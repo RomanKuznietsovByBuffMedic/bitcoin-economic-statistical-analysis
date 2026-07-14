@@ -10,6 +10,7 @@ book:
   chapters:
     - index.qmd
     - 01-how-it-works.qmd
+    - 02-data-acquisition.qmd
     - references.qmd
   repo-url: https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis
   repo-actions: [source]

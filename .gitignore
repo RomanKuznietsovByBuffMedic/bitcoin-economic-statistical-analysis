@@ -8,3 +8,11 @@ _book/
 **/*.quarto_ipynb
 
 /.quarto/
+
+# Local market data
+data/raw/
+data/cache/
+data/processed/
+data/validation/
+
+data/
