@@ -1,5 +1,7 @@
 # Bitcoin і BTC: економічний та статистичний аналіз
 
+**Онлайн-версія книги:** [читати на GitHub Pages](https://romankuznietsovbybuffmedic.github.io/bitcoin-economic-statistical-analysis/)
+
 Проєкт створює відтворювану основу для економічного та статистичного аналізу Bitcoin і BTC.
 
 Поточний статус: нульовий етап — технічна основа.
