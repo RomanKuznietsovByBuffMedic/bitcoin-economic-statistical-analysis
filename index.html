@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -68,6 +33,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./01-how-it-works.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -105,6 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 
 
 </head>
@@ -118,7 +85,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Вступ</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Про проєкт</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -149,7 +116,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Вступ</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Про проєкт</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-how-it-works.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Джерела</span></span></a>
   </div>
 </li>
     </ul>
@@ -158,11 +137,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Зміст</h2>
    
   <ul>
-  <li><a href="#вступ" id="toc-вступ" class="nav-link active" data-scroll-target="#вступ">Вступ</a></li>
+  <li><a href="#sec-about" id="toc-sec-about" class="nav-link active" data-scroll-target="#sec-about"><span class="header-section-number">1</span> Про проєкт</a>
+  <ul>
+  <li><a href="#project-purpose" id="toc-project-purpose" class="nav-link" data-scroll-target="#project-purpose"><span class="header-section-number">1.1</span> Навіщо створено цей проєкт?</a></li>
+  <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions"><span class="header-section-number">1.2</span> Головні питання дослідження</a></li>
+  <li><a href="#objectivity" id="toc-objectivity" class="nav-link" data-scroll-target="#objectivity"><span class="header-section-number">1.3</span> Що означає об’єктивність?</a></li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow"><span class="header-section-number">1.4</span> Послідовність роботи</a></li>
+  <li><a href="#possible-models" id="toc-possible-models" class="nav-link" data-scroll-target="#possible-models"><span class="header-section-number">1.5</span> Можливі статистичні моделі</a>
+  <ul>
+  <li><a href="#прості-базові-методи" id="toc-прості-базові-методи" class="nav-link" data-scroll-target="#прості-базові-методи"><span class="header-section-number">1.5.1</span> Прості базові методи</a></li>
+  <li><a href="#arma-та-arima" id="toc-arma-та-arima" class="nav-link" data-scroll-target="#arma-та-arima"><span class="header-section-number">1.5.2</span> ARMA та ARIMA</a></li>
+  <li><a href="#arch-і-garch" id="toc-arch-і-garch" class="nav-link" data-scroll-target="#arch-і-garch"><span class="header-section-number">1.5.3</span> ARCH і GARCH</a></li>
+  <li><a href="#egarch-і-gjr-garch" id="toc-egarch-і-gjr-garch" class="nav-link" data-scroll-target="#egarch-і-gjr-garch"><span class="header-section-number">1.5.4</span> EGARCH і GJR-GARCH</a></li>
+  <li><a href="#figarch-та-моделі-довгої-памяті" id="toc-figarch-та-моделі-довгої-памяті" class="nav-link" data-scroll-target="#figarch-та-моделі-довгої-памяті"><span class="header-section-number">1.5.5</span> FIGARCH та моделі довгої пам’яті</a></li>
+  <li><a href="#моделі-з-перемиканням-режимів" id="toc-моделі-з-перемиканням-режимів" class="nav-link" data-scroll-target="#моделі-з-перемиканням-режимів"><span class="header-section-number">1.5.6</span> Моделі з перемиканням режимів</a></li>
+  <li><a href="#тести-структурних-змін" id="toc-тести-структурних-змін" class="nav-link" data-scroll-target="#тести-структурних-змін"><span class="header-section-number">1.5.7</span> Тести структурних змін</a></li>
+  <li><a href="#регресійні-моделі" id="toc-регресійні-моделі" class="nav-link" data-scroll-target="#регресійні-моделі"><span class="header-section-number">1.5.8</span> Регресійні моделі</a></li>
+  <li><a href="#var-коінтеграція-та-vecm" id="toc-var-коінтеграція-та-vecm" class="nav-link" data-scroll-target="#var-коінтеграція-та-vecm"><span class="header-section-number">1.5.9</span> VAR, коінтеграція та VECM</a></li>
+  <li><a href="#подієвий-аналіз" id="toc-подієвий-аналіз" class="nav-link" data-scroll-target="#подієвий-аналіз"><span class="header-section-number">1.5.10</span> Подієвий аналіз</a></li>
+  <li><a href="#моделі-ризику" id="toc-моделі-ризику" class="nav-link" data-scroll-target="#моделі-ризику"><span class="header-section-number">1.5.11</span> Моделі ризику</a></li>
+  <li><a href="#методи-ринкової-мікроструктури" id="toc-методи-ринкової-мікроструктури" class="nav-link" data-scroll-target="#методи-ринкової-мікроструктури"><span class="header-section-number">1.5.12</span> Методи ринкової мікроструктури</a></li>
+  <li><a href="#машинне-навчання" id="toc-машинне-навчання" class="nav-link" data-scroll-target="#машинне-навчання"><span class="header-section-number">1.5.13</span> Машинне навчання</a></li>
+  <li><a href="#нелінійні-та-неперервні-моделі" id="toc-нелінійні-та-неперервні-моделі" class="nav-link" data-scroll-target="#нелінійні-та-неперервні-моделі"><span class="header-section-number">1.5.14</span> Нелінійні та неперервні моделі</a></li>
+  </ul></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">1.6</span> Як обиратиметься модель?</a></li>
+  <li><a href="#model-explanation" id="toc-model-explanation" class="nav-link" data-scroll-target="#model-explanation"><span class="header-section-number">1.7</span> Як пояснюватиметься кожна модель?</a></li>
+  <li><a href="#useful-result" id="toc-useful-result" class="nav-link" data-scroll-target="#useful-result"><span class="header-section-number">1.8</span> Що вважатиметься корисним результатом?</a></li>
+  <li><a href="#project-limitations" id="toc-project-limitations" class="nav-link" data-scroll-target="#project-limitations"><span class="header-section-number">1.9</span> Чого цей проєкт не обіцяє?</a></li>
+  <li><a href="#project-structure" id="toc-project-structure" class="nav-link" data-scroll-target="#project-structure"><span class="header-section-number">1.10</span> Попередня структура проєкту</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
@@ -171,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Bitcoin і BTC: економічний та статистичний аналіз</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<h1 class="title">Bitcoin і BTC: економічний та статистичний аналіз</h1>
 </div>
 
 
@@ -188,22 +195,342 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="вступ" class="level1 unnumbered">
-<h1 class="unnumbered">Вступ</h1>
-<p>Це технічна основа проєкту.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<section id="sec-about" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Про проєкт</h1>
+<p>Цей проєкт присвячений послідовному дослідженню Bitcoin і ринку BTC: від пояснення основних понять до отримання реальних даних, статистичного аналізу, оцінювання ризику та перевірки можливих способів прогнозування.</p>
+<p>Початковою позицією не буде твердження, що Bitcoin обов’язково подорожчає, знеціниться, є вигідною інвестицією або взагалі не має цінності. Висновки мають з’являтися після перевірки даних, а не визначатися наперед.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Початкова позиція">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Початкова позиція
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>Мета проєкту — не довести, що на BTC можна заробити, і не довести протилежне.</p>
+<p>Мета — з’ясувати, що показують реальні дані, наскільки надійними є отримані результати та чи залишаються вони корисними поза періодом, на якому були знайдені.</p>
+</div>
+</div>
+<section id="project-purpose" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="project-purpose"><span class="header-section-number">1.1</span> Навіщо створено цей проєкт?</h2>
+<p>Ціна BTC може швидко зростати або падати. Після сильного зростання легко вирішити, що воно продовжиться. Після падіння може здаватися, що BTC став вигідною покупкою або, навпаки, що він більше нікому не буде потрібен.</p>
+<p>Такі висновки можуть ґрунтуватися не на аналізі, а на емоціях, останніх новинах або випадково вибраному фрагменті графіка.</p>
+<p>Тому дослідження починається не з пошуку найскладнішої моделі і не з побудови торгової стратегії. Спочатку потрібно зрозуміти:</p>
+<ul>
+<li>що таке Bitcoin і BTC;</li>
+<li>що означає купівля та володіння BTC;</li>
+<li>як на біржі виникає ціна;</li>
+<li>чому на різних біржах ціна може відрізнятися;</li>
+<li>що означають <code>open</code>, <code>high</code>, <code>low</code>, <code>close</code> і <code>volume</code>;</li>
+<li>звідки можна отримати реальні дані;</li>
+<li>які обмеження та помилки можуть бути в цих даних.</li>
+</ul>
+<p>Лише після цього можна переходити до економічних гіпотез і статистичних моделей.</p>
+</section>
+<section id="research-questions" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="research-questions"><span class="header-section-number">1.2</span> Головні питання дослідження</h2>
+<p>Проєкт має поступово відповісти на такі питання:</p>
+<ol type="1">
+<li>Що саме купує людина, коли купує BTC?</li>
+<li>Як формується ринкова ціна BTC?</li>
+<li>Які дані про BTC доступні та хто їх створює?</li>
+<li>Чим відрізняються дані різних бірж, торгових пар і часових інтервалів?</li>
+<li>Як правильно вимірювати зміну ціни, дохідність і ризик?</li>
+<li>Чи мають доходи BTC статистично помітну залежність у часі?</li>
+<li>Чи змінюється волатильність передбачуваним способом?</li>
+<li>Чи існують окремі спокійні, висхідні, низхідні або кризові режими?</li>
+<li>Чи пов’язані зміни BTC з іншими фінансовими або економічними показниками?</li>
+<li>Чи можна отримати прогноз, кращий за просте базове припущення?</li>
+<li>Чи зберігається результат на нових даних?</li>
+<li>Чи може статистично помітний результат принести прибуток після комісій та інших витрат?</li>
+</ol>
+<p>Не всі ці питання обов’язково отримають позитивну відповідь. Відсутність передбачуваності також є результатом.</p>
+</section>
+<section id="objectivity" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="objectivity"><span class="header-section-number">1.3</span> Що означає об’єктивність?</h2>
+<p>Повністю позбутися припущень неможливо. Навіть вибір біржі, торгової пари, початкової дати або часового інтервалу впливає на результат.</p>
+<p>Тому об’єктивність у цьому проєкті означатиме не відсутність будь-яких рішень, а їхню відкритість і можливість перевірки.</p>
+<p>Для цього будуть застосовуватися такі правила:</p>
+<ul>
+<li>дослідницьке питання формулюється до перегляду остаточного результату;</li>
+<li>джерело даних, біржа, торгова пара і часовий пояс зазначаються явно;</li>
+<li>необроблені дані зберігаються окремо від очищених;</li>
+<li>усі перетворення виконуються кодом;</li>
+<li>ціни не підміняються доходами, а доходи — прибутком;</li>
+<li>навчальні та тестові періоди розділяються за часом;</li>
+<li>майбутні спостереження не використовуються для прогнозування минулого;</li>
+<li>складні моделі порівнюються з простими базовими прогнозами;</li>
+<li>невдалі, нестійкі та статистично непереконливі результати не приховуються;</li>
+<li>економічна користь перевіряється окремо від статистичної значущості;</li>
+<li>у перевірці торгових правил враховуються комісії та, за можливості, інші витрати.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Важливе обмеження">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Важливе обмеження
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Результат, отриманий на історичних даних, не є доказом того, що він повториться в майбутньому.</p>
+<p>Навіть правильна статистична модель описує невизначеність, а не усуває її.</p>
+</div>
+</div>
+</section>
+<section id="workflow" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="workflow"><span class="header-section-number">1.4</span> Послідовність роботи</h2>
+<p>Дослідження проходитиме поетапно.</p>
+<ol type="1">
+<li><strong>Поняття.</strong> З’ясувати, що таке Bitcoin, BTC, біржа, гаманець, приватний ключ, торгова пара та ринкова ціна.</li>
+<li><strong>Дані.</strong> Вибрати джерело, завантажити реальні спостереження та зберегти їх без ручного редагування.</li>
+<li><strong>Перевірка якості.</strong> Знайти пропуски, дублікати, неправильні часові мітки, аномальні значення та відмінності між джерелами.</li>
+<li><strong>Описовий аналіз.</strong> Побудувати графіки й розрахувати основні характеристики цін, доходів, обсягів і ризику.</li>
+<li><strong>Формулювання питань.</strong> Визначити, яку саме властивість потрібно перевірити.</li>
+<li><strong>Вибір моделі.</strong> Використовувати лише ту модель, яка відповідає поставленому питанню.</li>
+<li><strong>Діагностика.</strong> Перевірити припущення моделі та дослідити її помилки.</li>
+<li><strong>Перевірка на нових даних.</strong> Оцінити результат поза періодом, на якому модель будувалася.</li>
+<li><strong>Економічна оцінка.</strong> З’ясувати, чи має результат практичне значення після витрат.</li>
+<li><strong>Висновок.</strong> Окремо вказати, що встановлено, що не встановлено і що залишається невідомим.</li>
+</ol>
+</section>
+<section id="possible-models" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="possible-models"><span class="header-section-number">1.5</span> Можливі статистичні моделі</h2>
+<p>Наведений нижче перелік не є планом використати всі моделі. Це набір можливих інструментів.</p>
+<p>Конкретна модель з’явиться в роботі лише тоді, коли для неї буде чітке питання, відповідні дані та зрозуміла причина застосування.</p>
+<section id="прості-базові-методи" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="прості-базові-методи"><span class="header-section-number">1.5.1</span> Прості базові методи</h3>
+<p>Перед складними моделями будуть перевірятися прості варіанти:</p>
+<ul>
+<li>останнє відоме значення;</li>
+<li>відсутність зміни;</li>
+<li>випадкове блукання;</li>
+<li>середня історична дохідність;</li>
+<li>середня історична волатильність;</li>
+<li>ковзне середнє;</li>
+<li>проста історична симуляція.</li>
+</ul>
+<p>Ці методи потрібні як базовий рівень. Складна модель має показати кращий результат не лише на навчальних, а й на нових даних.</p>
+</section>
+<section id="arma-та-arima" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="arma-та-arima"><span class="header-section-number">1.5.2</span> ARMA та ARIMA</h3>
+<p>Моделі ARMA або ARIMA можуть використовуватися для перевірки залежності поточного значення від попередніх значень і попередніх помилок прогнозу.</p>
+<p>Для цін фінансових активів такі моделі не повинні застосовуватися автоматично. Спочатку потрібно перевірити стаціонарність і визначити, що саме аналізується: ціна, зміна ціни чи дохідність.</p>
+</section>
+<section id="arch-і-garch" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="arch-і-garch"><span class="header-section-number">1.5.3</span> ARCH і GARCH</h3>
+<p>Моделі ARCH і GARCH можуть бути потрібні, якщо періоди великих коливань групуються разом, а спокійні періоди змінюються нестабільними.</p>
+<p>Їхнє основне завдання — оцінювати та прогнозувати умовну волатильність, а не визначати майбутній напрямок ціни.</p>
+</section>
+<section id="egarch-і-gjr-garch" class="level3" data-number="1.5.4">
+<h3 data-number="1.5.4" class="anchored" data-anchor-id="egarch-і-gjr-garch"><span class="header-section-number">1.5.4</span> EGARCH і GJR-GARCH</h3>
+<p>Ці моделі можуть розглядатися, якщо позитивні та негативні зміни ціни по-різному впливають на майбутню волатильність.</p>
+<p>Вони не будуть використовуватися лише тому, що є складнішими за звичайний GARCH. Спочатку має бути перевірена наявність асиметрії.</p>
+</section>
+<section id="figarch-та-моделі-довгої-памяті" class="level3" data-number="1.5.5">
+<h3 data-number="1.5.5" class="anchored" data-anchor-id="figarch-та-моделі-довгої-памяті"><span class="header-section-number">1.5.5</span> FIGARCH та моделі довгої пам’яті</h3>
+<p>FIGARCH та інші моделі довгої пам’яті можуть бути корисними, якщо вплив минулих коливань на волатильність зменшується дуже повільно.</p>
+<p>Їх використання потребуватиме окремої перевірки, оскільки довгу пам’ять можна помилково сплутати зі структурними змінами або переходами між режимами.</p>
+</section>
+<section id="моделі-з-перемиканням-режимів" class="level3" data-number="1.5.6">
+<h3 data-number="1.5.6" class="anchored" data-anchor-id="моделі-з-перемиканням-режимів"><span class="header-section-number">1.5.6</span> Моделі з перемиканням режимів</h3>
+<p>Markov-switching та MS-GARCH або MSGARCH можуть використовуватися для перевірки, чи поводиться ринок по-різному в окремих прихованих станах.</p>
+<p>Наприклад, модель може розрізняти:</p>
+<ul>
+<li>відносно спокійний режим;</li>
+<li>режим високої волатильності;</li>
+<li>кризовий режим;</li>
+<li>періоди з різними середніми доходами.</li>
+</ul>
+<p>Кількість і зміст режимів не повинні визначатися лише після перегляду красивого графіка. Потрібні статистичні критерії та перевірка стабільності результату.</p>
+</section>
+<section id="тести-структурних-змін" class="level3" data-number="1.5.7">
+<h3 data-number="1.5.7" class="anchored" data-anchor-id="тести-структурних-змін"><span class="header-section-number">1.5.7</span> Тести структурних змін</h3>
+<p>Тести структурних зламів і методи пошуку точок зміни можуть бути потрібні, якщо параметри ринку перестають бути стабільними.</p>
+<p>Вони допомагають перевірити, чи одна модель справді може описувати весь період спостережень.</p>
+</section>
+<section id="регресійні-моделі" class="level3" data-number="1.5.8">
+<h3 data-number="1.5.8" class="anchored" data-anchor-id="регресійні-моделі"><span class="header-section-number">1.5.8</span> Регресійні моделі</h3>
+<p>Регресія може застосовуватися для перевірки зв’язку доходів або волатильності BTC з іншими показниками.</p>
+<p>Можливими пояснювальними змінними можуть бути:</p>
+<ul>
+<li>доходи фондових індексів;</li>
+<li>процентні ставки;</li>
+<li>інфляційні показники;</li>
+<li>курс долара;</li>
+<li>ціна золота;</li>
+<li>обсяг торгів;</li>
+<li>показники ліквідності;</li>
+<li>ринкові очікування або настрої.</li>
+</ul>
+<p>Наявність статистичного зв’язку не означатиме автоматично, що одна змінна спричиняє іншу.</p>
+</section>
+<section id="var-коінтеграція-та-vecm" class="level3" data-number="1.5.9">
+<h3 data-number="1.5.9" class="anchored" data-anchor-id="var-коінтеграція-та-vecm"><span class="header-section-number">1.5.9</span> VAR, коінтеграція та VECM</h3>
+<p>Якщо одночасно досліджуватимуться кілька часових рядів, можуть знадобитися:</p>
+<ul>
+<li>VAR для аналізу їхньої спільної короткострокової динаміки;</li>
+<li>тести коінтеграції для перевірки довгострокового зв’язку;</li>
+<li>VECM, якщо нестаціонарні ряди мають стійку довгострокову рівновагу.</li>
+</ul>
+<p>Ці моделі не застосовуватимуться до нестаціонарних рівнів без відповідної перевірки.</p>
+</section>
+<section id="подієвий-аналіз" class="level3" data-number="1.5.10">
+<h3 data-number="1.5.10" class="anchored" data-anchor-id="подієвий-аналіз"><span class="header-section-number">1.5.10</span> Подієвий аналіз</h3>
+<p>Подієвий аналіз може використовуватися для перевірки реакції ринку на заздалегідь визначені події.</p>
+<p>Наприклад:</p>
+<ul>
+<li>халвінги Bitcoin;</li>
+<li>зміни регулювання;</li>
+<li>запуск біржових продуктів;</li>
+<li>великі банкрутства або злами;</li>
+<li>рішення центральних банків.</li>
+</ul>
+<p>Дата події та часовий проміжок аналізу мають визначатися до оцінювання ефекту.</p>
+</section>
+<section id="моделі-ризику" class="level3" data-number="1.5.11">
+<h3 data-number="1.5.11" class="anchored" data-anchor-id="моделі-ризику"><span class="header-section-number">1.5.11</span> Моделі ризику</h3>
+<p>Для оцінювання можливих втрат можуть розглядатися:</p>
+<ul>
+<li>історичні квантили;</li>
+<li>Value at Risk;</li>
+<li>Expected Shortfall;</li>
+<li>моделювання розподілу доходів;</li>
+<li>методи теорії екстремальних значень;</li>
+<li>стрес-сценарії.</li>
+</ul>
+<p>Оцінка ризику має супроводжуватися зворотною перевіркою: потрібно з’ясувати, як часто фактичні втрати перевищували прогнозований рівень.</p>
+</section>
+<section id="методи-ринкової-мікроструктури" class="level3" data-number="1.5.12">
+<h3 data-number="1.5.12" class="anchored" data-anchor-id="методи-ринкової-мікроструктури"><span class="header-section-number">1.5.12</span> Методи ринкової мікроструктури</h3>
+<p>Якщо будуть доступні внутрішньоденні угоди або книга заявок, можуть досліджуватися:</p>
+<ul>
+<li>різниця між цінами купівлі та продажу;</li>
+<li>ліквідність;</li>
+<li>глибина ринку;</li>
+<li>дисбаланс заявок;</li>
+<li>вплив великих угод;</li>
+<li>внутрішньоденна та реалізована волатильність.</li>
+</ul>
+<p>Цей напрям не потрібний для звичайних денних свічок і з’явиться лише за наявності відповідних даних.</p>
+</section>
+<section id="машинне-навчання" class="level3" data-number="1.5.13">
+<h3 data-number="1.5.13" class="anchored" data-anchor-id="машинне-навчання"><span class="header-section-number">1.5.13</span> Машинне навчання</h3>
+<p>Регуляризована регресія, дерева рішень, випадковий ліс або градієнтний бустинг можуть розглядатися, якщо з’явиться достатня кількість обґрунтованих ознак.</p>
+<p>Машинне навчання не буде автоматично вважатися кращим за класичні статистичні моделі. Воно має:</p>
+<ul>
+<li>використовувати лише інформацію, доступну на момент прогнозу;</li>
+<li>перевірятися на майбутньому часовому відрізку;</li>
+<li>порівнюватися з простими базовими моделями;</li>
+<li>демонструвати результат після врахування витрат;</li>
+<li>мати захист від перенавчання.</li>
+</ul>
+<p>Нейронні мережі та інші складні алгоритми можуть розглядатися лише після того, як простіші методи виявляться недостатніми.</p>
+</section>
+<section id="нелінійні-та-неперервні-моделі" class="level3" data-number="1.5.14">
+<h3 data-number="1.5.14" class="anchored" data-anchor-id="нелінійні-та-неперервні-моделі"><span class="header-section-number">1.5.14</span> Нелінійні та неперервні моделі</h3>
+<p>Нелінійні часові ряди, моделі стохастичної волатильності, неперервні процеси або самозбуджувальні процеси можуть знадобитися для спеціальних питань і високочастотних даних.</p>
+<p>Вони не є початковим етапом роботи. Їх застосування потребуватиме окремого обґрунтування, оскільки складність моделі сама по собі не робить результат точнішим.</p>
+</section>
+</section>
+<section id="model-selection" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">1.6</span> Як обиратиметься модель?</h2>
+<p>Модель використовуватиметься лише за одночасного виконання кількох умов:</p>
+<ol type="1">
+<li>Сформульовано конкретне питання.</li>
+<li>Зрозуміло, що саме модель оцінює.</li>
+<li>Є дані необхідної якості та частоти.</li>
+<li>Основні припущення можна перевірити.</li>
+<li>Проста базова модель є недостатньою.</li>
+<li>Результат можна перевірити на нових даних.</li>
+<li>Покращення має не лише статистичне, а й практичне значення.</li>
+</ol>
+<p>Якщо модель не проходить діагностику або не покращує результат на нових даних, її складність не буде підставою залишити її основною.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Модель не обиратиметься за красивим результатом">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Модель не обиратиметься за красивим результатом
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Спочатку не будуть оцінюватися десятки моделей із подальшим вибором тієї, яка випадково показала найбільший прибуток.</p>
+<p>Коло моделей має визначатися питанням, властивостями даних і результатами діагностики.</p>
+</div>
+</div>
+</section>
+<section id="model-explanation" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="model-explanation"><span class="header-section-number">1.7</span> Як пояснюватиметься кожна модель?</h2>
+<p>Кожна модель, яка справді знадобиться, буде розібрана окремо й з початку.</p>
+<p>Для неї буде пояснено:</p>
+<ol type="1">
+<li><strong>Що це?</strong> Проста ідея без формул.</li>
+<li><strong>Навіщо вона потрібна?</strong> Питання, на яке модель може відповісти.</li>
+<li><strong>Що вона не може зробити?</strong> Межі її застосування.</li>
+<li><strong>Які дані потрібні?</strong> Змінні, частота та підготовка.</li>
+<li><strong>Які є припущення?</strong> Умови, без яких висновок може бути неправильним.</li>
+<li><strong>Як вона працює?</strong> Поступовий перехід від інтуїції до формули.</li>
+<li><strong>Як оцінити її в R?</strong> Код із поясненням кожного важливого кроку.</li>
+<li><strong>Як перевірити результат?</strong> Діагностика залишків і стабільності.</li>
+<li><strong>Як перевірити прогноз?</strong> Оцінювання на даних, яких модель не бачила.</li>
+<li><strong>Як вона може помилитися?</strong> Типові проблеми та ознаки перенавчання.</li>
+<li><strong>Де це підтверджено?</strong> Точне джерело, сторінка, розділ та дослівна цитата, яку можна знайти через пошук.</li>
+</ol>
+<p>Отже, назва моделі не буде використовуватися як пояснення. Якщо неможливо зрозуміло сказати, навіщо вона потрібна, модель не повинна застосовуватися.</p>
+</section>
+<section id="useful-result" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="useful-result"><span class="header-section-number">1.8</span> Що вважатиметься корисним результатом?</h2>
+<p>Корисним результатом може бути не лише прибуткова стратегія.</p>
+<p>Проєкт може встановити, що:</p>
+<ul>
+<li>певної залежності в даних немає;</li>
+<li>залежність існувала лише в окремому періоді;</li>
+<li>волатильність прогнозується краще, ніж напрямок ціни;</li>
+<li>модель працює на навчальних даних, але не працює на нових;</li>
+<li>статистичне покращення занадто мале для покриття комісій;</li>
+<li>результат сильно залежить від біржі або часового інтервалу;</li>
+<li>ризик вищий, ніж очікуваний прибуток;</li>
+<li>наявних даних недостатньо для надійного висновку.</li>
+</ul>
+<p>Такі результати не є невдачею. Вони допомагають не приймати фінансові рішення на підставі випадкової закономірності.</p>
+</section>
+<section id="project-limitations" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="project-limitations"><span class="header-section-number">1.9</span> Чого цей проєкт не обіцяє?</h2>
+<p>Проєкт не гарантує:</p>
+<ul>
+<li>прибутку від купівлі BTC;</li>
+<li>точного прогнозу майбутньої ціни;</li>
+<li>знаходження найкращого моменту для купівлі або продажу;</li>
+<li>повторення історичних закономірностей;</li>
+<li>захисту від різкого падіння ринку;</li>
+<li>захисту від банкрутства біржі або втрати доступу;</li>
+<li>перетворення статистичної моделі на безризиковий спосіб заробітку.</li>
+</ul>
+<p>Рішення про використання реальних грошей не повинно ґрунтуватися лише на одному графіку, показнику, прогнозі або результаті однієї моделі.</p>
+</section>
+<section id="project-structure" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="project-structure"><span class="header-section-number">1.10</span> Попередня структура проєкту</h2>
+<p>Робота розвиватиметься приблизно в такій послідовності:</p>
+<ol type="1">
+<li><strong>Що це і як працює?</strong> Основні поняття Bitcoin, BTC, гаманця, біржі та ринкової ціни.</li>
+<li><strong>Отримання реальних даних.</strong> Вибір біржі, торгової пари, часового інтервалу та способу завантаження.</li>
+<li><strong>Перевірка й підготовка даних.</strong> Пропуски, дублікати, часові пояси, аномалії та відтворюваність.</li>
+<li><strong>Що відбувалося з BTC у минулому?</strong> Ціни, доходи, волатильність, падіння та обсяги.</li>
+<li><strong>Які властивості можна перевірити?</strong> Формулювання економічних і статистичних гіпотез.</li>
+<li><strong>Які моделі справді потрібні?</strong> Вибір методів відповідно до результатів попередніх етапів.</li>
+<li><strong>Чи працюють прогнози на нових даних?</strong> Часове тестування та порівняння з базовими моделями.</li>
+<li><strong>Чи можна було б заробити після витрат?</strong> Комісії, оборот, ризик і стабільність.</li>
+<li><strong>Що можна стверджувати?</strong> Підсумок установлених фактів, обмежень і невизначеності.</li>
+</ol>
+<p>Ця структура не зобов’язує використати всі перелічені моделі. Вона задає порядок, у якому складність додається лише тоді, коли попередній етап показує реальну потребу.</p>
 
 
-<!-- -->
-
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -277,57 +604,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -657,19 +933,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Вступ {.unnumbered}</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Це технічна основа проєкту.</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./01-how-it-works.html" class="pagination-link" aria-label="Що це і як працює?">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
