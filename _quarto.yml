@@ -1,0 +1,16 @@
+project:
+  type: book
+
+book:
+  title: "Bitcoin і BTC: економічний та статистичний аналіз"
+  chapters:
+    - index.qmd
+  repo-url: https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis
+  repo-actions: [source]
+
+lang: uk
+
+format:
+  html:
+    code-fold: true
+    code-tools: true
