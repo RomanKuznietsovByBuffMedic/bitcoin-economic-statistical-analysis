@@ -761,17 +761,11 @@ bybit_update = function(
       config$intervals
     )
   )) {
-    api_interval = config$intervals$api_interval[
-      [index]
-    ]
+    api_interval = config$intervals$api_interval[[index]]
 
-    label = config$intervals$label[
-      [index]
-    ]
+    label = config$intervals$label[[index]]
 
-    seconds = config$intervals$seconds[
-      [index]
-    ]
+    seconds = config$intervals$seconds[[index]]
 
     rds_path = file.path(
       config$processed_dir,
