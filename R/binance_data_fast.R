@@ -1325,11 +1325,11 @@ btc_fast_aggregation_sql = function(
   paste0(
     "WITH bucketed AS (",
     "SELECT ",
-    "to_timestamp(floor(epoch(open_time) / ",
+    "CAST(to_timestamp(floor(epoch(open_time) / ",
     seconds,
     ") * ",
     seconds,
-    ") AS bucket_time, ",
+    ") AS TIMESTAMP) AS bucket_time, ",
     "open_time AS source_open_time, ",
     "\"open\", high, low, \"close\", ",
     "base_volume, quote_volume, number_of_trades, ",
