@@ -20,6 +20,15 @@
 
 options(stringsAsFactors = FALSE)
 
+chart_height = 860L
+chart_margins = list(
+  l = 80,
+  r = 35,
+  t = 80,
+  b = 60
+)
+
+
 required_packages = c(
   "digest",
   "jsonlite",
@@ -572,12 +581,9 @@ build_candlestick_volume_chart = function(
     ),
     showlegend = FALSE,
     hovermode = "x unified",
-    margin = list(
-      l = 70,
-      r = 30,
-      t = 70,
-      b = 50
-    )
+    height = chart_height,
+    autosize = TRUE,
+    margin = chart_margins
   )
 
   combined_chart = plotly::config(
@@ -650,12 +656,9 @@ build_close_chart = function(
     ),
     showlegend = FALSE,
     hovermode = "x unified",
-    margin = list(
-      l = 70,
-      r = 30,
-      t = 70,
-      b = 50
-    )
+    height = chart_height,
+    autosize = TRUE,
+    margin = chart_margins
   )
 
   close_chart = plotly::config(
@@ -695,15 +698,15 @@ build_close_chart = function(
 chart_files = c(
   build_candlestick_volume_chart(
     data = btc_1h,
-    title = "BTCUSDT, годинні свічки за останні 30 днів",
-    output_file = "BTCUSDT_1h_30d.html",
-    days = 30
+    title = "BTCUSDT, годинні свічки за останні 90 днів",
+    output_file = "BTCUSDT_1h_90d.html",
+    days = 90
   ),
   build_candlestick_volume_chart(
     data = btc_4h,
-    title = "BTCUSDT, чотиригодинні свічки за останні 180 днів",
-    output_file = "BTCUSDT_4h_180d.html",
-    days = 180
+    title = "BTCUSDT, чотиригодинні свічки за останній рік",
+    output_file = "BTCUSDT_4h_365d.html",
+    days = 365
   ),
   build_candlestick_volume_chart(
     data = btc_1d,
