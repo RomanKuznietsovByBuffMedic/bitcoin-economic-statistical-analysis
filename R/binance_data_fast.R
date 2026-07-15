@@ -11,6 +11,8 @@
 # Цей файл використовує допоміжні функції з R/binance_data.R.
 # Пакети автоматично не встановлюються.
 
+BTC_FAST_CONVERTER_VERSION = "3"
+
 btc_fast_default_config = function(project_root = ".") {
   base_config = btc_default_config(project_root)
 
@@ -130,6 +132,25 @@ btc_fast_make_dirs = function(config) {
 }
 
 btc_fast_set_threads = function(config) {
+  extension_directory = file.path(
+    config$duckdb_dir,
+    "extensions"
+  )
+
+  dir.create(
+    extension_directory,
+    recursive = TRUE,
+    showWarnings = FALSE
+  )
+
+  options(
+    duckdb.extension_directory = normalizePath(
+      extension_directory,
+      winslash = "/",
+      mustWork = TRUE
+    )
+  )
+
   data.table::setDTthreads(
     threads = as.integer(
       config$data_table_threads
@@ -296,17 +317,60 @@ btc_fast_parquet_current = function(
     return(FALSE)
   }
 
-  stored_checksum = trimws(
+  sidecar_lines = trimws(
     readLines(
       sidecar,
-      n = 1L,
       warn = FALSE
     )
   )
 
-  identical(
-    stored_checksum,
-    checksum
+  length(sidecar_lines) >= 2L &&
+    identical(
+      sidecar_lines[[1L]],
+      checksum
+    ) &&
+    identical(
+      sidecar_lines[[2L]],
+      paste0(
+        "converter_version=",
+        BTC_FAST_CONVERTER_VERSION
+      )
+    )
+}
+
+btc_fast_timestamp_to_posix = function(value) {
+  numeric_value = suppressWarnings(
+    as.numeric(
+      as.character(value)
+    )
+  )
+
+  if (anyNA(numeric_value)) {
+    stop(
+      "Часова мітка містить нечислове значення.",
+      call. = FALSE
+    )
+  }
+
+  absolute_value = abs(numeric_value)
+  divisor = rep(NA_real_, length(numeric_value))
+
+  divisor[absolute_value >= 1e17] = 1e9
+  divisor[absolute_value >= 1e14 & absolute_value < 1e17] = 1e6
+  divisor[absolute_value >= 1e11 & absolute_value < 1e14] = 1e3
+  divisor[absolute_value >= 1e8 & absolute_value < 1e11] = 1
+
+  if (anyNA(divisor)) {
+    stop(
+      "Не вдалося визначити одиницю часової мітки.",
+      call. = FALSE
+    )
+  }
+
+  as.POSIXct(
+    numeric_value / divisor,
+    origin = "1970-01-01",
+    tz = "UTC"
   )
 }
 
@@ -374,7 +438,8 @@ btc_fast_read_archive = function(
     csv_file,
     header = FALSE,
     showProgress = FALSE,
-    nThread = 1L
+    nThread = 1L,
+    integer64 = "character"
   )
 
   if (ncol(data) != 12L) {
@@ -390,13 +455,20 @@ btc_fast_read_archive = function(
     )
   }
 
-  if (
-    nrow(data) > 0L &&
-    !grepl(
-      "^[0-9]+$",
+  first_timestamp = suppressWarnings(
+    as.numeric(
       as.character(
         data[[1L]][[1L]]
       )
+    )
+  )
+
+  if (
+    nrow(data) > 0L &&
+    (
+      length(first_timestamp) != 1L ||
+      is.na(first_timestamp) ||
+      !is.finite(first_timestamp)
     )
   ) {
     data = data[-1L]
@@ -422,14 +494,14 @@ btc_fast_read_archive = function(
 
   data[
     ,
-    open_time := btc_timestamp_to_posix(
+    open_time := btc_fast_timestamp_to_posix(
       open_time
     )
   ]
 
   data[
     ,
-    close_time := btc_timestamp_to_posix(
+    close_time := btc_fast_timestamp_to_posix(
       close_time
     )
   ]
@@ -635,6 +707,16 @@ btc_fast_convert_one_archive = function(
     )
   }
 
+  unlink(
+    c(
+      output_path,
+      btc_fast_checksum_sidecar(
+        output_path
+      )
+    ),
+    force = TRUE
+  )
+
   data = btc_fast_read_archive(
     archive$zip_file
   )
@@ -728,7 +810,13 @@ btc_fast_convert_one_archive = function(
   }
 
   writeLines(
-    archive$checksum,
+    c(
+      archive$checksum,
+      paste0(
+        "converter_version=",
+        BTC_FAST_CONVERTER_VERSION
+      )
+    ),
     btc_fast_checksum_sidecar(
       output_path
     ),
@@ -1150,6 +1238,29 @@ btc_fast_api_sample = function(
     "SELECT count(*) AS rows FROM btc_1m"
   )$rows[[1]]
 
+  total_rows = as.numeric(total_rows)
+
+  if (
+    length(total_rows) != 1L ||
+    is.na(total_rows) ||
+    total_rows < 1
+  ) {
+    stop(
+      "Неможливо створити API-вибірку: btc_1m не містить рядків.",
+      call. = FALSE
+    )
+  }
+
+  sample_size = as.integer(sample_size)
+
+  if (
+    length(sample_size) != 1L ||
+    is.na(sample_size) ||
+    sample_size < 1L
+  ) {
+    sample_size = 1L
+  }
+
   indices = unique(
     as.integer(
       round(
@@ -1540,8 +1651,11 @@ btc_fast_outputs_exist = function(
   }
 
   all(
-    file.exists(
-      manifest$parquet_path
+    mapply(
+      btc_fast_parquet_current,
+      manifest$parquet_path,
+      manifest$checksum,
+      USE.NAMES = FALSE
     )
   )
 }
