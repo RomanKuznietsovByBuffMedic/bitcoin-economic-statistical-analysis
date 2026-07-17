@@ -160,8 +160,7 @@ btc_book_read_preferred_rds = function(
       paste0(
         "Не знайдено локальний набір даних: ",
         selected_path,
-        ". Спочатку запустіть scripts/01_get_binance_data.R, ",
-        "а потім scripts/02_validate_and_build_charts.R."
+        ". Спочатку запустіть scripts/03_update_binance_fast.R."
       ),
       call. = FALSE
     )
@@ -318,7 +317,7 @@ btc_book_validation_summary = function(book_data) {
         Перевірка = "Звіти",
         Результат = paste0(
           "Не всі підсумкові CSV-файли знайдено. ",
-          "Запустіть scripts/02_validate_and_build_charts.R."
+          "Запустіть scripts/03_update_binance_fast.R."
         ),
         check.names = FALSE,
         stringsAsFactors = FALSE

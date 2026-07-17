@@ -529,6 +529,17 @@ bybit_validate = function(
     )
   )
 
+  open_seconds = as.numeric(
+    data$open_time
+  )
+
+  off_interval_grid = sum(
+    abs(
+      open_seconds -
+        round(open_seconds / seconds) * seconds
+    ) > 1e-6
+  )
+
   gap_positions = which(
     differences > seconds
   )
@@ -574,6 +585,7 @@ bybit_validate = function(
       "first_open_time",
       "last_open_time",
       "duplicate_open_times",
+      "off_interval_grid",
       "gap_count",
       "missing_intervals",
       "non_positive_prices",
@@ -603,6 +615,7 @@ bybit_validate = function(
           data$open_time
         )
       ),
+      off_interval_grid,
       nrow(gaps),
       if (nrow(gaps) > 0L) {
         sum(
@@ -890,6 +903,53 @@ bybit_update = function(
         data = new_data
       }
     }
+
+    # Після інкрементального оновлення перша дохідність у новій порції
+    # була б NA, якщо не перерахувати похідні поля на об'єднаному ряді.
+    data = data.table::as.data.table(
+      data
+    )
+
+    data.table::setorder(
+      data,
+      open_time
+    )
+
+    data[
+      ,
+      `:=`(
+        close_time = open_time +
+          seconds -
+          0.000001,
+        log_close = log(
+          close
+        ),
+        high_low_range = 100 * log(
+          high / low
+        )
+      )
+    ]
+
+    data[
+      ,
+      log_return := 100 * (
+        log_close -
+          data.table::shift(
+            log_close
+          )
+      )
+    ]
+
+    data[
+      ,
+      simple_return := 100 * (
+        close /
+          data.table::shift(
+            close
+          ) -
+          1
+      )
+    ]
 
     validation = bybit_validate(
       data = data,

@@ -7,9 +7,9 @@
 # source("scripts/02_validate_and_build_charts.R", encoding = "UTF-8")
 #
 # Скрипт:
-# 1. Перевіряє, чи локальні дані актуальні.
-# 2. Оновлює їх лише тоді, коли з'явився новий архів Binance.
-# 3. Не завантажує хвилинний набір у пам'ять, якщо оновлення не потрібне.
+# 1. Оновлює швидке Parquet-сховище лише за наявності нових архівів.
+# 2. Читає компактні 1h, 4h і 1d ряди через DuckDB.
+# 3. Не завантажує весь хвилинний набір у пам'ять.
 # 4. Читає звіти якості.
 # 5. Створює підсумки пропусків і неповних свічок.
 # 6. Зберігає окремі набори лише з повними свічками.
@@ -30,7 +30,10 @@ chart_margins = list(
 
 
 required_packages = c(
+  "data.table",
+  "DBI",
   "digest",
+  "duckdb",
   "jsonlite",
   "plotly",
   "htmlwidgets"
@@ -63,106 +66,64 @@ project_root = normalizePath(
   mustWork = TRUE
 )
 
-pipeline_file = file.path(
+base_pipeline_file = file.path(
   project_root,
   "R",
   "binance_data.R"
 )
 
-if (!file.exists(pipeline_file)) {
+fast_pipeline_file = file.path(
+  project_root,
+  "R",
+  "binance_data_fast.R"
+)
+
+if (!all(file.exists(c(base_pipeline_file, fast_pipeline_file)))) {
   stop(
-    "Не знайдено R/binance_data.R. Відкрийте правильний RStudio Project.",
+    paste0(
+      "Не знайдено R/binance_data.R або R/binance_data_fast.R. ",
+      "Відкрийте правильний RStudio Project."
+    ),
     call. = FALSE
   )
 }
 
 source(
-  pipeline_file,
+  base_pipeline_file,
   encoding = "UTF-8"
 )
 
-config = btc_default_config(
+source(
+  fast_pipeline_file,
+  encoding = "UTF-8"
+)
+
+config = btc_fast_default_config(
   project_root = project_root
-)
-
-processed_paths = btc_processed_paths(config)
-
-required_processed_files = c(
-  processed_paths$data_1h,
-  processed_paths$data_4h,
-  processed_paths$data_1d,
-  processed_paths$manifest
-)
-
-local_data_exist = all(
-  file.exists(required_processed_files)
 )
 
 latest_available_date = btc_resolve_end_date(
   config
 )
 
-local_end_date = as.Date(NA)
+btc_fast = btc_fast_update(
+  config = config,
+  update = TRUE
+)
 
-if (file.exists(processed_paths$manifest)) {
-  local_manifest = readRDS(
-    processed_paths$manifest
-  )
+btc_1h = btc_fast$data_1h
+btc_4h = btc_fast$data_4h
+btc_1d = btc_fast$data_1d
 
-  if (
-    is.data.frame(local_manifest) &&
-    "end_date" %in% names(local_manifest) &&
-    nrow(local_manifest) > 0L
-  ) {
-    local_end_date = max(
-      as.Date(local_manifest$end_date),
-      na.rm = TRUE
-    )
-  }
-}
+local_end_date = max(
+  as.Date(btc_fast$manifest$end_date),
+  na.rm = TRUE
+)
 
-update_required = !local_data_exist ||
-  is.na(local_end_date) ||
-  local_end_date < latest_available_date
-
-if (isTRUE(update_required)) {
-  message(
-    "Локальні дані потребують оновлення. ",
-    "Остання доступна дата Binance: ",
-    latest_available_date,
-    "."
-  )
-
-  updated_data = btc_load_or_update(
-    config = config,
-    update = TRUE
-  )
-
-  btc_1h = updated_data$data_1h
-  btc_4h = updated_data$data_4h
-  btc_1d = updated_data$data_1d
-
-  rm(updated_data)
-  invisible(gc())
-} else {
-  message(
-    "Локальні дані актуальні до ",
-    local_end_date,
-    ". Підключаю тільки 1h, 4h і 1d."
-  )
-
-  btc_1h = readRDS(
-    processed_paths$data_1h
-  )
-
-  btc_4h = readRDS(
-    processed_paths$data_4h
-  )
-
-  btc_1d = readRDS(
-    processed_paths$data_1d
-  )
-}
+update_required = identical(
+  btc_fast$source,
+  "fast_updated_store"
+)
 
 validation_dir = config$validation_dir
 
@@ -192,7 +153,7 @@ if (!all(file.exists(required_validation_files))) {
     paste0(
       "Не знайдено всі звіти перевірки у ",
       validation_dir,
-      ". Спочатку запустіть scripts/01_get_binance_data.R."
+      ". Спочатку запустіть scripts/03_update_binance_fast.R."
     ),
     call. = FALSE
   )
@@ -780,9 +741,7 @@ run_summary = data.frame(
     as.character(
       max(
         as.Date(
-          readRDS(
-            processed_paths$manifest
-          )$end_date
+          btc_fast$manifest$end_date
         ),
         na.rm = TRUE
       )

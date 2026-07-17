@@ -1090,12 +1090,18 @@ btc_fast_validate = function(
       "max(open_time) AS last_open_time, ",
       "(SELECT count(*) - count(DISTINCT open_time) ",
       "FROM btc_1m_source) AS duplicate_open_times, ",
+      "sum(CASE WHEN mod(CAST(round(epoch(open_time)) AS BIGINT), 60) ",
+      "<> 0 THEN 1 ELSE 0 END) AS off_minute_grid, ",
       "sum(CASE WHEN \"open\" <= 0 OR high <= 0 OR low <= 0 ",
       "OR \"close\" <= 0 THEN 1 ELSE 0 END) AS non_positive_prices, ",
       "sum(CASE WHEN base_volume < 0 OR quote_volume < 0 ",
       "OR taker_buy_base_volume < 0 OR ",
       "taker_buy_quote_volume < 0 THEN 1 ELSE 0 END) ",
       "AS negative_volumes, ",
+      "sum(CASE WHEN taker_buy_base_volume > ",
+      "base_volume * (1 + 1e-12) OR taker_buy_quote_volume > ",
+      "quote_volume * (1 + 1e-12) THEN 1 ELSE 0 END) ",
+      "AS taker_buy_exceeds_total, ",
       "sum(CASE WHEN high < greatest(\"open\", \"close\") ",
       "THEN 1 ELSE 0 END) AS invalid_high, ",
       "sum(CASE WHEN low > least(\"open\", \"close\") ",
@@ -1143,10 +1149,12 @@ btc_fast_validate = function(
       "expected_first_open_time",
       "expected_last_open_time",
       "duplicate_open_times",
+      "off_minute_grid",
       "gap_count",
       "missing_minutes",
       "non_positive_prices",
       "negative_volumes",
+      "taker_buy_exceeds_total",
       "invalid_high",
       "invalid_low",
       "invalid_range"
@@ -1174,6 +1182,7 @@ btc_fast_validate = function(
         usetz = TRUE
       ),
       metrics$duplicate_open_times[[1]],
+      metrics$off_minute_grid[[1]],
       nrow(gaps),
       if (nrow(gaps) > 0L) {
         sum(
@@ -1185,6 +1194,7 @@ btc_fast_validate = function(
       },
       metrics$non_positive_prices[[1]],
       metrics$negative_volumes[[1]],
+      metrics$taker_buy_exceeds_total[[1]],
       metrics$invalid_high[[1]],
       metrics$invalid_low[[1]],
       metrics$invalid_range[[1]]
@@ -1213,8 +1223,10 @@ btc_fast_validate = function(
     ) < 1
   ) &&
     metrics$duplicate_open_times[[1]] == 0 &&
+    metrics$off_minute_grid[[1]] == 0 &&
     metrics$non_positive_prices[[1]] == 0 &&
     metrics$negative_volumes[[1]] == 0 &&
+    metrics$taker_buy_exceeds_total[[1]] == 0 &&
     metrics$invalid_high[[1]] == 0 &&
     metrics$invalid_low[[1]] == 0 &&
     metrics$invalid_range[[1]] == 0
@@ -1786,6 +1798,166 @@ btc_fast_write_run_summary = function(
   invisible(TRUE)
 }
 
+btc_fast_write_book_summaries = function(
+  config,
+  compact_data
+) {
+  gaps_path = file.path(
+    config$validation_dir,
+    "missing_intervals.csv"
+  )
+
+  api_path = file.path(
+    config$validation_dir,
+    "api_sample_check.csv"
+  )
+
+  if (!all(file.exists(c(gaps_path, api_path)))) {
+    warning(
+      paste0(
+        "Не вдалося створити підсумки для книги: ",
+        "відсутні missing_intervals.csv або api_sample_check.csv."
+      ),
+      call. = FALSE
+    )
+    return(invisible(FALSE))
+  }
+
+  gaps = utils::read.csv(
+    gaps_path,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  api_check = utils::read.csv(
+    api_path,
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  missing_minutes = if (
+    nrow(gaps) > 0L &&
+      "missing_minutes" %in% names(gaps)
+  ) {
+    as.numeric(gaps$missing_minutes)
+  } else {
+    numeric()
+  }
+
+  gap_summary = data.frame(
+    metric = c(
+      "gap_count",
+      "missing_minutes",
+      "largest_gap_minutes"
+    ),
+    value = c(
+      nrow(gaps),
+      if (length(missing_minutes) > 0L) {
+        sum(missing_minutes, na.rm = TRUE)
+      } else {
+        0
+      },
+      if (length(missing_minutes) > 0L) {
+        max(missing_minutes, na.rm = TRUE)
+      } else {
+        0
+      }
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  api_checked = if ("checked" %in% names(api_check)) {
+    sum(api_check$checked %in% TRUE, na.rm = TRUE)
+  } else {
+    0L
+  }
+
+  api_matched = if (
+    all(c("checked", "matched") %in% names(api_check))
+  ) {
+    sum(
+      api_check$checked %in% TRUE &
+        api_check$matched %in% TRUE,
+      na.rm = TRUE
+    )
+  } else {
+    0L
+  }
+
+  api_summary = data.frame(
+    metric = c(
+      "api_checked",
+      "api_matched",
+      "api_failed"
+    ),
+    value = c(
+      api_checked,
+      api_matched,
+      api_checked - api_matched
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  interval_summary = do.call(
+    rbind,
+    lapply(
+      c("1h", "4h", "1d"),
+      function(label) {
+        data = compact_data[[paste0("data_", label)]]
+        complete = data$is_complete %in% TRUE
+
+        data.frame(
+          interval = label,
+          rows = nrow(data),
+          complete_rows = sum(complete, na.rm = TRUE),
+          incomplete_rows = sum(!complete, na.rm = TRUE),
+          complete_percent = round(
+            100 * mean(complete, na.rm = TRUE),
+            6
+          ),
+          first_open_time = format(
+            min(data$open_time, na.rm = TRUE),
+            tz = "UTC",
+            usetz = TRUE
+          ),
+          last_open_time = format(
+            max(data$open_time, na.rm = TRUE),
+            tz = "UTC",
+            usetz = TRUE
+          ),
+          stringsAsFactors = FALSE
+        )
+      }
+    )
+  )
+
+  utils::write.csv(
+    gap_summary,
+    file.path(config$validation_dir, "gap_summary.csv"),
+    row.names = FALSE,
+    fileEncoding = "UTF-8"
+  )
+
+  utils::write.csv(
+    api_summary,
+    file.path(config$validation_dir, "api_summary.csv"),
+    row.names = FALSE,
+    fileEncoding = "UTF-8"
+  )
+
+  utils::write.csv(
+    interval_summary,
+    file.path(
+      config$validation_dir,
+      "incomplete_bars_summary.csv"
+    ),
+    row.names = FALSE,
+    fileEncoding = "UTF-8"
+  )
+
+  invisible(TRUE)
+}
+
 btc_fast_update = function(
   config = btc_fast_default_config(),
   update = TRUE
@@ -1849,11 +2021,16 @@ btc_fast_update = function(
       "Нових завершених днів немає. Підключаю швидке локальне сховище."
     )
 
-    return(
-      btc_fast_load_compact(
-        config
-      )
+    compact_data = btc_fast_load_compact(
+      config
     )
+
+    btc_fast_write_book_summaries(
+      config = config,
+      compact_data = compact_data
+    )
+
+    return(compact_data)
   }
 
   message(
@@ -1970,6 +2147,11 @@ btc_fast_update = function(
   compact_data = btc_fast_save_book_rds(
     connection = connection,
     config = config
+  )
+
+  btc_fast_write_book_summaries(
+    config = config,
+    compact_data = compact_data
   )
 
   saveRDS(

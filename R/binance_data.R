@@ -709,8 +709,17 @@ btc_aggregate_ohlcv <- function(data, seconds, label) {
 
 btc_validate_1m <- function(data, config, end_date) {
   times <- as.numeric(data$open_time)
-  unique_times <- unique(times)
+  unique_times <- sort(unique(times))
   differences <- diff(unique_times)
+  off_minute_grid <- sum(
+    abs(times - round(times / 60) * 60) > 1e-6
+  )
+  taker_buy_exceeds_total <- sum(
+    data$taker_buy_base_volume >
+      data$base_volume * (1 + 1e-12) |
+      data$taker_buy_quote_volume >
+        data$quote_volume * (1 + 1e-12)
+  )
 
   gap_positions <- which(differences > 60)
   missing_minutes <- if (length(gap_positions) > 0L) {
@@ -756,10 +765,12 @@ btc_validate_1m <- function(data, config, end_date) {
       "expected_first_open_time",
       "expected_last_open_time",
       "duplicate_open_times",
+      "off_minute_grid",
       "gap_count",
       "missing_minutes",
       "non_positive_prices",
       "negative_volumes",
+      "taker_buy_exceeds_total",
       "invalid_high",
       "invalid_low",
       "invalid_range"
@@ -771,6 +782,7 @@ btc_validate_1m <- function(data, config, end_date) {
       format(config$start_time, tz = "UTC", usetz = TRUE),
       format(expected_end, tz = "UTC", usetz = TRUE),
       sum(duplicated(times)),
+      off_minute_grid,
       length(gap_positions),
       missing_minutes,
       sum(
@@ -785,6 +797,7 @@ btc_validate_1m <- function(data, config, end_date) {
           data$taker_buy_base_volume < 0 |
           data$taker_buy_quote_volume < 0
       ),
+      taker_buy_exceeds_total,
       sum(data$high < pmax(data$open, data$close)),
       sum(data$low > pmin(data$open, data$close)),
       sum(data$high < data$low)
@@ -801,6 +814,7 @@ btc_validate_1m <- function(data, config, end_date) {
       expected_end
     ) &&
     sum(duplicated(times)) == 0L &&
+    off_minute_grid == 0L &&
     sum(
       data$open <= 0 |
         data$high <= 0 |
@@ -813,6 +827,7 @@ btc_validate_1m <- function(data, config, end_date) {
         data$taker_buy_base_volume < 0 |
         data$taker_buy_quote_volume < 0
     ) == 0L &&
+    taker_buy_exceeds_total == 0L &&
     sum(data$high < pmax(data$open, data$close)) == 0L &&
     sum(data$low > pmin(data$open, data$close)) == 0L &&
     sum(data$high < data$low) == 0L
