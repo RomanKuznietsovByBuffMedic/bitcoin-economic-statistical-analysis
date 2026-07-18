@@ -122,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-how-it-works.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -149,26 +149,11 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#sec-about" id="toc-sec-about" class="nav-link active" data-scroll-target="#sec-about">Про проєкт</a>
   <ul>
-  <li><a href="#meaning-of-profit" id="toc-meaning-of-profit" class="nav-link" data-scroll-target="#meaning-of-profit">Що означає «заробляти»?</a></li>
-  <li><a href="#main-research-question" id="toc-main-research-question" class="nav-link" data-scroll-target="#main-research-question">Головне дослідницьке питання</a>
-  <ul>
-  <li><a href="#target-decision" id="toc-target-decision" class="nav-link" data-scroll-target="#target-decision">Яке рішення має підтримувати модель?</a></li>
-  </ul></li>
-  <li><a href="#minimum-knowledge" id="toc-minimum-knowledge" class="nav-link" data-scroll-target="#minimum-knowledge">Який мінімум потрібно знати?</a>
-  <ul>
-  <li><a href="#ринок-і-виконання-угод" id="toc-ринок-і-виконання-угод" class="nav-link" data-scroll-target="#ринок-і-виконання-угод">Ринок і виконання угод</a></li>
-  <li><a href="#дані" id="toc-дані" class="nav-link" data-scroll-target="#дані">Дані</a></li>
-  <li><a href="#статистика" id="toc-статистика" class="nav-link" data-scroll-target="#статистика">Статистика</a></li>
-  <li><a href="#торгове-правило" id="toc-торгове-правило" class="nav-link" data-scroll-target="#торгове-правило">Торгове правило</a></li>
-  <li><a href="#ризик" id="toc-ризик" class="nav-link" data-scroll-target="#ризик">Ризик</a></li>
-  </ul></li>
-  <li><a href="#ideal-knowledge" id="toc-ideal-knowledge" class="nav-link" data-scroll-target="#ideal-knowledge">Що в ідеалі потрібно знати?</a></li>
-  <li><a href="#minimum-viable-research" id="toc-minimum-viable-research" class="nav-link" data-scroll-target="#minimum-viable-research">Мінімальне практичне дослідження</a></li>
-  <li><a href="#model-admission" id="toc-model-admission" class="nav-link" data-scroll-target="#model-admission">Як модель отримує допуск до роботи?</a></li>
-  <li><a href="#useful-result" id="toc-useful-result" class="nav-link" data-scroll-target="#useful-result">Що вважатиметься корисним результатом?</a></li>
-  <li><a href="#ideal-result" id="toc-ideal-result" class="nav-link" data-scroll-target="#ideal-result">Який результат потрібен в ідеалі?</a></li>
-  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Послідовність подальшої роботи</a></li>
-  <li><a href="#project-limitations" id="toc-project-limitations" class="nav-link" data-scroll-target="#project-limitations">Чого цей проєкт не обіцяє?</a></li>
+  <li><a href="#що-спочатку-треба-зрозуміти" id="toc-що-спочатку-треба-зрозуміти" class="nav-link" data-scroll-target="#що-спочатку-треба-зрозуміти">Що спочатку треба зрозуміти?</a></li>
+  <li><a href="#як-перевірятиметься-ідея" id="toc-як-перевірятиметься-ідея" class="nav-link" data-scroll-target="#як-перевірятиметься-ідея">Як перевірятиметься ідея?</a></li>
+  <li><a href="#які-методи-плануються" id="toc-які-методи-плануються" class="nav-link" data-scroll-target="#які-методи-плануються">Які методи плануються?</a></li>
+  <li><a href="#для-кого-цей-проєкт" id="toc-для-кого-цей-проєкт" class="nav-link" data-scroll-target="#для-кого-цей-проєкт">Для кого цей проєкт?</a></li>
+  <li><a href="#який-результат-очікується" id="toc-який-результат-очікується" class="nav-link" data-scroll-target="#який-результат-очікується">Який результат очікується?</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
@@ -197,251 +182,72 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="sec-about" class="level1">
 <h1>Про проєкт</h1>
-<p>Цей проєкт досліджує, чи може статистичний аналіз ринку BTC дати практично корисне рішення для spot-торгівлі після врахування витрат і ризику.</p>
-<p>Робота не починається з припущення, що BTC обов'язково подорожчає, що певна модель знайде прибутковий сигнал або що активна торгівля буде кращою за просте утримання BTC.</p>
-<div class="callout callout-style-default callout-warning callout-titled" title="Правдоподібно, але неправильно">
+<div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Правдоподібно, але неправильно
+<span class="screen-reader-only">Important</span>Головне питання
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Щоб заробляти на BTC, достатньо знайти складну модель, яка вгадуватиме наступну ціну?</p>
+<p><strong>Чи може статистика допомогти отримувати прибуток від торгівлі BTC?</strong></p>
 </div>
 </div>
-<p><strong>Ні.</strong> Складність моделі не створює торгової переваги й не усуває комісії, прослизання або ризик великого падіння.</p>
-<p><strong>A-сюжет - дослідження.</strong> Дані використовуються для перевірки вузької гіпотези на майбутньому часовому відрізку.</p>
-<p><strong>B-сюжет - практичне рішення.</strong> Для кожного сигналу потрібно визначити, скільки BTC тримати, скільки коштуватиме зміна позиції та за якої втрати правило зупиняється.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Зафіксована мета">
+<p>Проєкт починається з простих питань, а потім переходить до моделей і практичної перевірки.</p>
+<section id="що-спочатку-треба-зрозуміти" class="level2">
+<h2 class="anchored" data-anchor-id="що-спочатку-треба-зрозуміти">Що спочатку треба зрозуміти?</h2>
+<ol type="1">
+<li>Що таке Bitcoin і BTC?</li>
+<li>Чому BTC має ціну?</li>
+<li>Як на зміні ціни можна заробити?</li>
+<li>Що в ідеалі треба знати для отримання прибутку?</li>
+<li>Що реально можна отримати з доступними даними та невеликим бюджетом?</li>
+</ol>
+</section>
+<section id="як-перевірятиметься-ідея" class="level2">
+<h2 class="anchored" data-anchor-id="як-перевірятиметься-ідея">Як перевірятиметься ідея?</h2>
+<ol type="1">
+<li>Отримати й перевірити ринкові дані.</li>
+<li>Сформулювати конкретне статистичне питання.</li>
+<li>Вибрати модель саме для цього питання.</li>
+<li>Створити правило купівлі, продажу або бездіяльності.</li>
+<li>Урахувати комісії, інші витрати та ризики.</li>
+<li>Перевірити результат на нових даних.</li>
+<li>Знайти проблеми та спробувати їх виправити.</li>
+</ol>
+<div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Зафіксована мета
+<span class="screen-reader-only">Note</span>Головна ідея
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Мета проєкту - перевірити, чи можна на даних конкретного ринку побудувати просте і відтворюване правило розподілу коштів між BTC та котирувальним активом, яке має практичну користь на нових даних після комісій, спреду й прослизання.</p>
-<p>Мета не полягає у використанні якомога більшої кількості моделей.</p>
-</div>
-</div>
-<section id="meaning-of-profit" class="level2">
-<h2 class="anchored" data-anchor-id="meaning-of-profit">Що означає «заробляти»?</h2>
-<p>Слово «заробляти» може означати три різні результати.</p>
-<ol type="1">
-<li><strong>Окремий прибуток.</strong> Одна або кілька вдалих угод можуть бути випадковістю.</li>
-<li><strong>Позитивне статистичне очікування.</strong> Торгове правило в середньому дає додатний результат після витрат, але окремі періоди залишаються збитковими.</li>
-<li><strong>Відчутний грошовий дохід.</strong> Для нього потрібні не лише знання і робоче правило, а й достатній капітал.</li>
-</ol>
-<p>Дослідницькою метою є другий результат. Третій не можна обіцяти до того, як другий підтверджено на нових і реальних даних.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Малий капітал змінює мету">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Малий капітал змінює мету
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Грошовий результат залежить від капіталу та чистої дохідності.</p>
-<p>За капіталу 100 USD навіть чиста дохідність 20% означає лише 20 USD прибутку. Тому початковий бюджет потрібен для перевірки процесу, а не для отримання стабільного доходу.</p>
+<p><strong>Модель сама не заробляє гроші.</strong></p>
+<p>Перевіряти потрібно модель разом із правилом дій, витратами та ризиком.</p>
 </div>
 </div>
 </section>
-<section id="main-research-question" class="level2">
-<h2 class="anchored" data-anchor-id="main-research-question">Головне дослідницьке питання</h2>
-<blockquote class="blockquote">
-<p>Чи додає статистичне моделювання BTC практичну користь для spot-рішення після витрат і на даних, яких модель не бачила під час побудови?</p>
-</blockquote>
-<p>Це питання важливіше за назву конкретної моделі. ARIMA, GARCH, MS-GARCH або машинне навчання можуть бути лише інструментами перевірки, але не метою роботи.</p>
-<section id="target-decision" class="level3">
-<h3 class="anchored" data-anchor-id="target-decision">Яке рішення має підтримувати модель?</h3>
-<p>На початковому етапі модель не повинна вгадувати точну майбутню ціну BTC.</p>
-<p>Практичне рішення простіше:</p>
-<ul>
-<li>чи варто в наступному періоді мати експозицію до BTC;</li>
-<li>яку частину доступного капіталу можна тримати в BTC;</li>
-<li>коли частку BTC потрібно зменшити через підвищений ризик;</li>
-<li>за якої втрати або нестабільності правило потрібно зупинити.</li>
-</ul>
-<p>Початкове дослідження обмежується spot-ринком. Кредитне плече, короткі позиції, ф'ючерси та інші похідні інструменти не використовуються.</p>
+<section id="які-методи-плануються" class="level2">
+<h2 class="anchored" data-anchor-id="які-методи-плануються">Які методи плануються?</h2>
+<p>Спочатку я планую працювати з часовими рядами.</p>
+<p>Якщо вони не дадуть корисного результату, можна буде перевірити інші методи, зокрема машинне навчання.</p>
+<p>Метод має з'являтися лише тоді, коли для нього є конкретне питання.</p>
 </section>
+<section id="для-кого-цей-проєкт" class="level2">
+<h2 class="anchored" data-anchor-id="для-кого-цей-проєкт">Для кого цей проєкт?</h2>
+<p>Для звичайної людини, яка не знає економіки Bitcoin і складних статистичних моделей.</p>
+<p>Спочатку все пояснюється просто. Технічний рівень додається поступово, коли вже зрозуміло, навіщо він потрібен.</p>
+<p>Результат також має бути придатним для невеликого бюджету.</p>
 </section>
-<section id="minimum-knowledge" class="level2">
-<h2 class="anchored" data-anchor-id="minimum-knowledge">Який мінімум потрібно знати?</h2>
-<p>Мінімум означає не гарантований заробіток, а достатню підготовку для чесної перевірки однієї торгової ідеї.</p>
-<section id="ринок-і-виконання-угод" class="level3">
-<h3 class="anchored" data-anchor-id="ринок-і-виконання-угод">Ринок і виконання угод</h3>
-<p>Потрібно розуміти:</p>
-<ul>
-<li>чим відрізняються ринковий і лімітний накази;</li>
-<li>що таке ціна купівлі, ціна продажу та спред;</li>
-<li>як комісія і прослизання зменшують результат;</li>
-<li>чому ліквідність і мінімальний розмір наказу мають значення;</li>
-<li>чим біржовий баланс відрізняється від самостійного контролю BTC.</li>
-</ul>
-</section>
-<section id="дані" class="level3">
-<h3 class="anchored" data-anchor-id="дані">Дані</h3>
-<p>Потрібно вміти:</p>
-<ul>
-<li>працювати з даними саме того ринку, на якому може виконуватися угода;</li>
-<li>перевіряти часову сітку, дублікати, пропуски та неповні свічки;</li>
-<li>розрізняти ціну, просту дохідність, логарифмічну дохідність, обсяг і волатильність;</li>
-<li>не використовувати інформацію з майбутнього.</li>
-</ul>
-</section>
-<section id="статистика" class="level3">
-<h3 class="anchored" data-anchor-id="статистика">Статистика</h3>
-<p>На старті достатньо розуміти:</p>
-<ul>
-<li>середнє, дисперсію, квантили та кореляцію;</li>
-<li>стаціонарність і залежність у часі;</li>
-<li>волатильність, важкі хвости та структурні зміни;</li>
-<li>різницю між оцінюванням на навчальному періоді та перевіркою на новому періоді;</li>
-<li>чому статистична значущість не дорівнює прибутковості.</li>
-</ul>
-</section>
-<section id="торгове-правило" class="level3">
-<h3 class="anchored" data-anchor-id="торгове-правило">Торгове правило</h3>
-<p>Потрібно заздалегідь визначити:</p>
-<ul>
-<li>які дані створюють сигнал;</li>
-<li>коли відбувається купівля або продаж;</li>
-<li>яку частину капіталу можна використати;</li>
-<li>які витрати віднімаються;</li>
-<li>коли правило вважається непридатним.</li>
-</ul>
-</section>
-<section id="ризик" class="level3">
-<h3 class="anchored" data-anchor-id="ризик">Ризик</h3>
-<p>Потрібні обмеження:</p>
-<ul>
-<li>максимальна частка капіталу в BTC;</li>
-<li>допустима просадка;</li>
-<li>умови зупинення торгівлі;</li>
-<li>заборона використовувати гроші, потрібні для звичайних витрат;</li>
-<li>початкова перевірка без реальних коштів або на малій сумі.</li>
-</ul>
-</section>
-</section>
-<section id="ideal-knowledge" class="level2">
-<h2 class="anchored" data-anchor-id="ideal-knowledge">Що в ідеалі потрібно знати?</h2>
-<p>Ідеальний рівень ширший за мінімальний і охоплює весь шлях від ринкових даних до фактичного результату.</p>
-<ol type="1">
-<li><strong>Економіка Bitcoin і попиту на BTC.</strong> Які учасники створюють попит, чому змінюється пропозиція на ринку та які події можуть змінювати поведінку учасників.</li>
-<li><strong>Ринкова мікроструктура.</strong> Книга наказів, ліквідність, спред, вплив наказів на ціну та відмінності між біржами.</li>
-<li><strong>Фінансові часові ряди.</strong> Стаціонарність, автокореляція, волатильність, асиметрія, важкі хвости, структурні злами та режими.</li>
-<li><strong>Прогнозування.</strong> Базові прогнози, ARMA та ARIMA для умовного середнього, GARCH та його розширення для волатильності, моделі режимів і методи машинного навчання за наявності обґрунтованих ознак.</li>
-<li><strong>Перевірка стратегій.</strong> Послідовне тестування в часі, захист від витоку майбутньої інформації, множинних перевірок і перенавчання.</li>
-<li><strong>Оцінювання результату.</strong> Чиста дохідність, оборот, максимальна просадка, час відновлення, стабільність і чутливість до витрат.</li>
-<li><strong>Виконання та контроль.</strong> Надсилання наказів, журнал операцій, моніторинг помилок, зміни правил біржі та розбіжності між симуляцією і реальною торгівлею.</li>
-</ol>
-<p>Знати всі можливі моделі наперед не потрібно. Потрібно розуміти весь процес і додавати складність лише для розв'язання конкретної проблеми.</p>
-</section>
-<section id="minimum-viable-research" class="level2">
-<h2 class="anchored" data-anchor-id="minimum-viable-research">Мінімальне практичне дослідження</h2>
-<p>Перший завершений експеримент має бути вузьким.</p>
-<ol type="1">
-<li><strong>Ринок:</strong> Binance Spot <code>BTCUSDT</code>.</li>
-<li><strong>Основний інтервал:</strong> один день.</li>
-<li><strong>Додатковий інтервал:</strong> чотири години.</li>
-<li><strong>Контрольний інтервал:</strong> одна година.</li>
-<li><strong>Дії:</strong> тримати BTC, зменшувати частку BTC або залишатися в USDT.</li>
-<li><strong>Базові рішення:</strong> постійне утримання BTC, відсутність позиції в BTC та просте правило на основі історичної волатильності.</li>
-<li><strong>Перша модель:</strong> звичайний GARCH для прогнозу умовної волатильності.</li>
-<li><strong>Перевірка:</strong> послідовне оцінювання на минулих даних і тестування на наступному часовому відрізку.</li>
-<li><strong>Витрати:</strong> комісія, спред, прослизання та оборот.</li>
-<li><strong>Ризик:</strong> розмір позиції, максимальна просадка й умова зупинення правила.</li>
-</ol>
-<div class="callout callout-style-default callout-important callout-titled" title="Перша перевірювана гіпотеза">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Перша перевірювана гіпотеза
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Прогноз волатильності може бути корисним для зміни частки BTC та контролю просадки, навіть якщо напрямок наступної зміни ціни передбачити не вдається.</p>
-<p>Це припущення має бути перевірене, а не прийняте як факт.</p>
-</div>
-</div>
-<p>MS-GARCH або інша складніша модель розглядатиметься лише тоді, коли звичайний GARCH систематично не описуватиме зміни між різними станами волатильності та складніша модель покаже додаткову користь на нових даних.</p>
-</section>
-<section id="model-admission" class="level2">
-<h2 class="anchored" data-anchor-id="model-admission">Як модель отримує допуск до роботи?</h2>
-<p>Кожна модель повинна пройти однакову перевірку.</p>
-<ol type="1">
-<li>Яку властивість даних вона описує?</li>
-<li>Яке практичне рішення може змінити її прогноз?</li>
-<li>Чи перевершує вона простий базовий метод на нових даних після витрат?</li>
-</ol>
-<p>Модель не використовується лише тому, що вона складна, сучасна або дає красивий результат на навчальному періоді.</p>
-<p>Одночасне перебирання десятків моделей і параметрів не є початковим планом. Кожна нова модель повинна відповідати на проблему, яку не розв'язав простіший метод.</p>
-</section>
-<section id="useful-result" class="level2">
-<h2 class="anchored" data-anchor-id="useful-result">Що вважатиметься корисним результатом?</h2>
-<p>Практично корисний результат повинен:</p>
-<ul>
-<li>бути отриманий на даних, яких модель не бачила;</li>
-<li>враховувати торгові витрати;</li>
-<li>порівнюватися з постійним утриманням BTC та відсутністю позиції;</li>
-<li>не залежати від однієї вдалої угоди або одного короткого періоду;</li>
-<li>залишатися прийнятним за помірно гірших припущень про витрати;</li>
-<li>мати зрозумілу максимальну просадку;</li>
-<li>відтворюватися кодом.</li>
-</ul>
-<p>Негативний висновок також є корисним. Якщо модель не дає додаткової користі, її не потрібно перетворювати на торгове правило.</p>
-</section>
-<section id="ideal-result" class="level2">
-<h2 class="anchored" data-anchor-id="ideal-result">Який результат потрібен в ідеалі?</h2>
-<p>Ідеальний результат - не графік прогнозу і не одна прибуткова симуляція.</p>
-<p>Потрібна відтворювана система, яка для кожного торгового моменту визначає:</p>
-<ul>
-<li>доступну інформацію;</li>
-<li>оцінку ризику або сигнал;</li>
-<li>цільову частку BTC;</li>
-<li>очікувані витрати;</li>
-<li>умову виконання наказу;</li>
-<li>умову зупинення;</li>
-<li>фактичний результат після виконання.</li>
-</ul>
-<p>Навіть така система не гарантує майбутнього прибутку. Вона лише робить рішення послідовними, перевірюваними та придатними для контролю.</p>
-</section>
-<section id="workflow" class="level2">
-<h2 class="anchored" data-anchor-id="workflow">Послідовність подальшої роботи</h2>
-<p>Початкові поняття, вибір ринку, конвеєр отримання даних і процедура побудови модельної таблиці без витоку майбутнього вже підготовлені.</p>
-<p>Наступні етапи:</p>
-<ol type="1">
-<li>описати дохідність, волатильність, хвости розподілу та просадки;</li>
-<li>перевірити стаціонарність, автокореляцію і кластеризацію волатильності;</li>
-<li>зафіксувати першу гіпотезу та критерії її відхилення;</li>
-<li>побудувати просте правило на основі історичної волатильності;</li>
-<li>оцінити GARCH і перевірити, чи змінює він практичне рішення;</li>
-<li>провести послідовну перевірку на нових даних;</li>
-<li>застосувати витрати відповідно до обороту стратегії;</li>
-<li>лише після цього вирішити, чи потрібна складніша модель.</li>
-</ol>
-</section>
-<section id="project-limitations" class="level2">
-<h2 class="anchored" data-anchor-id="project-limitations">Чого цей проєкт не обіцяє?</h2>
-<p>Проєкт не гарантує:</p>
-<ul>
-<li>прибутку від купівлі або торгівлі BTC;</li>
-<li>точного прогнозу майбутньої ціни;</li>
-<li>стабільного доходу з малого капіталу;</li>
-<li>повторення історичних закономірностей;</li>
-<li>захисту від різких змін ринку, проблем біржі або втрати доступу;</li>
-<li>перетворення статистичної моделі на безризиковий спосіб заробітку.</li>
-</ul>
-<p>Рішення про використання реальних грошей може розглядатися лише після перевірки правила на нових даних, урахування витрат і встановлення обмежень ризику.</p>
+<section id="який-результат-очікується" class="level2">
+<h2 class="anchored" data-anchor-id="який-результат-очікується">Який результат очікується?</h2>
+<p>Я не виходжу з припущення, що статистика обов'язково дасть змогу заробляти.</p>
+<p>Мета проєкту - перевірити, що справді можна отримати на практиці.</p>
 
 
 </section>
@@ -852,8 +658,8 @@ ul.task-list li input[type="checkbox"] {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01-how-it-works.html" class="pagination-link" aria-label="Що це і як працює?">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./01-how-it-works.html" class="pagination-link" aria-label="Що це?">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

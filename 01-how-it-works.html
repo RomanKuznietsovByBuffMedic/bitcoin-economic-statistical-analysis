@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Що це і як працює? – Bitcoin і BTC: економічний та статистичний аналіз</title>
+<title>2&nbsp; Що це? – Bitcoin і BTC: економічний та статистичний аналіз</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,27 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -106,7 +86,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-how-it-works.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-how-it-works.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -143,7 +123,7 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-how-it-works.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -168,12 +148,19 @@ div.csl-indent {
     <h2 id="toc-title">Зміст</h2>
    
   <ul>
-  <li><a href="#what-is-bitcoin" id="toc-what-is-bitcoin" class="nav-link active" data-scroll-target="#what-is-bitcoin"><span class="header-section-number">2.1</span> Що саме купує Олена?</a></li>
-  <li><a href="#who-controls-bitcoin" id="toc-who-controls-bitcoin" class="nav-link" data-scroll-target="#who-controls-bitcoin"><span class="header-section-number">2.2</span> Де знаходяться куплені BTC?</a></li>
-  <li><a href="#why-bitcoin-has-value" id="toc-why-bitcoin-has-value" class="nav-link" data-scroll-target="#why-bitcoin-has-value"><span class="header-section-number">2.3</span> Чому за BTC віддають справжні гроші?</a></li>
-  <li><a href="#what-is-bitcoin-price" id="toc-what-is-bitcoin-price" class="nav-link" data-scroll-target="#what-is-bitcoin-price"><span class="header-section-number">2.4</span> Що означає ціна 63 920 USD?</a></li>
-  <li><a href="#what-is-closing-price" id="toc-what-is-closing-price" class="nav-link" data-scroll-target="#what-is-closing-price"><span class="header-section-number">2.5</span> Що означає ціна закриття?</a></li>
-  <li><a href="#can-bitcoin-go-to-zero" id="toc-can-bitcoin-go-to-zero" class="nav-link" data-scroll-target="#can-bitcoin-go-to-zero"><span class="header-section-number">2.6</span> Чи може BTC коштувати нуль?</a></li>
+  <li><a href="#bitcoin-і-btc" id="toc-bitcoin-і-btc" class="nav-link active" data-scroll-target="#bitcoin-і-btc"><span class="header-section-number">2.1</span> Bitcoin і BTC</a></li>
+  <li><a href="#чому-робота-відбуватиметься-через-біржу" id="toc-чому-робота-відбуватиметься-через-біржу" class="nav-link" data-scroll-target="#чому-робота-відбуватиметься-через-біржу"><span class="header-section-number">2.2</span> Чому робота відбуватиметься через біржу?</a></li>
+  <li><a href="#чому-за-btc-платять-гроші" id="toc-чому-за-btc-платять-гроші" class="nav-link" data-scroll-target="#чому-за-btc-платять-гроші"><span class="header-section-number">2.3</span> Чому за BTC платять гроші?</a>
+  <ul>
+  <li><a href="#як-утворюється-ціна" id="toc-як-утворюється-ціна" class="nav-link" data-scroll-target="#як-утворюється-ціна"><span class="header-section-number">2.3.1</span> Як утворюється ціна?</a></li>
+  </ul></li>
+  <li><a href="#як-можна-отримати-прибуток" id="toc-як-можна-отримати-прибуток" class="nav-link" data-scroll-target="#як-можна-отримати-прибуток"><span class="header-section-number">2.4</span> Як можна отримати прибуток?</a>
+  <ul>
+  <li><a href="#якщо-ціна-зросте" id="toc-якщо-ціна-зросте" class="nav-link" data-scroll-target="#якщо-ціна-зросте"><span class="header-section-number">2.4.1</span> Якщо ціна зросте</a></li>
+  <li><a href="#якщо-ціна-впаде" id="toc-якщо-ціна-впаде" class="nav-link" data-scroll-target="#якщо-ціна-впаде"><span class="header-section-number">2.4.2</span> Якщо ціна впаде</a></li>
+  </ul></li>
+  <li><a href="#що-треба-знати-для-отримання-прибутку" id="toc-що-треба-знати-для-отримання-прибутку" class="nav-link" data-scroll-target="#що-треба-знати-для-отримання-прибутку"><span class="header-section-number">2.5</span> Що треба знати для отримання прибутку?</a></li>
+  <li><a href="#що-реально-можна-отримати" id="toc-що-реально-можна-отримати" class="nav-link" data-scroll-target="#що-реально-можна-отримати"><span class="header-section-number">2.6</span> Що реально можна отримати?</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/01-how-it-works.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
@@ -182,7 +169,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-how-it-works" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це і як працює?</span></span></h1>
+<h1 class="title"><span id="sec-how-it-works" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span></h1>
 </div>
 
 
@@ -199,243 +186,110 @@ div.csl-indent {
 </header>
 
 
-<p>Олена відкриває біржу і бачить:</p>
-<blockquote class="blockquote">
-<p><strong>1 BTC = 63 920 USD</strong></p>
-</blockquote>
-<p>Перша думка проста: Bitcoin - це цифрова монета, яку можна купити, покласти в гаманець і пізніше продати дорожче.</p>
-<p>Але тут одразу виникають питання. Де знаходиться ця монета? Що саме зберігає гаманець? І звідки взялася ціна 63 920 доларів?</p>
-<section id="what-is-bitcoin" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-bitcoin"><span class="header-section-number">2.1</span> Що саме купує Олена?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
+<div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
+<span class="screen-reader-only">Note</span>Коротка відповідь
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Bitcoin - це файл із цифровою монетою, який після купівлі завантажується в гаманець?</p>
+<p><strong>Bitcoin - це система. BTC - це одиниця, яку можна купувати, продавати та передавати.</strong></p>
 </div>
 </div>
-<p><strong>Ні.</strong></p>
-<p><strong>Bitcoin</strong> - це система, за правилами якої учасники перевіряють і записують перекази.</p>
-<p><strong>Bitcoin</strong>, написане з великої літери, зазвичай означає систему або мережу. <strong>bitcoin</strong> - актив усередині цієї системи, а <strong>BTC</strong> - його скорочене біржове позначення.</p>
-<p>Тому 1 BTC і 1 bitcoin означають ту саму кількість активу. BTC - це не окремий номінал.</p>
-<p>Один BTC можна ділити. Наприклад, Олена може купити 0,01 BTC, не купуючи цілий BTC.</p>
-<p>Початковий задум Bitcoin полягав у можливості передавати електронні платежі без обов’язкової участі фінансової установи.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал:</strong> online payments to be sent directly from one party to another without going through a financial institution.</p>
-<p><strong>Переклад:</strong> онлайн-платежі можна надсилати безпосередньо від однієї сторони іншій без участі фінансової установи.</p>
-</blockquote>
-<p><span class="citation" data-cites="nakamoto2008"><a href="references.html#ref-nakamoto2008" role="doc-biblioref">[1]</a>, p. 1</span></p>
-<p>Окремих цифрових монет-файлів у гаманці немає.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал, розділ «What Is Bitcoin?»:</strong> There are no physical coins or even individual digital coins.</p>
-<p><strong>Переклад:</strong> Не існує ані фізичних монет, ані окремих цифрових монет.</p>
-</blockquote>
-<p><span class="citation" data-cites="antonopoulosHarding2023"><a href="references.html#ref-antonopoulosHarding2023" role="doc-biblioref">[2]</a>, chap. 1</span></p>
-<p>Коли Олена купує 0,01 BTC на біржі, вона не завантажує монету на телефон. Спочатку біржа просто показує новий баланс у її обліковому записі.</p>
+<section id="bitcoin-і-btc" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="bitcoin-і-btc"><span class="header-section-number">2.1</span> Bitcoin і BTC</h2>
+<p>Bitcoin - це не монета чи банкнота, яку можна покласти до кишені.</p>
+<p>Це система правил і комп'ютерна мережа, у якій обліковують та передають BTC.</p>
+<p>Кількість BTC і його ринкову ціну можна вимірювати.</p>
 </section>
-<section id="who-controls-bitcoin" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="who-controls-bitcoin"><span class="header-section-number">2.2</span> Де знаходяться куплені BTC?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
-<div class="callout-header d-flex align-content-center">
+<section id="чому-робота-відбуватиметься-через-біржу" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="чому-робота-відбуватиметься-через-біржу"><span class="header-section-number">2.2</span> Чому робота відбуватиметься через біржу?</h2>
+<p>Для самостійної роботи з BTC потрібні приватні ключі та криптогаманець.</p>
+<p>Поки що я не хочу заглиблюватися в цю технічну частину. Тому купівля, продаж і зберігання BTC спочатку відбуватимуться через біржу.</p>
+<div class="callout callout-style-simple callout-warning">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
+<div class="callout-body-container">
+<p>Біржа спрощує роботу, але зберігає активи й контролює доступ до них.</p>
+<p>Це окремий ризик, який пізніше треба буде врахувати.</p>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>Якщо біржа показує 0,01 BTC, лише Олена може ними розпоряджатися?</p>
 </div>
-</div>
-<p><strong>Не обов’язково.</strong></p>
-<p>Поки BTC залишаються на біржі, Олена бачить баланс, але технічний контроль зазвичай має біржа. Саме біржа зберігає ключі та дозволяє або не дозволяє виведення коштів.</p>
-<p>Олена має обліковий запис і вимогу до біржі, але це ще не самостійний контроль над BTC.</p>
-<p>Якщо Олена виведе BTC у власний гаманець, ситуація зміниться. Тепер гаманець допомагатиме їй керувати приватними ключами.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал, розділ «Who controls the keys»:</strong> access to bitcoins is controlled by "private keys," which are like very long PINs.</p>
-<p><strong>Переклад:</strong> доступ до біткоїнів контролюється приватними ключами, схожими на дуже довгі PIN-коди.</p>
-</blockquote>
-<p><span class="citation" data-cites="antonopoulosHarding2023"><a href="references.html#ref-antonopoulosHarding2023" role="doc-biblioref">[2]</a>, chap. 1</span></p>
-<p>Приватний ключ не є біткоїном. Це секрет, який дає можливість підтвердити переказ.</p>
-<p>Отже, гаманець не зберігає монети-файли. Він допомагає зберігати ключі, необхідні для розпорядження BTC.</p>
-<p>Якщо ключі контролює біржа, Олена залежить від біржі. Якщо ключі контролює сама Олена, вона несе відповідальність за їх збереження.</p>
 </section>
-<section id="why-bitcoin-has-value" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="why-bitcoin-has-value"><span class="header-section-number">2.3</span> Чому за BTC віддають справжні гроші?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>BTC коштує грошей, тому що він забезпечений доларами або гарантує прибуток?</p>
-</div>
-</div>
-<p><strong>Ні.</strong></p>
-<p>Bitcoin не обіцяє обміняти кожен BTC на певну кількість доларів. Володіння BTC також не приносить гарантованих процентів або дивідендів.</p>
-<p>Люди все одно можуть хотіти BTC:</p>
+<section id="чому-за-btc-платять-гроші" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="чому-за-btc-платять-гроші"><span class="header-section-number">2.3</span> Чому за BTC платять гроші?</h2>
+<p>Люди купують BTC з різних причин.</p>
 <ul>
-<li>для переказів;</li>
-<li>для зберігання поза традиційною банківською системою;</li>
-<li>через очікування ширшого використання Bitcoin;</li>
-<li>через надію продати BTC дорожче.</li>
+<li>Bitcoin дає змогу передавати BTC без банку як обов'язкового центрального посередника.</li>
+<li>Частина покупців очікує, що ціна BTC зростатиме.</li>
+<li>Частина намагається заробити на зміні ціни.</li>
 </ul>
-<p>Останній випадок називається спекуляцією.</p>
-<p>Дослідники Bolt і van Oordt пов’язують обмінний курс віртуальної валюти з її використанням у платежах, рішеннями інвесторів та очікуваннями майбутнього поширення.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал:</strong> In our framework, three components are important for the exchange rate:</p>
-<p><strong>Переклад:</strong> У моделі авторів для обмінного курсу важливі три складові.</p>
-</blockquote>
-<p><span class="citation" data-cites="boltVanOordt2016"><a href="references.html#ref-boltVanOordt2016" role="doc-biblioref">[3]</a>, p. 3</span></p>
-<p>Це не означає, що BTC обов’язково зростатиме. Якщо люди перестануть бачити в ньому користь або очікувати подальшого попиту, вони можуть відмовитися його купувати.</p>
-<p>Обмежена кількість BTC також не гарантує високої ціни. Річ може бути рідкісною, але нічого не коштувати, якщо вона нікому не потрібна.</p>
+<section id="як-утворюється-ціна" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="як-утворюється-ціна"><span class="header-section-number">2.3.1</span> Як утворюється ціна?</h3>
+<p>На біржі покупці та продавці пропонують свої ціни. Коли їхні умови збігаються, відбувається угода.</p>
+<p>Так через попит і пропозицію утворюється ринкова ціна.</p>
+<p>Єдиної ціни BTC для всього світу немає. На кожній біржі свої покупці та продавці, тому ціни можуть трохи відрізнятися.</p>
 </section>
-<section id="what-is-bitcoin-price" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="what-is-bitcoin-price"><span class="header-section-number">2.4</span> Що означає ціна 63 920 USD?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
-<div class="callout-header d-flex align-content-center">
+</section>
+<section id="як-можна-отримати-прибуток" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="як-можна-отримати-прибуток"><span class="header-section-number">2.4</span> Як можна отримати прибуток?</h2>
+<p>Моя початкова ідея проста.</p>
+<section id="якщо-ціна-зросте" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="якщо-ціна-зросте"><span class="header-section-number">2.4.1</span> Якщо ціна зросте</h3>
+<p>Купити BTC зараз, а потім продати дорожче.</p>
+</section>
+<section id="якщо-ціна-впаде" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="якщо-ціна-впаде"><span class="header-section-number">2.4.2</span> Якщо ціна впаде</h3>
+<p>Якщо BTC уже є, його можна продати, а пізніше купити дешевше.</p>
+<p>Різниця між ціною купівлі та продажу ще не є чистим прибутком. З неї треба відняти комісії та інші витрати.</p>
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
+<div class="callout-body-container">
+<p>Точну майбутню ціну, а також момент піку чи дна, заздалегідь знати неможливо.</p>
+<p>Модель має давати не «знання майбутнього», а оцінку, яку можна перевірити на даних.</p>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>У Bitcoin є одна офіційна ціна, однакова для всіх бірж?</p>
 </div>
-</div>
-<p><strong>Ні. Є ціни конкретних угод на конкретних ринках.</strong></p>
-<p>Припустімо, Олена купила 0,01 BTC за 639,20 USD без урахування комісії.</p>
-<p>У цій угоді один BTC оцінили так:</p>
-<p><strong>639,20 USD ÷ 0,01 BTC = 63 920 USD за 1 BTC.</strong></p>
-<p>Це не означає, що Олена витратила 63 920 доларів. Вона витратила 639,20 долара, але угода відбулася за курсом 63 920 доларів за один BTC.</p>
-<p>Після угоди біржа може показати <strong>63 920 USD</strong> як останню ціну.</p>
-<p>У документації Coinbase показник останньої ціни пов’язаний з останньою виконаною угодою.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал, розділ «Get product ticker»:</strong> Gets snapshot information about the last trade (tick), best bid/ask and 24h volume.</p>
-<p><strong>Переклад:</strong> Повертає поточну інформацію про останню угоду, найкращі ціни купівлі та продажу й обсяг за 24 години.</p>
-</blockquote>
-<p><span class="citation" data-cites="coinbaseTickerDocs"><a href="references.html#ref-coinbaseTickerDocs" role="doc-biblioref">[4]</a></span></p>
-<p>Тому напис:</p>
-<blockquote class="blockquote">
-<p><strong>BTC = 63 920 USD</strong></p>
-</blockquote>
-<p>насправді є скороченням довшого твердження:</p>
-<blockquote class="blockquote">
-<p>На певній біржі, у торговій парі BTC-USD, остання угода відбулася за ціною 63 920 доларів за один BTC.</p>
-</blockquote>
-<p>На іншій біржі в ту саму секунду ціна може трохи відрізнятися. Ціна BTC-USDT також не зобов’язана точно дорівнювати ціні BTC-USD.</p>
-<p>Отже, єдиної центральної ціни Bitcoin не існує. Сайти, які показують одну цифру, беруть ціну з певної біржі або розраховують узагальнений показник із кількох ринків.</p>
 </section>
-<section id="what-is-closing-price" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="what-is-closing-price"><span class="header-section-number">2.5</span> Що означає ціна закриття?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Ціна закриття - це офіційна ціна Bitcoin наприкінці робочого дня?</p>
-</div>
-</div>
-<p><strong>Ні. Bitcoin торгується цілодобово.</strong></p>
-<p>Щоб побудувати денний графік, постачальник даних ділить безперервні торги на часові проміжки.</p>
-<p>Наприклад, один день може тривати від 00:00 до 23:59 за UTC. Усі угоди за цей час об’єднуються в одну денну свічку.</p>
-<p>Така свічка зазвичай містить:</p>
+</section>
+<section id="що-треба-знати-для-отримання-прибутку" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="що-треба-знати-для-отримання-прибутку"><span class="header-section-number">2.5</span> Що треба знати для отримання прибутку?</h2>
+<p>Модель і правило дій мають допомогти оцінити:</p>
 <ul>
-<li><strong>open</strong> - ціну першої угоди;</li>
-<li><strong>high</strong> - найвищу ціну;</li>
-<li><strong>low</strong> - найнижчу ціну;</li>
-<li><strong>close</strong> - ціну останньої угоди;</li>
-<li><strong>volume</strong> - обсяг торгів.</li>
+<li>у який бік і наскільки може змінитися ціна;</li>
+<li>наскільки надійна ця оцінка;</li>
+<li>коли купувати, продавати або нічого не робити;</li>
+<li>скільки заберуть комісії та інші витрати;</li>
+<li>яким може бути збиток у разі помилки.</li>
 </ul>
-<p>У документації Coinbase поле <code>close</code> визначене так:</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал, розділ «Response Items», поле <code>close</code>:</strong> closing price (last trade) in the bucket interval</p>
-<p><strong>Переклад:</strong> ціна закриття, тобто ціна останньої угоди в межах часового інтервалу.</p>
-</blockquote>
-<p><span class="citation" data-cites="coinbaseCandleDocs"><a href="references.html#ref-coinbaseCandleDocs" role="doc-biblioref">[5]</a></span></p>
-<p>Отже, денна ціна закриття - не особлива справжня ціна BTC. Це просто ціна останньої угоди в обраному часовому проміжку.</p>
-<p>На іншій біржі або за іншого часового поясу значення може відрізнятися.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Самої моделі недостатньо.</strong></p>
+<p>Потрібне правило, яке перетворює результат моделі на купівлю, продаж або бездіяльність.</p>
+</div>
+</div>
+</div>
+<p>Можливо, існують й інші правила заробітку, але поки я не знаю, які з них можна обґрунтувати й перевірити.</p>
 </section>
-<section id="can-bitcoin-go-to-zero" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="can-bitcoin-go-to-zero"><span class="header-section-number">2.6</span> Чи може BTC коштувати нуль?</h2>
-<div class="callout callout-style-default callout-warning callout-titled" title="Хибне уявлення">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Хибне уявлення
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Оскільки кількість BTC обмежена, його ціна не може впасти до нуля?</p>
-</div>
-</div>
-<p><strong>Може. Гарантованої мінімальної ціни немає.</strong></p>
-<p>Ринкова ціна існує, поки хтось готовий заплатити за BTC додатну суму.</p>
-<blockquote class="blockquote">
-<p><strong>Оригінал:</strong> Their value is completely derived by market forces of supply and demand, and they are more volatile than traditional fiat currencies.</p>
-<p><strong>Переклад:</strong> Їхня вартість повністю визначається ринковими силами попиту і пропозиції, а їхня волатильність вища, ніж у традиційних фіатних валют.</p>
-</blockquote>
-<p><span class="citation" data-cites="cftc2017"><a href="references.html#ref-cftc2017" role="doc-biblioref">[6]</a>, p. 1</span></p>
-<p>Щоб ринкова ціна стала буквально нульовою, покупці мали б повністю відмовитися платити за BTC. Це може статися лише за надзвичайного руйнування довіри, можливості використання або доступу до ринку.</p>
-<p>Набагато реальніший ризик для Олени - не обов’язково повний нуль, а значне падіння ціни.</p>
-<p>Наприклад, падіння на 70% означає, що від вкладених 1 000 доларів залишиться приблизно 300 доларів.</p>
-<p>Крім падіння ціни, гроші можна втратити через банкрутство біржі, викрадення облікового запису, помилковий переказ або втрату приватних ключів.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Головна думка">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Головна думка
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Bitcoin може бути реальною працюючою системою, а BTC може мати реальну ринкову ціну. Але це не робить купівлю BTC безпечною або гарантовано прибутковою.</p>
-</div>
-</div>
-<p>Тепер можна перейти до реальних даних: обрати конкретну біржу, торгову пару і часовий проміжок, а потім завантажити фактичні угоди або свічки.</p>
+<section id="що-реально-можна-отримати" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="що-реально-можна-отримати"><span class="header-section-number">2.6</span> Що реально можна отримати?</h2>
+<p><strong>Я поки не знаю. Саме це і треба перевірити.</strong></p>
+<p>Може виявитися, що модель знаходить закономірність, але після врахування витрат прибутку не залишається.</p>
+<p>Такий результат теж важливий. Він покаже межі можливостей обраного підходу.</p>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-nakamoto2008" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">S. Nakamoto, <span>«Bitcoin: A Peer-to-Peer Electronic Cash System»</span>. 2008 [Online]. Доступний у: <a href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-<div id="ref-antonopoulosHarding2023" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">A. M. Antonopoulos і D. A. Harding, <em>Mastering Bitcoin: Programming the Open Blockchain</em>, 3ий вид. O’Reilly Media, 2023 [Online]. Доступний у: <a href="https://github.com/bitcoinbook/bitcoinbook/blob/6d1c26e1640ae32b28389d5ae4caf1214c2be7db/ch01_intro.adoc">https://github.com/bitcoinbook/bitcoinbook/blob/6d1c26e1640ae32b28389d5ae4caf1214c2be7db/ch01_intro.adoc</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-<div id="ref-boltVanOordt2016" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">W. Bolt і M. R. C. van Oordt, <span>«On the Value of Virtual Currencies»</span>, Bank of Canada, Staff Working Paper 2016-42, 2016 [Online]. Доступний у: <a href="https://www.bankofcanada.ca/wp-content/uploads/2016/08/swp2016-42.pdf">https://www.bankofcanada.ca/wp-content/uploads/2016/08/swp2016-42.pdf</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-<div id="ref-coinbaseTickerDocs" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[4] </div><div class="csl-right-inline">Coinbase, <span>«Get Product Ticker»</span>. [Online]. Доступний у: <a href="https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-ticker">https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-ticker</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-<div id="ref-coinbaseCandleDocs" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Coinbase, <span>«Get Product Candles»</span>. [Online]. Доступний у: <a href="https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-candles">https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-candles</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-<div id="ref-cftc2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline">Commodity Futures Trading Commission, <span>«Customer Advisory: Understand the Risks of Virtual Currency Trading»</span>. U.S. Commodity Futures Trading Commission, 2017 [Online]. Доступний у: <a href="https://www.cftc.gov/sites/default/files/idc/groups/public/@customerprotection/documents/file/customeradvisory_urvct121517.pdf">https://www.cftc.gov/sites/default/files/idc/groups/public/@customerprotection/documents/file/customeradvisory_urvct121517.pdf</a>. [Дата звернення: 14-Лип-2026]</div>
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
