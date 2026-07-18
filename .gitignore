@@ -16,3 +16,10 @@ data/processed/
 data/validation/
 
 data/
+
+R/
+scripts/
+renv/
+.Rprofile
+renv.lock
+INSTALL_STAGE2*
