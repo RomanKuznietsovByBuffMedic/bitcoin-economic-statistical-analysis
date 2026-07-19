@@ -23,3 +23,5 @@ renv/
 .Rprofile
 renv.lock
 INSTALL_STAGE2*
+/*_cache/
+/_book/

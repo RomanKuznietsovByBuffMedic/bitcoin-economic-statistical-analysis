@@ -5,7 +5,7 @@ code-tools: false
 from: markdown-smart
 ---
 
-# Про проєкт {#sec-about}
+# Про проєкт {.unnumbered}
 
 ::: {.callout-important appearance="simple"}
 ## Головне питання
