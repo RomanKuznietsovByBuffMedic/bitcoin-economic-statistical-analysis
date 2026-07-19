@@ -1,0 +1,22 @@
+Type: Project
+Package: bitcoinEconomicStatisticalAnalysis
+Title: Bitcoin Economic and Statistical Analysis
+Version: 0.0.0.9000
+Description: Source code and reproducible dependencies for the Quarto book.
+Encoding: UTF-8
+Imports:
+    dplyr,
+    ggplot2,
+    htmlwidgets,
+    jsonlite,
+    knitr,
+    plotly,
+    renv,
+    rmarkdown,
+    scales,
+    tibble
+Suggests:
+    quarto,
+    shrtcts
+Remotes:
+    gadenbuie/shrtcts
