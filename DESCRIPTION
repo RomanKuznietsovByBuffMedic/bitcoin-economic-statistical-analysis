@@ -16,6 +16,7 @@ Imports:
     scales,
     tibble
 Suggests:
+    miniUI,
     quarto,
     shrtcts
 Remotes:
