@@ -30,5 +30,10 @@ format:
     toc-location: right
     toc-expand: true
     smooth-scroll: true
-    code-fold: false
-    code-tools: false
+    code-fold: show
+    code-summary: "Код"
+    code-copy: false
+    code-tools:
+      source: false
+      toggle: true
+      caption: "Код"
