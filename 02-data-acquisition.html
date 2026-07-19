@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Отримання реальних ринкових даних – Bitcoin і BTC: економічний та статистичний аналіз</title>
+<title>2&nbsp; Отримання реальних ринкових даних – Bitcoin і BTC: економічний та статистичний аналіз</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -33,7 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./03-price-and-returns.html" rel="next">
 <link href="./01-how-it-works.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-data-acquisition.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-data-acquisition.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -117,19 +117,25 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Про проєкт</span></span></a>
+ <span class="menu-text">Про проєкт</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-how-it-works.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Що це?</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02-data-acquisition.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-price-and-returns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна та дохідність BTC</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -148,14 +154,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Зміст</h2>
    
   <ul>
-  <li><a href="#що-означає-торгувати-btc" id="toc-що-означає-торгувати-btc" class="nav-link active" data-scroll-target="#що-означає-торгувати-btc"><span class="header-section-number">3.1</span> Що означає торгувати BTC?</a></li>
-  <li><a href="#що-таке-spot-і-btcusdt" id="toc-що-таке-spot-і-btcusdt" class="nav-link" data-scroll-target="#що-таке-spot-і-btcusdt"><span class="header-section-number">3.2</span> Що таке spot і BTCUSDT?</a></li>
-  <li><a href="#що-таке-usdt" id="toc-що-таке-usdt" class="nav-link" data-scroll-target="#що-таке-usdt"><span class="header-section-number">3.3</span> Що таке USDT?</a></li>
-  <li><a href="#чому-binance" id="toc-чому-binance" class="nav-link" data-scroll-target="#чому-binance"><span class="header-section-number">3.4</span> Чому Binance?</a></li>
-  <li><a href="#які-дані-потрібні" id="toc-які-дані-потрібні" class="nav-link" data-scroll-target="#які-дані-потрібні"><span class="header-section-number">3.5</span> Які дані потрібні?</a></li>
-  <li><a href="#скільки-даних-збирати" id="toc-скільки-даних-збирати" class="nav-link" data-scroll-target="#скільки-даних-збирати"><span class="header-section-number">3.6</span> Скільки даних збирати?</a></li>
-  <li><a href="#коли-потрібен-бот" id="toc-коли-потрібен-бот" class="nav-link" data-scroll-target="#коли-потрібен-бот"><span class="header-section-number">3.7</span> Коли потрібен бот?</a></li>
-  <li><a href="#джерела-до-розділу" id="toc-джерела-до-розділу" class="nav-link" data-scroll-target="#джерела-до-розділу"><span class="header-section-number">3.8</span> Джерела до розділу</a></li>
+  <li><a href="#що-означає-торгувати-btc" id="toc-що-означає-торгувати-btc" class="nav-link active" data-scroll-target="#що-означає-торгувати-btc"><span class="header-section-number">2.1</span> Що означає торгувати BTC?</a></li>
+  <li><a href="#що-таке-spot-і-btcusdt" id="toc-що-таке-spot-і-btcusdt" class="nav-link" data-scroll-target="#що-таке-spot-і-btcusdt"><span class="header-section-number">2.2</span> Що таке spot і BTCUSDT?</a></li>
+  <li><a href="#що-таке-usdt" id="toc-що-таке-usdt" class="nav-link" data-scroll-target="#що-таке-usdt"><span class="header-section-number">2.3</span> Що таке USDT?</a></li>
+  <li><a href="#чому-binance" id="toc-чому-binance" class="nav-link" data-scroll-target="#чому-binance"><span class="header-section-number">2.4</span> Чому Binance?</a></li>
+  <li><a href="#які-дані-потрібні" id="toc-які-дані-потрібні" class="nav-link" data-scroll-target="#які-дані-потрібні"><span class="header-section-number">2.5</span> Які дані потрібні?</a></li>
+  <li><a href="#скільки-даних-збирати" id="toc-скільки-даних-збирати" class="nav-link" data-scroll-target="#скільки-даних-збирати"><span class="header-section-number">2.6</span> Скільки даних збирати?</a></li>
+  <li><a href="#коли-потрібен-бот" id="toc-коли-потрібен-бот" class="nav-link" data-scroll-target="#коли-потрібен-бот"><span class="header-section-number">2.7</span> Коли потрібен бот?</a></li>
+  <li><a href="#джерела-до-розділу" id="toc-джерела-до-розділу" class="nav-link" data-scroll-target="#джерела-до-розділу"><span class="header-section-number">2.8</span> Джерела до розділу</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/02-data-acquisition.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
@@ -164,7 +170,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-data-acquisition" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></span></h1>
+<h1 class="title"><span id="sec-data-acquisition" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></span></h1>
 </div>
 
 
@@ -195,15 +201,15 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>Спочатку треба вибрати конкретний ринок. Без цього незрозуміло, яку саме ціну досліджувати.</p>
-<section id="що-означає-торгувати-btc" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="що-означає-торгувати-btc"><span class="header-section-number">3.1</span> Що означає торгувати BTC?</h2>
+<section id="що-означає-торгувати-btc" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="що-означає-торгувати-btc"><span class="header-section-number">2.1</span> Що означає торгувати BTC?</h2>
 <p>Торгівля завжди означає обмін одного активу на інший.</p>
 <p>Щоб купити BTC, треба віддати гривні, долари, USDT або інший актив. Щоб зафіксувати результат, BTC треба обміняти назад.</p>
 <p>Якщо просто передати BTC з одного гаманця на інший, це буде переказ, а не торгівля.</p>
 <p>Тому для дослідження потрібна торгова пара, яка показує два активи обміну.</p>
 </section>
-<section id="що-таке-spot-і-btcusdt" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="що-таке-spot-і-btcusdt"><span class="header-section-number">3.2</span> Що таке spot і BTCUSDT?</h2>
+<section id="що-таке-spot-і-btcusdt" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="що-таке-spot-і-btcusdt"><span class="header-section-number">2.2</span> Що таке spot і BTCUSDT?</h2>
 <p>Першим майданчиком буде криптовалютна біржа Binance. На ній покупці та продавці подають заявки, а угода відбувається, коли їхні умови збігаються.</p>
 <p>На спотовому ринку один актив обмінюється на інший за поточною ринковою ціною [1].</p>
 <p>У цьому проєкті спочатку не використовуються:</p>
@@ -221,16 +227,16 @@ ul.task-list li input[type="checkbox"] {
 <p>Наприклад, <code>BTCUSDT = 60 000</code> означає, що один BTC на цьому ринку коштує 60 000 USDT.</p>
 <p>Торгова операція виглядає просто: за USDT купується BTC, а пізніше BTC продається назад за USDT. Результат оцінюється після віднімання витрат.</p>
 </section>
-<section id="що-таке-usdt" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="що-таке-usdt"><span class="header-section-number">3.3</span> Що таке USDT?</h2>
+<section id="що-таке-usdt" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="що-таке-usdt"><span class="header-section-number">2.3</span> Що таке USDT?</h2>
 <p>USDT - це цифровий токен, який випускає компанія Tether. За заявою емітента, один USDT має відповідати одному долару США [3].</p>
 <p>Тому ціну BTC в USDT зручно приблизно сприймати як доларову.</p>
 <p>Але USDT не є звичайним доларом на банківському рахунку. Його ціна може відхилятися від одного долара, а зберігання на біржі додає окремий ризик.</p>
 <p>BTC можна купувати й за гривні. Однак ціни P2P залежать від оголошення, способу оплати та конкретного учасника. Такий ринок складніше подати як єдиний відтворюваний часовий ряд.</p>
 <p>Отже, <code>BTCUSDT</code> обирається не через відсутність ризику, а через зручність для першого дослідження.</p>
 </section>
-<section id="чому-binance" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="чому-binance"><span class="header-section-number">3.4</span> Чому Binance?</h2>
+<section id="чому-binance" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="чому-binance"><span class="header-section-number">2.4</span> Чому Binance?</h2>
 <p>Binance обрано як перший майданчик, тому що:</p>
 <ol type="1">
 <li>Для spot-ринку доступні публічні історичні дані [4].</li>
@@ -241,8 +247,8 @@ ul.task-list li input[type="checkbox"] {
 <p>Це не означає, що Binance є найкращою або найбезпечнішою біржею. Висновки спочатку стосуватимуться лише ринку Binance Spot <code>BTCUSDT</code>.</p>
 <p>За потреби їх можна буде перевірити на іншій біржі.</p>
 </section>
-<section id="які-дані-потрібні" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="які-дані-потрібні"><span class="header-section-number">3.5</span> Які дані потрібні?</h2>
+<section id="які-дані-потрібні" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="які-дані-потрібні"><span class="header-section-number">2.5</span> Які дані потрібні?</h2>
 <p>Для першого аналізу зручно використовувати свічки. Кожна свічка узагальнює торгівлю за хвилину, годину, день або інший інтервал.</p>
 <p>Вона містить:</p>
 <ul>
@@ -265,8 +271,8 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>Інакше модель може знайти не ринкову закономірність, а помилку в даних.</p>
 </section>
-<section id="скільки-даних-збирати" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="скільки-даних-збирати"><span class="header-section-number">3.6</span> Скільки даних збирати?</h2>
+<section id="скільки-даних-збирати" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="скільки-даних-збирати"><span class="header-section-number">2.6</span> Скільки даних збирати?</h2>
 <p>Немає потреби збирати все наперед.</p>
 <p>Для кожного етапу спочатку визначаються:</p>
 <ol type="1">
@@ -279,14 +285,14 @@ ul.task-list li input[type="checkbox"] {
 <p>Після цього завантажуються лише потрібні дані.</p>
 <p><strong>Спочатку питання. Потім дані. Лише після цього модель.</strong></p>
 </section>
-<section id="коли-потрібен-бот" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="коли-потрібен-бот"><span class="header-section-number">3.7</span> Коли потрібен бот?</h2>
+<section id="коли-потрібен-бот" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="коли-потрібен-бот"><span class="header-section-number">2.7</span> Коли потрібен бот?</h2>
 <p>Бот - це не перший крок.</p>
 <p>Спочатку треба вручну перевірити дані, модель, правило дій і витрати. Лише відтворюваний процес варто автоматизувати.</p>
 <p>У майбутньому бот може оновлювати дані, будувати графіки та пропонувати дію власнику на підтвердження.</p>
 </section>
-<section id="джерела-до-розділу" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="джерела-до-розділу"><span class="header-section-number">3.8</span> Джерела до розділу</h2>
+<section id="джерела-до-розділу" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="джерела-до-розділу"><span class="header-section-number">2.8</span> Джерела до розділу</h2>
 <ol type="1">
 <li><a href="https://www.binance.com/en/academy/articles/binance-spot-trading-rules-a-comprehensive-guide">Binance Academy. Binance Spot Trading Rules: A Comprehensive Guide</a>, розділ «Introduction».</li>
 <li><a href="https://www.binance.com/en/academy/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners">Binance Academy. A Beginner's Guide to Cryptocurrency Trading</a>, розділ «Choose a trading pair».</li>
@@ -701,12 +707,12 @@ ul.task-list li input[type="checkbox"] {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./01-how-it-works.html" class="pagination-link" aria-label="Що це?">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Що це?</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Що це?</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="Джерела">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Джерела</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./03-price-and-returns.html" class="pagination-link" aria-label="Ціна та дохідність BTC">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна та дохідність BTC</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
