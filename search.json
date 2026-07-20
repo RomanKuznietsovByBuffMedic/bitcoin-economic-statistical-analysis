@@ -50,11 +50,31 @@
     ]
   },
   {
+    "objectID": "01-how-it-works.html#що-таке-btcusdt",
+    "href": "01-how-it-works.html#що-таке-btcusdt",
+    "title": "1  Що це?",
+    "section": "1.2 Що таке BTC/USDT?",
+    "text": "1.2 Що таке BTC/USDT?\nЦіну BTC треба виразити в іншому активі. Для цього біржа використовує торгову пару.\nУ парі BTC/USDT:\n\nBTC - актив, який купують або продають;\nUSDT - актив, яким за нього платять.\n\nУ термінах біржі BTC є базовим активом, а USDT - активом котирування [2].\nЦіна BTC/USDT = 60 000 означає, що 1 BTC коштує 60 000 USDT. За такої ціни 0,01 BTC коштує 600 USDT до врахування комісії.\nКупити BTC/USDT означає віддати USDT й отримати BTC. Продати BTC/USDT означає віддати BTC й отримати USDT [3].\nUSDT - це цифровий токен компанії Tether. За заявою Tether, USDT прив'язаний до долара США у співвідношенні 1:1 [4]. Тому ціну BTC/USDT можна приблизно читати як доларову ціну BTC.\nАле USDT не є доларом на банківському рахунку. Його ціна може відхилятися від одного долара, тому BTC/USDT і BTC/USD є різними ринками.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
+    ]
+  },
+  {
+    "objectID": "01-how-it-works.html#що-таке-spot",
+    "href": "01-how-it-works.html#що-таке-spot",
+    "title": "1  Що це?",
+    "section": "1.3 Що таке spot?",
+    "text": "1.3 Що таке spot?\nSpot, або спотовий ринок, - це звичайний обмін активів. Після виконання купівлі покупець отримує BTC, а продавець отримує USDT [3].\nУ цьому дослідженні розглядається лише spot. Не використовуються ф'ючерси, кредитне плече, позичені кошти або короткі позиції. Так ризик і результат операції легше зрозуміти.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
+    ]
+  },
+  {
     "objectID": "01-how-it-works.html#як-користуватися-btc",
     "href": "01-how-it-works.html#як-користуватися-btc",
     "title": "1  Що це?",
-    "section": "1.2 Як користуватися BTC?",
-    "text": "1.2 Як користуватися BTC?\nДля самостійного контролю BTC потрібен приватний ключ. Він дає змогу підтвердити право витратити BTC [2].\nПоки що я не хочу заглиблюватися в роботу криптогаманців. Тому початкова практична робота відбуватиметься через біржу.\nБіржа спрощує купівлю та продаж, але зберігає активи й контролює доступ до них. Отже, до ринкового ризику додається ризик самої біржі.",
+    "section": "1.4 Як користуватися BTC?",
+    "text": "1.4 Як користуватися BTC?\nДля самостійного контролю BTC потрібен приватний ключ. Він дає змогу підтвердити право витратити BTC [5].\nПоки що я не хочу заглиблюватися в роботу криптогаманців. Тому початкова практична робота відбуватиметься через біржу.\nБіржа спрощує купівлю та продаж, але зберігає активи й контролює доступ до них. Отже, до ринкового ризику додається ризик самої біржі.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
     ]
@@ -63,8 +83,8 @@
     "objectID": "01-how-it-works.html#чому-btc-має-ціну",
     "href": "01-how-it-works.html#чому-btc-має-ціну",
     "title": "1  Що це?",
-    "section": "1.3 Чому BTC має ціну?",
-    "text": "1.3 Чому BTC має ціну?\nНа біржі покупці й продавці пропонують свої ціни. Коли їхні умови збігаються, відбувається угода.\nТак через попит і пропозицію утворюється ринкова ціна BTC.\nЄдиної ціни для всього світу немає. Кожна біржа має власний ринок, тому ціни можуть трохи відрізнятися.\nЛюди купують BTC з різних причин:\n\nдля передавання BTC іншій людині;\nдля тривалого зберігання;\nчерез очікування зростання ціни;\nдля торгівлі на коротших проміжках часу.",
+    "section": "1.5 Чому BTC має ціну?",
+    "text": "1.5 Чому BTC має ціну?\nНа біржі покупці й продавці пропонують свої ціни. Коли їхні умови збігаються, відбувається угода.\nТак через попит і пропозицію утворюється ринкова ціна BTC.\nЄдиної ціни для всього світу немає. Кожна біржа має власний ринок, тому ціни можуть трохи відрізнятися.\nЛюди купують BTC з різних причин:\n\nдля передавання BTC іншій людині;\nдля тривалого зберігання;\nчерез очікування зростання ціни;\nдля торгівлі на коротших проміжках часу.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
     ]
@@ -73,8 +93,8 @@
     "objectID": "01-how-it-works.html#як-можна-отримати-прибуток",
     "href": "01-how-it-works.html#як-можна-отримати-прибуток",
     "title": "1  Що це?",
-    "section": "1.4 Як можна отримати прибуток?",
-    "text": "1.4 Як можна отримати прибуток?\nПочаткова ідея проста: купити BTC дешевше, а пізніше продати дорожче.\nЯкщо BTC уже є й очікується падіння, його можна продати, а потім спробувати купити дешевше.\nАле різниця між цінами ще не є чистим прибутком. Треба відняти комісії та інші витрати.\nТочну майбутню ціну, а також момент піку чи дна, заздалегідь знати неможливо.\nСтатистична модель може дати лише оцінку, яку треба перевірити на даних, не використаних під час її побудови.",
+    "section": "1.6 Як можна отримати прибуток?",
+    "text": "1.6 Як можна отримати прибуток?\nПочаткова ідея проста: купити BTC дешевше, а пізніше продати дорожче.\nЯкщо BTC уже є й очікується падіння, його можна продати, а потім спробувати купити дешевше.\nАле різниця між цінами ще не є чистим прибутком. Треба відняти комісії та інші витрати.\nТочну майбутню ціну, а також момент піку чи дна, заздалегідь знати неможливо.\nСтатистична модель може дати лише оцінку, яку треба перевірити на даних, не використаних під час її побудови.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
     ]
@@ -83,18 +103,8 @@
     "objectID": "01-how-it-works.html#що-саме-треба-перевірити",
     "href": "01-how-it-works.html#що-саме-треба-перевірити",
     "title": "1  Що це?",
-    "section": "1.5 Що саме треба перевірити?",
-    "text": "1.5 Що саме треба перевірити?\nСамої моделі недостатньо. Потрібне правило, яке перетворює її результат на купівлю, продаж або бездіяльність.\nПісля цього треба перевірити, чи залишається користь після витрат і помилок моделі.\nЯ поки не знаю, чи це дасть прибуток. Саме це і має з'ясувати дослідження.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
-    ]
-  },
-  {
-    "objectID": "01-how-it-works.html#джерела-до-розділу",
-    "href": "01-how-it-works.html#джерела-до-розділу",
-    "title": "1  Що це?",
-    "section": "1.6 Джерела до розділу",
-    "text": "1.6 Джерела до розділу\n\nSatoshi Nakamoto. Bitcoin: A Peer-to-Peer Electronic Cash System, Abstract, с. 1.\nBitcoin Developer Guide. Wallets, розділ «Private Key Formats».",
+    "section": "1.7 Що саме треба перевірити?",
+    "text": "1.7 Що саме треба перевірити?\nСамої моделі недостатньо. Потрібне правило, яке перетворює її результат на купівлю, продаж або бездіяльність.\nПісля цього треба перевірити, чи залишається користь після витрат і помилок моделі.\nЯ поки не знаю, чи це дасть прибуток. Саме це і має з'ясувати дослідження.\n\n\n\n\n[1] S. Nakamoto, «Bitcoin: A Peer-to-Peer Electronic Cash System». 2008 [Online]. Доступний у: https://bitcoin.org/bitcoin.pdf. [Дата звернення: 20-Лип-2026]\n\n\n[2] Binance Academy, «Binance Spot Trading Rules: A Comprehensive Guide». 2026 [Online]. Доступний у: https://www.binance.com/en/academy/articles/binance-spot-trading-rules-a-comprehensive-guide. [Дата звернення: 20-Лип-2026]\n\n\n[3] Binance Academy, «A Beginner’s Guide to Cryptocurrency Trading». 2026 [Online]. Доступний у: https://www.binance.com/en/academy/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners. [Дата звернення: 20-Лип-2026]\n\n\n[4] Tether, «Frequently Asked Questions». [Online]. Доступний у: https://tether.to/faqs/. [Дата звернення: 20-Лип-2026]\n\n\n[5] Bitcoin.org, «Bitcoin Developer Guide: Wallets». [Online]. Доступний у: https://developer.bitcoin.org/devguide/wallets.html. [Дата звернення: 20-Лип-2026]",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Що це?</span>"
     ]
@@ -104,77 +114,87 @@
     "href": "02-data-acquisition.html",
     "title": "2  Отримання реальних ринкових даних",
     "section": "",
-    "text": "2.1 Що означає торгувати BTC?\nСпочатку треба вибрати конкретний ринок. Без цього незрозуміло, яку саме ціну досліджувати.\nТоргівля завжди означає обмін одного активу на інший.\nЩоб купити BTC, треба віддати гривні, долари, USDT або інший актив. Щоб зафіксувати результат, BTC треба обміняти назад.\nЯкщо просто передати BTC з одного гаманця на інший, це буде переказ, а не торгівля.\nТому для дослідження потрібна торгова пара, яка показує два активи обміну.",
+    "text": "2.1 Що саме завантажується\nСпочатку визначаються ринок, показники, інтервал і часові межі. Лише після цього можна завантажувати дані та оцінювати їхню якість.\nПоняття BTC, USDT і spot пояснено в розділі Chapter 1. Тут порівнюються погодинні дані спотового ринку BTC/USDT на Bybit і Binance. Bitstamp BTC/USD використовується лише для незалежної перевірки.\nДля кожної свічки використовуються:\nЦіна \\(P_t\\) у наступному розділі визначатиметься як close завершеної свічки. Незавершена поточна година до набору не включається.\nОдин рядок дорівнює одній завершеній годині UTC. Це дає більше деталей, ніж денні дані, але менше шуму й обсягу, ніж хвилинні.\nBinance і Bitstamp перевіряються за шість років. Основний ряд Bybit починається з першої доступної свічки. Точні межі наведено нижче.\nПоказати / приховати код\nperiod_table &lt;- tibble::tibble(\n  `Призначення` = c(\n    \"Початковий аудит джерел\",\n    \"Основний ряд Bybit\"\n  ),\n  `Початок, UTC` = c(\n    \"2020-07-01 00:00\",\n    \"2021-07-05 12:00\"\n  ),\n  `Кінець без включення, UTC` = \"2026-07-01 00:00\",\n  `Очікувано годин` = c(52584, 43716)\n)\n\nknitr::kable(\n  period_table,\n  align = c(\"l\", \"l\", \"l\", \"r\"),\n  caption = \"Часові межі, визначені до порівняння результатів\"\n)\n\n\n\n\nTable 2.1: Часові межі, визначені до порівняння результатів\n\n\n\n\n\n\n\n\n\n\n\n\nПризначення\nПочаток, UTC\nКінець без включення, UTC\nОчікувано годин\n\n\n\n\nПочатковий аудит джерел\n2020-07-01 00:00\n2026-07-01 00:00\n52584\n\n\nОсновний ряд Bybit\n2021-07-05 12:00\n2026-07-01 00:00\n43716",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#що-таке-spot-і-btcusdt",
-    "href": "02-data-acquisition.html#що-таке-spot-і-btcusdt",
+    "objectID": "02-data-acquisition.html#що-саме-завантажується",
+    "href": "02-data-acquisition.html#що-саме-завантажується",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.2 Що таке spot і BTCUSDT?",
-    "text": "2.2 Що таке spot і BTCUSDT?\nПершим майданчиком буде криптовалютна біржа Binance. На ній покупці та продавці подають заявки, а угода відбувається, коли їхні умови збігаються.\nНа спотовому ринку один актив обмінюється на інший за поточною ринковою ціною [1].\nУ цьому проєкті спочатку не використовуються:\n\nф'ючерси;\nкредитне плече;\nпозичання BTC;\nкороткі позиції.\n\nПершою торговою парою буде BTCUSDT [2]:\n\nBTC - актив, який купують або продають;\nUSDT - актив, у якому вказується ціна BTC.\n\nНаприклад, BTCUSDT = 60 000 означає, що один BTC на цьому ринку коштує 60 000 USDT.\nТоргова операція виглядає просто: за USDT купується BTC, а пізніше BTC продається назад за USDT. Результат оцінюється після віднімання витрат.",
+    "section": "",
+    "text": "час початку;\nopen — ціна першої угоди;\nhigh — найбільша ціна;\nlow — найменша ціна;\nclose — ціна останньої угоди;\nvolume — обсяг BTC.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#що-таке-usdt",
-    "href": "02-data-acquisition.html#що-таке-usdt",
+    "objectID": "02-data-acquisition.html#як-отримано-дані",
+    "href": "02-data-acquisition.html#як-отримано-дані",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.3 Що таке USDT?",
-    "text": "2.3 Що таке USDT?\nUSDT - це цифровий токен, який випускає компанія Tether. За заявою емітента, один USDT має відповідати одному долару США [3].\nТому ціну BTC в USDT зручно приблизно сприймати як доларову.\nАле USDT не є звичайним доларом на банківському рахунку. Його ціна може відхилятися від одного долара, а зберігання на біржі додає окремий ризик.\nBTC можна купувати й за гривні. Однак ціни P2P залежать від оголошення, способу оплати та конкретного учасника. Такий ринок складніше подати як єдиний відтворюваний часовий ряд.\nОтже, BTCUSDT обирається не через відсутність ризику, а через зручність для першого дослідження.",
+    "section": "2.2 Як отримано дані",
+    "text": "2.2 Як отримано дані\n\nBinance: місячні й денні архіви та їхні контрольні суми SHA-256 [1]. Для кожного знайденого розриву код окремо повторює запит через REST API.\nBybit: API повертає до 1 000 свічок за запит, тому період поділено на неперекривні 1000-годинні частини [2].\nBitstamp: BTC/USD завантажено лише як незалежний контроль. Ці значення не вставляються в ряд BTC/USDT.\n\nОновлення кешів і рендер книги розділено. quarto render читає локальні RDS-файли й не звертається до бірж.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#чому-binance",
-    "href": "02-data-acquisition.html#чому-binance",
+    "objectID": "02-data-acquisition.html#що-перевіряється-до-вибору-джерела",
+    "href": "02-data-acquisition.html#що-перевіряється-до-вибору-джерела",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.4 Чому Binance?",
-    "text": "2.4 Чому Binance?\nBinance обрано як перший майданчик, тому що:\n\nДля spot-ринку доступні публічні історичні дані [4].\nДані можна регулярно оновлювати.\nДоступні різні часові інтервали.\nДані та майбутня перевірка можуть стосуватися одного ринку.\n\nЦе не означає, що Binance є найкращою або найбезпечнішою біржею. Висновки спочатку стосуватимуться лише ринку Binance Spot BTCUSDT.\nЗа потреби їх можна буде перевірити на іншій біржі.",
+    "section": "2.3 Що перевіряється до вибору джерела",
+    "text": "2.3 Що перевіряється до вибору джерела\nДля всіх джерел перевіряються:\n\nпотрібні поля та часові позначки UTC;\nдублікати й пропущені години;\nдодатні числові ціни та співвідношення low ≤ open, close ≤ high;\nневід'ємний обсяг;\nвідсутність підміни даними іншої біржі.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#які-дані-потрібні",
-    "href": "02-data-acquisition.html#які-дані-потрібні",
+    "objectID": "02-data-acquisition.html#результат-аудиту-джерел",
+    "href": "02-data-acquisition.html#результат-аудиту-джерел",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.5 Які дані потрібні?",
-    "text": "2.5 Які дані потрібні?\nДля першого аналізу зручно використовувати свічки. Кожна свічка узагальнює торгівлю за хвилину, годину, день або інший інтервал.\nВона містить:\n\nчас;\nціну відкриття;\nнайвищу та найнижчу ціну;\nціну закриття;\nобсяг торгів;\nкількість угод та допоміжні показники.\n\nЧасовий інтервал не треба обирати наперед. Хвилинні дані містять більше деталей і шуму. Денні дані простіші, але приховують зміни всередині дня.\nСпочатку формулюється питання, а вже потім обирається інтервал.\nПеред моделюванням також треба перевірити:\n\nпропущені інтервали;\nдублікати;\nпорядок і часовий пояс;\nнезавершені свічки;\nнеможливі значення.\n\nІнакше модель може знайти не ринкову закономірність, а помилку в даних.",
+    "section": "2.4 Результат аудиту джерел",
+    "text": "2.4 Результат аудиту джерел\n\n\nПоказати / приховати код\nsource_comparison &lt;- tibble::tibble(\n  `Джерело` = c(\n    \"Binance Spot BTC/USDT\",\n    \"Bybit Spot BTC/USDT\",\n    \"Bitstamp Spot BTC/USD\"\n  ),\n  `Перевірений період` = c(\n    \"2020-07-01 00:00 — 2026-07-01 00:00\",\n    \"2021-07-05 12:00 — 2026-07-01 00:00\",\n    \"2020-07-01 00:00 — 2026-07-01 00:00\"\n  ),\n  `Очікувано` = c(\n    quality_value(binance_quality, \"Очікувана кількість годин\"),\n    quality_value(bybit_quality, \"Очікувана кількість годин\"),\n    quality_value(bitstamp_quality, \"Очікувана кількість годин\")\n  ),\n  `Наявні свічки` = c(\n    nrow(binance_quality$data),\n    nrow(bybit_quality$data),\n    nrow(bitstamp_quality$data)\n  ),\n  `Пропущено` = c(\n    quality_value(binance_quality, \"Пропущені години\"),\n    quality_value(bybit_quality, \"Пропущені години\"),\n    quality_value(bitstamp_quality, \"Пропущені години\")\n  ),\n  `Внутрішні розриви` = c(\n    nrow(binance_quality$gaps),\n    nrow(bybit_quality$gaps),\n    nrow(bitstamp_quality$gaps)\n  )\n)\n\nknitr::kable(\n  source_comparison,\n  format.args = list(big.mark = \" \", scientific = FALSE),\n  align = c(\"l\", \"l\", \"r\", \"r\", \"r\", \"r\"),\n  caption = \"Результати однакової перевірки трьох локальних кешів\"\n)\n\n\n\n\nTable 2.2: Результати однакової перевірки трьох локальних кешів\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nДжерело\nПеревірений період\nОчікувано\nНаявні свічки\nПропущено\nВнутрішні розриви\n\n\n\n\nBinance Spot BTC/USDT\n2020-07-01 00:00 — 2026-07-01 00:00\n52 584\n52 565\n19\n10\n\n\nBybit Spot BTC/USDT\n2021-07-05 12:00 — 2026-07-01 00:00\n43 716\n43 716\n0\n0\n\n\nBitstamp Spot BTC/USD\n2020-07-01 00:00 — 2026-07-01 00:00\n52 584\n52 584\n0\n0\n\n\n\n\n\n\n\n\n\n2.4.1 Binance: де саме бракує даних\n\n\nПоказати / приховати код\nknitr::kable(\n  binance_quality$summary,\n  format.args = list(big.mark = \" \", scientific = FALSE),\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка Binance Spot BTC/USDT\"\n)\n\n\n\n\nTable 2.3: Перевірка Binance Spot BTC/USDT\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nОчікувана кількість годин\n52 584.0000\n\n\nФактична кількість свічок\n52 565.0000\n\n\nПропущені години\n19.0000\n\n\nПовнота, %\n99.9639\n\n\nПовторені години\n0.0000\n\n\nЧасові розриви\n10.0000\n\n\nСвічки поза межею години UTC\n0.0000\n\n\nНедодатні або нечислові OHLC-ціни\n0.0000\n\n\nПорушення співвідношень OHLC\n0.0000\n\n\nВід'ємний або нечисловий обсяг\n0.0000\n\n\n\n\n\n\n\n\n\n\nПоказати / приховати код\ngap_plot_data &lt;- binance_quality$gaps |&gt;\n  dplyr::mutate(\n    gap_date = previous_observation +\n      as.difftime(interval_hours / 2, units = \"hours\"),\n    label = format(gap_date, \"%Y-%m-%d\", tz = \"UTC\")\n  )\n\ngap_chart &lt;- ggplot2::ggplot(\n  gap_plot_data,\n  ggplot2::aes(\n    x = gap_date,\n    y = missing_hours,\n    text = paste0(\n      \"Дата: \", label,\n      \"&lt;br&gt;Пропущено годин: \", missing_hours\n    )\n  )\n) +\n  ggplot2::geom_hline(yintercept = 0, colour = \"#9AA5B1\") +\n  ggplot2::geom_point(\n    ggplot2::aes(size = missing_hours),\n    colour = \"#D7301F\",\n    alpha = 0.85\n  ) +\n  ggplot2::scale_x_datetime(\n    limits = c(full_data_start, data_end),\n    date_breaks = \"1 year\",\n    date_labels = \"%Y\"\n  ) +\n  ggplot2::scale_y_continuous(\n    breaks = seq(0, max(gap_plot_data$missing_hours), by = 1),\n    expand = ggplot2::expansion(mult = c(0.05, 0.25))\n  ) +\n  ggplot2::scale_size_continuous(range = c(4, 10), guide = \"none\") +\n  ggplot2::labs(\n    x = NULL,\n    y = \"Пропущено годин\",\n    title = \"Коли у Binance відсутні годинні свічки\"\n  ) +\n  book_ggplot_theme(base_size = 15)\n\nrender_book_plot(\n  gap_chart,\n  tooltip = \"text\",\n  hovermode = \"closest\",\n  connect_gaps = FALSE\n)\n\n\n\n\n\n\n\n\nFigure 2.1: Часові розриви Binance; точну дату видно при наведенні, а розмір точки відповідає кількості відсутніх годин\n\n\n\n\nТочну дату видно при наведенні, а повні межі наведено в таблиці.\n\n\nПоказати / приховати код\nbinance_gap_table &lt;- binance_quality$gaps |&gt;\n  dplyr::transmute(\n    `Остання свічка перед розривом, UTC` = format(\n      previous_observation,\n      \"%Y-%m-%d %H:%M\",\n      tz = \"UTC\"\n    ),\n    `Перша свічка після розриву, UTC` = format(\n      next_observation,\n      \"%Y-%m-%d %H:%M\",\n      tz = \"UTC\"\n    ),\n    `Пропущено годин` = missing_hours\n  )\n\nknitr::kable(\n  binance_gap_table,\n  align = c(\"l\", \"l\", \"r\"),\n  caption = \"Повний перелік розривів Binance\"\n)\n\n\n\n\nTable 2.4: Повний перелік розривів Binance\n\n\n\n\n\n\n\n\n\n\n\nОстання свічка перед розривом, UTC\nПерша свічка після розриву, UTC\nПропущено годин\n\n\n\n\n2020-11-30 05:00\n2020-11-30 07:00\n1\n\n\n2020-12-21 14:00\n2020-12-21 18:00\n3\n\n\n2020-12-25 01:00\n2020-12-25 03:00\n1\n\n\n2021-02-11 03:00\n2021-02-11 05:00\n1\n\n\n2021-03-06 01:00\n2021-03-06 03:00\n1\n\n\n2021-04-20 01:00\n2021-04-20 04:00\n2\n\n\n2021-04-25 04:00\n2021-04-25 08:00\n3\n\n\n2021-08-13 01:00\n2021-08-13 06:00\n4\n\n\n2021-09-29 06:00\n2021-09-29 09:00\n2\n\n\n2023-03-24 12:00\n2023-03-24 14:00\n1\n\n\n\n\n\n\n\n\nПовторне отримання з офіційних джерел не відновило ці 19 годин. Вони не інтерполюються й не замінюються цінами іншої біржі.\n\n\n2.4.2 Bybit: повнота основного періоду\n\n\nПоказати / приховати код\nknitr::kable(\n  bybit_quality$summary,\n  format.args = list(big.mark = \" \", scientific = FALSE),\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка Bybit Spot BTC/USDT від першої доступної години\"\n)\n\n\n\n\nTable 2.5: Перевірка Bybit Spot BTC/USDT від першої доступної години\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nОчікувана кількість годин\n43 716\n\n\nФактична кількість свічок\n43 716\n\n\nПропущені години\n0\n\n\nПовнота, %\n100\n\n\nПовторені години\n0\n\n\nЧасові розриви\n0\n\n\nСвічки поза межею години UTC\n0\n\n\nНедодатні або нечислові OHLC-ціни\n0\n\n\nПорушення співвідношень OHLC\n0\n\n\nВід'ємний або нечисловий обсяг\n0\n\n\n\n\n\n\n\n\nВід 2021-07-05 12:00 UTC ряд містить усі 43 716 очікуваних свічок. Внутрішніх розривів і дублікатів немає.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#скільки-даних-збирати",
-    "href": "02-data-acquisition.html#скільки-даних-збирати",
+    "objectID": "02-data-acquisition.html#чому-основним-джерелом-став-bybit",
+    "href": "02-data-acquisition.html#чому-основним-джерелом-став-bybit",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.6 Скільки даних збирати?",
-    "text": "2.6 Скільки даних збирати?\nНемає потреби збирати все наперед.\nДля кожного етапу спочатку визначаються:\n\nКонкретне питання.\nПотрібні показники.\nЧасовий інтервал.\nНеобхідний період спостережень.\nСпосіб перевірки результату.\n\nПісля цього завантажуються лише потрібні дані.\nСпочатку питання. Потім дані. Лише після цього модель.",
+    "section": "2.5 Чому основним джерелом став Bybit",
+    "text": "2.5 Чому основним джерелом став Bybit\n\n\n\n\n\n\nImportantРішення після аудиту\n\n\n\nОсновним аналітичним набором є Bybit Spot BTC/USDT від 2021-07-05 12:00 UTC.\nBinance має довшу історію, але містить 19 невідновлених годин. Bitstamp повний, проте використовує іншу пару BTC/USD. Bybit дає суцільний ряд потрібної пари BTC/USDT і може відповідати майбутньому ринку виконання операцій.\n\n\nІсторія Bybit коротша на 8 868 початкових годин, але всередині обраного періоду пропусків немає.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#коли-потрібен-бот",
-    "href": "02-data-acquisition.html#коли-потрібен-бот",
+    "objectID": "02-data-acquisition.html#перевірка-узгодженості-binance-і-bybit",
+    "href": "02-data-acquisition.html#перевірка-узгодженості-binance-і-bybit",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.7 Коли потрібен бот?",
-    "text": "2.7 Коли потрібен бот?\nБот - це не перший крок.\nСпочатку треба вручну перевірити дані, модель, правило дій і витрати. Лише відтворюваний процес варто автоматизувати.\nУ майбутньому бот може оновлювати дані, будувати графіки та пропонувати дію власнику на підтвердження.",
+    "section": "2.6 Перевірка узгодженості Binance і Bybit",
+    "text": "2.6 Перевірка узгодженості Binance і Bybit\nПорівнюються лише однакові години. Різниця цін обчислюється так:\n\\[\nd_t=100\\left(\\frac{P_t^{Bybit}}{P_t^{Binance}}-1\\right).\n\\]\nДохідність кожної біржі обчислюється окремо:\n\\[\nr_t=\\ln\\left(\\frac{P_t}{P_{t-1}}\\right).\n\\]\nНесуміжні години не входять до порівняння дохідностей. Таблицю нижче повністю створює показаний код.\n\n\nПоказати / приховати код\ncommon_prices &lt;- bybit_quality$data |&gt;\n  dplyr::select(open_time, bybit_close = close) |&gt;\n  dplyr::inner_join(\n    binance_quality$data |&gt;\n      dplyr::select(open_time, binance_close = close),\n    by = \"open_time\"\n  ) |&gt;\n  dplyr::arrange(open_time) |&gt;\n  dplyr::mutate(\n    hours_from_previous = as.numeric(\n      difftime(open_time, dplyr::lag(open_time), units = \"hours\")\n    ),\n    price_difference_percent =\n      100 * (bybit_close / binance_close - 1),\n    bybit_log_return = dplyr::if_else(\n      hours_from_previous == 1,\n      log(bybit_close / dplyr::lag(bybit_close)),\n      NA_real_\n    ),\n    binance_log_return = dplyr::if_else(\n      hours_from_previous == 1,\n      log(binance_close / dplyr::lag(binance_close)),\n      NA_real_\n    )\n  )\n\ncommon_returns &lt;- common_prices |&gt;\n  dplyr::filter(\n    !is.na(bybit_log_return),\n    !is.na(binance_log_return)\n  )\n\nformat_count &lt;- function(x) {\n  format(x, big.mark = \" \", scientific = FALSE, trim = TRUE)\n}\nformat_decimal &lt;- function(x, digits) {\n  formatC(x, format = \"f\", digits = digits, decimal.mark = \",\")\n}\n\nagreement_table &lt;- tibble::tibble(\n  `Показник` = c(\n    \"Спільні годинні ціни\",\n    \"Спільні суміжні дохідності\",\n    \"Медіанна абсолютна різниця цін\",\n    \"95-й процентиль абсолютної різниці цін\",\n    \"Максимальна абсолютна різниця цін\",\n    \"Кореляція логарифмічних дохідностей\"\n  ),\n  `Результат` = c(\n    format_count(nrow(common_prices)),\n    format_count(nrow(common_returns)),\n    paste0(format_decimal(\n      stats::median(abs(common_prices$price_difference_percent)), 6\n    ), \" %\"),\n    paste0(format_decimal(\n      stats::quantile(\n        abs(common_prices$price_difference_percent),\n        probs = 0.95,\n        names = FALSE\n      ), 6\n    ), \" %\"),\n    paste0(format_decimal(\n      max(abs(common_prices$price_difference_percent)), 6\n    ), \" %\"),\n    format_decimal(\n      stats::cor(\n        common_returns$bybit_log_return,\n        common_returns$binance_log_return\n      ), 6\n    )\n  )\n)\n\nknitr::kable(\n  agreement_table,\n  align = c(\"l\", \"r\"),\n  caption = \"Узгодженість Bybit і Binance у спільному періоді\"\n)\n\n\n\n\nTable 2.6: Узгодженість Bybit і Binance у спільному періоді\n\n\n\n\n\n\nПоказник\nРезультат\n\n\n\n\nСпільні годинні ціни\n43 709\n\n\nСпільні суміжні дохідності\n43 705\n\n\nМедіанна абсолютна різниця цін\n0,007189 %\n\n\n95-й процентиль абсолютної різниці цін\n0,042173 %\n\n\nМаксимальна абсолютна різниця цін\n2,329775 %\n\n\nКореляція логарифмічних дохідностей\n0,998447\n\n\n\n\n\n\n\n\nМедіана показує типову різницю, а 95-й процентиль і максимум - більші відхилення. Висока кореляція означає схожий рух ринків, але не робить їхні ціни взаємозамінними.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
   },
   {
-    "objectID": "02-data-acquisition.html#джерела-до-розділу",
-    "href": "02-data-acquisition.html#джерела-до-розділу",
+    "objectID": "02-data-acquisition.html#комісії-та-реальна-робота-на-біржі",
+    "href": "02-data-acquisition.html#комісії-та-реальна-робота-на-біржі",
     "title": "2  Отримання реальних ринкових даних",
-    "section": "2.8 Джерела до розділу",
-    "text": "2.8 Джерела до розділу\n\nBinance Academy. Binance Spot Trading Rules: A Comprehensive Guide, розділ «Introduction».\nBinance Academy. A Beginner's Guide to Cryptocurrency Trading, розділ «Choose a trading pair».\nTether. What are Tether tokens and how do they work?, розділ про відповідність USD₮ долару США.\nBinance Data Collection, каталог історичних даних спотового ринку.",
+    "section": "2.7 Комісії та реальна робота на біржі",
+    "text": "2.7 Комісії та реальна робота на біржі\nСпочатку потрібні якісні ціни. Комісію, спред і прослизання буде додано під час перевірки торгового правила. До реальної торгівлі також треба перевірити, чи доступні послуги Bybit у країні користувача [3]. Актуальні способи введення й виведення коштів треба перевірити в особистому кабінеті. Там само слід перевірити власну ставку комісії, оскільки вона залежить від регіону й рівня користувача [4].",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
+    ]
+  },
+  {
+    "objectID": "02-data-acquisition.html#висновок",
+    "href": "02-data-acquisition.html#висновок",
+    "title": "2  Отримання реальних ринкових даних",
+    "section": "2.8 Висновок",
+    "text": "2.8 Висновок\nОсновний набір Bybit має 43 716 послідовних годинних свічок BTC/USDT. Binance залишається контролем із 19 явно показаними пропусками. Дані різних бірж не змішуються.\n\n\n\n\n[1] Binance, «Binance Public Data». [Online]. Доступний у: https://github.com/binance/binance-public-data. [Дата звернення: 20-Лип-2026]\n\n\n[2] Bybit, «Get Kline». [Online]. Доступний у: https://bybit-exchange.github.io/docs/v5/market/kline. [Дата звернення: 20-Лип-2026]\n\n\n[3] Bybit, «Service Restricted Countries». 2026 [Online]. Доступний у: https://www.bybit.com/en/help-center/article/Service-Restricted-Countries. [Дата звернення: 20-Лип-2026]\n\n\n[4] Bybit, «Trading Fee Structure». [Online]. Доступний у: https://www.bybit.com/en/help-center/article/Trading-Fee-Structure. [Дата звернення: 20-Лип-2026]",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Отримання реальних ринкових даних</span>"
     ]
@@ -182,211 +202,121 @@
   {
     "objectID": "03-price-and-returns.html",
     "href": "03-price-and-returns.html",
-    "title": "3  Ціна та дохідність BTC",
+    "title": "3  Ціна та підготовка дохідностей BTC",
     "section": "",
-    "text": "3.1 Архітектура коду\nУ попередньому розділі було визначено джерело даних: спотовий ринок Binance і торгову пару BTCUSDT. Тепер потрібно точно встановити, що в цьому дослідженні називається ціною, як із ціни отримується дохідність і що саме має прогнозувати перша модель.\nОсновна ідея проста:\nКод розділено за відповідальністю:\nЗавдяки цьому отримання даних, статистичні обчислення і оформлення книги не змішані в одному великому блоці.",
+    "text": "3.1 Архітектура коду\nЦей розділ завершує підготовку аналітичного набору. Він читає вже створений локальний файл, перевіряє його часову цілісність і пояснює, як із годинної ціни отримано дохідності.\nВідповідальності розділено так:\nПоказати / приховати код\nrequired_packages &lt;- c(\n  \"dplyr\",\n  \"ggplot2\",\n  \"htmlwidgets\",\n  \"knitr\",\n  \"plotly\",\n  \"scales\",\n  \"tibble\"\n)\n\nmissing_packages &lt;- required_packages[\n  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)\n]\n\nif (length(missing_packages) &gt; 0) {\n  stop(\n    \"Не встановлено пакети: \",\n    paste(missing_packages, collapse = \", \"),\n    \". Встановіть їх через renv::install().\"\n  )\n}\n\nmodule_files &lt;- c(\n  \"R/hourly_ohlc_quality.R\",\n  \"R/price_returns.R\",\n  \"R/book_charts.R\",\n  \"R/price_returns_charts.R\"\n)\n\nmissing_modules &lt;- module_files[!file.exists(module_files)]\nif (length(missing_modules) &gt; 0) {\n  stop(\n    \"Не знайдено модулі: \",\n    paste(missing_modules, collapse = \", \")\n  )\n}\n\nfor (module_file in module_files) {\n  sys.source(module_file, envir = knitr::knit_global())\n}\n\noptions(scipen = 999, digits = 7)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#архітектура-коду",
     "href": "03-price-and-returns.html#архітектура-коду",
-    "title": "3  Ціна та дохідність BTC",
+    "title": "3  Ціна та підготовка дохідностей BTC",
     "section": "",
-    "text": "R/binance_klines.R завантажує дані, працює з кешем і перевіряє цілісність;\nR/price_returns.R обчислює дохідності, розділяє часові вибірки та перевіряє базову модель;\nR/price_returns_charts.R містить лише налаштування і побудову графіків;\nassets/plotly-quarto-theme.js узгоджує кольори інтерактивних графіків зі світлою або темною темою Quarto;\n03-price-and-returns.qmd задає параметри, запускає послідовні кроки та пояснює результати.",
+    "text": "R/bybit_klines.R отримує публічні годинні свічки Bybit [1];\nscripts/audit_bybit_btcusdt.R окремо оновлює й перевіряє сирий кеш;\nR/hourly_ohlc_quality.R перевіряє часову цілісність OHLC;\nR/price_returns.R лише створює аналітичні змінні;\nscripts/prepare_price_returns.R зберігає підготовлений набір;\nR/book_charts.R задає єдиний вигляд усіх графіків книги;\nR/price_returns_charts.R готує графік ціни з видимими розривами;\nцей QMD лише читає локальний підготовлений файл і пояснює результат.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
-    "objectID": "03-price-and-returns.html#налаштування-дослідження",
-    "href": "03-price-and-returns.html#налаштування-дослідження",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.2 Налаштування дослідження",
-    "text": "3.2 Налаштування дослідження\nУсі змінні, які визначають ринок, інтервал і часові межі, зібрано в одному місці.\n\nanalysis_config &lt;- list(\n  symbol = \"BTCUSDT\",\n  interval = \"1h\",\n  timezone = \"UTC\",\n\n  data_start = as.POSIXct(\n    \"2020-07-01 00:00:00\",\n    tz = \"UTC\"\n  ),\n\n  validation_start = as.POSIXct(\n    \"2024-07-01 00:00:00\",\n    tz = \"UTC\"\n  ),\n\n  final_test_start = as.POSIXct(\n    \"2025-07-01 00:00:00\",\n    tz = \"UTC\"\n  ),\n\n  final_test_end = as.POSIXct(\n    \"2026-07-01 00:00:00\",\n    tz = \"UTC\"\n  ),\n\n  run_final_test = FALSE,\n\n  cache_file = file.path(\n    \"data\",\n    \"cache\",\n    \"btcusdt_spot_1h_2020-07-01_2026-06-30.rds\"\n  )\n)\n\n\n\n\n\n\n\nWarningФінальний тест закрито\n\n\n\nПоки обираються змінні, модель і правила оцінювання, run_final_test повинен дорівнювати FALSE. Значення TRUE встановлюється лише після повної фіксації моделі.",
+    "objectID": "03-price-and-returns.html#налаштування-набору",
+    "href": "03-price-and-returns.html#налаштування-набору",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.2 Налаштування набору",
+    "text": "3.2 Налаштування набору\n\n\nПоказати / приховати код\nanalysis_config &lt;- list(\n  exchange = \"Bybit\",\n  market_symbol = \"BTCUSDT\",\n  market_label = \"Bybit Spot BTC/USDT\",\n  quote_currency = \"USDT\",\n  interval = \"1h\",\n  timezone = \"UTC\",\n  data_start = as.POSIXct(\n    \"2021-07-05 12:00:00\",\n    tz = \"UTC\"\n  ),\n  data_end = as.POSIXct(\n    \"2026-07-01 00:00:00\",\n    tz = \"UTC\"\n  ),\n  prepared_file = file.path(\n    \"data\",\n    \"processed\",\n    \"bybit_btcusdt_1h_price_returns_2021-07-05_2026-06-30.rds\"\n  )\n)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#що-саме-називається-ціною",
     "href": "03-price-and-returns.html#що-саме-називається-ціною",
-    "title": "3  Ціна та дохідність BTC",
+    "title": "3  Ціна та підготовка дохідностей BTC",
     "section": "3.3 Що саме називається ціною",
-    "text": "3.3 Що саме називається ціною\nТоргова пара BTCUSDT складається з двох частин:\n\nBTC є базовим активом, кількість якого купується або продається;\nUSDT є активом котирування, у якому виражається ціна BTC.\n\nЯкщо котирування BTCUSDT дорівнює 100 000, це означає, що ціна 1 BTC становить 100 000 USDT. Без урахування витрат 0.001 BTC за такого котирування коштує 100 USDT.\nBinance подає дані у вигляді свічок. Для кожної годинної свічки зберігаються, зокрема [1]:\n\nopen - ціна першої угоди протягом години;\nhigh - найбільша ціна угоди протягом години;\nlow - найменша ціна угоди протягом години;\nclose - ціна останньої угоди протягом години;\nvolume - кількість BTC, якою торгували протягом години.\n\n\n\n\n\n\n\nImportantТочне визначення ціни\n\n\n\nУ цьому дослідженні \\(P_t\\) означає ціну закриття завершеної годинної свічки BTCUSDT на спотовому ринку Binance. Вона показує, скільки USDT припадало на 1 BTC у останній угоді, включеній у годину \\(t\\). Усі часові межі визначаються за UTC.\n\n\nОтже,\n\\[\nP_t = \\mathrm{close}_t.\n\\]\nДля свічки від 12:00 до 13:00 UTC значення \\(P_t\\) є ціною останньої угоди до початку наступної години.\nЦе визначення має чіткі межі. \\(P_t\\) не є:\n\nсередньою ціною за годину;\nєдиною світовою ціною Bitcoin;\nціною BTC у доларах США;\nгарантованою ціною виконання майбутньої угоди;\nоцінкою справедливої вартості BTC.\n\nЦе конкретне спостереження з ринку Binance Spot BTCUSDT.",
+    "text": "3.3 Що саме називається ціною\nТоргова пара BTC/USDT складається з двох активів:\n\nBTC є базовим активом;\nUSDT є активом котирування, у якому виражена ціна BTC.\n\nДля кожної завершеної годинної свічки Bybit зберігаються ціни відкриття, максимуму, мінімуму та закриття, а також обсяг торгів.\n\n\n\n\n\n\nImportantТочне визначення ціни\n\n\n\nУ цьому наборі \\(P_t\\) означає ціну закриття завершеної годинної свічки BTC/USDT на спотовому ринку Bybit. Час визначено за UTC.\n\n\nОтже,\n\\[\nP_t = \\mathrm{close}_t.\n\\]\nЦе конкретна ціна одного ринку. Вона не є єдиною світовою ціною Bitcoin і не гарантує ціну виконання майбутньої угоди.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
-    "objectID": "03-price-and-returns.html#часовий-проміжок-та-інтервал",
-    "href": "03-price-and-returns.html#часовий-проміжок-та-інтервал",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.4 Часовий проміжок та інтервал",
-    "text": "3.4 Часовий проміжок та інтервал\nОсновним інтервалом є 1 година. Він дає достатньо спостережень для однорічної перевірки та не переносить у першу модель всю складність хвилинних даних.\nВикористовуються такі часові межі:\n\nпочаток даних: 2020-07-01 00:00 UTC;\nпочаток внутрішньої перевірки: 2024-07-01 00:00 UTC;\nпочаток фінального тесту: 2025-07-01 00:00 UTC;\nкінець фінального тесту: 2026-07-01 00:00 UTC, без включення цієї межі.\n\nКожен однорічний період оцінювання містить очікувано 8 760 цільових годин.",
+    "objectID": "03-price-and-returns.html#часовий-проміжок",
+    "href": "03-price-and-returns.html#часовий-проміжок",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.4 Часовий проміжок",
+    "text": "3.4 Часовий проміжок\nВикористано завершені годинні свічки від першої доступної години Bybit, 2021-07-05 12:00 UTC, до 2026-07-01 00:00 UTC без включення правої межі. Повна сітка такого періоду містить 43 716 годин.\nПочаток періоду не доповнюється даними Binance або Bitstamp. Скорочення історії є явною ціною за суцільний ряд одного ринку.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
-    "objectID": "03-price-and-returns.html#отримання-даних",
-    "href": "03-price-and-returns.html#отримання-даних",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.5 Отримання даних",
-    "text": "3.5 Отримання даних\nДані завантажуються з офіційного відкритого ринкового API Binance. Один запит повертає не більше 1 000 свічок, тому довгий проміжок завантажується частинами. Після першого запуску дані зберігаються в локальному кеші та не завантажуються повторно.\n\nbtc_raw &lt;- load_or_download_binance_klines(\n  symbol = analysis_config$symbol,\n  interval = analysis_config$interval,\n  start_time = analysis_config$data_start,\n  end_time = analysis_config$final_test_end,\n  cache_file = analysis_config$cache_file\n)\n\ndata_check &lt;- validate_hourly_klines(\n  data = btc_raw,\n  start_time = analysis_config$data_start,\n  end_time = analysis_config$final_test_end\n)\n\nbtc_raw &lt;- data_check$data\n\nФайл кешу не потрібно додавати до Git, оскільки його можна відтворити з Binance.\n\n3.5.1 Перевірка цілісності\n\nknitr::kable(\n  data_check$summary,\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка годинних даних BTCUSDT\"\n)\n\n\n\nTable 3.1: Перевірка годинних даних BTCUSDT\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nОчікувана кількість годин\n52584\n\n\nФактична кількість свічок\n52564\n\n\nПовторені години\n0\n\n\nЧасові розриви\n10\n\n\nНедодатні або нечислові ціни\n0\n\n\n\n\n\n\n\n\nДохідність не обчислюється через часовий розрив. Якщо між сусідніми спостереженнями пропущено годину, перше значення після розриву отримує NA, а не помилкову багатогодинну дохідність із назвою 1h.",
+    "objectID": "03-price-and-returns.html#читання-підготовлених-даних",
+    "href": "03-price-and-returns.html#читання-підготовлених-даних",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.5 Читання підготовлених даних",
+    "text": "3.5 Читання підготовлених даних\nЗвичайний рендер не завантажує дані з біржі й не перебудовує набір. Він лише читає результат окремого кроку підготовки.\n\n\nПоказати / приховати код\nif (!file.exists(analysis_config$prepared_file)) {\n  stop(\n    \"Не знайдено підготовлений набір. Виконайте: \",\n    \"Rscript scripts/prepare_price_returns.R\"\n  )\n}\n\nbtc_1h &lt;- readRDS(analysis_config$prepared_file)\n\ndata_check &lt;- validate_hourly_ohlc(\n  data = btc_1h,\n  start_time = analysis_config$data_start,\n  end_time = analysis_config$data_end\n)\n\nif (nrow(data_check$gaps) &gt; 0L) {\n  stop(\"Підготовлений основний набір Bybit містить часові розриви.\")\n}\n\nbtc_1h &lt;- data_check$data\n\n\nОновлення виконується двома явними кроками:\nRscript scripts/audit_bybit_btcusdt.R\nRscript scripts/prepare_price_returns.R\nПерший крок отримує й перевіряє сирі свічки Bybit. Другий повторно перевіряє повноту, створює дохідності, порівнює спільні години з Binance [2], [3] та зберігає окремі аналітичні RDS. Рендер книги не виконує жодного з цих кроків автоматично.\n\n3.5.1 Перевірка цілісності\n\n\nПоказати / приховати код\nknitr::kable(\n  data_check$summary,\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка основного набору Bybit Spot BTC/USDT\"\n)\n\n\n\n\nTable 3.1: Перевірка основного набору Bybit Spot BTC/USDT\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nОчікувана кількість годин\n43716\n\n\nФактична кількість свічок\n43716\n\n\nПропущені години\n0\n\n\nПовнота, %\n100\n\n\nПовторені години\n0\n\n\nЧасові розриви\n0\n\n\nСвічки поза межею години UTC\n0\n\n\nНедодатні або нечислові OHLC-ціни\n0\n\n\nПорушення співвідношень OHLC\n0\n\n\nВід'ємний або нечисловий обсяг\n0\n\n\n\n\n\n\n\n\n\n\n3.5.2 Підсумок безперервності\nОсновний ряд містить 43716 свічок і 0 внутрішніх часових розривів. Кожна свічка починається на межі години UTC, OHLC-співвідношення виконуються, а обсяг не містить від'ємних або нечислових значень.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#побудова-змінних",
     "href": "03-price-and-returns.html#побудова-змінних",
-    "title": "3  Ціна та дохідність BTC",
+    "title": "3  Ціна та підготовка дохідностей BTC",
     "section": "3.6 Побудова змінних",
-    "text": "3.6 Побудова змінних\n\nbtc_1h &lt;- build_price_return_features(btc_raw)\n\nНазва price_usdt_per_btc навмисно є точною. Вона нагадує, що це не абстрактна світова ціна, а кількість USDT за 1 BTC у годинній ціні закриття Binance Spot BTCUSDT.",
+    "text": "3.6 Побудова змінних\nПідготовлений файл уже містить результат функції build_price_return_features(). Кількість рядків не змінюється: кожна наявна свічка Bybit залишається окремим спостереженням.\n\n\nПоказати / приховати код\nprepared_summary &lt;- tibble::tibble(\n  `Показник` = c(\n    \"Рядки з ціною\",\n    \"Наявна звичайна дохідність\",\n    \"Наявна логарифмічна дохідність\",\n    \"Наявна цільова дохідність наступної години\"\n  ),\n  `Кількість` = c(\n    sum(is.finite(btc_1h$price_quote_per_btc)),\n    sum(!is.na(btc_1h$simple_return_1h)),\n    sum(!is.na(btc_1h$log_return_1h)),\n    sum(!is.na(btc_1h$target_log_return_1h))\n  )\n)\n\nknitr::kable(\n  prepared_summary,\n  align = c(\"l\", \"r\"),\n  caption = \"Наповнення підготовленого аналітичного набору\"\n)\n\n\n\n\nTable 3.2: Наповнення підготовленого аналітичного набору\n\n\n\n\n\n\nПоказник\nКількість\n\n\n\n\nРядки з ціною\n43716\n\n\nНаявна звичайна дохідність\n43715\n\n\nНаявна логарифмічна дохідність\n43715\n\n\nНаявна цільова дохідність наступної години\n43715\n\n\n\n\n\n\n\n\nУ суцільному ряді перша дохідність є NA, бо перед першою доступною свічкою немає попередньої ціни. Всі наступні дохідності обчислюються між сусідніми годинами.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#графік-ціни",
     "href": "03-price-and-returns.html#графік-ціни",
-    "title": "3  Ціна та дохідність BTC",
+    "title": "3  Ціна та підготовка дохідностей BTC",
     "section": "3.7 Графік ціни",
-    "text": "3.7 Графік ціни\nНа графіку показано саме \\(P_t\\). Він займає широку область сторінки, але має невелику фіксовану висоту. Кольори автоматично змінюються разом зі світлою або темною темою книги.\n\n#| fig-width: 14\n#| fig-height: 4.2\n\nmake_price_history_widget(\n  data = btc_1h,\n  validation_start = analysis_config$validation_start,\n  final_test_start = analysis_config$final_test_start\n)\n\n\n\n\n\n\n\nFigure 3.1: Годинна ціна закриття BTCUSDT на спотовому ринку Binance",
+    "text": "3.7 Графік ціни\nГрафік будується на повній годинній сітці. Механізм відображення розривів залишається активним як захист для майбутніх оновлень, хоча в поточному наборі Bybit пропусків немає.\n\n\nПоказати / приховати код\nmake_price_history_widget(\n  data = btc_1h,\n  quote_currency = analysis_config$quote_currency,\n  market_label = analysis_config$market_label\n)\n\n\n\n\n\n\n\n\nFigure 3.1: Годинна ціна закриття Bybit Spot BTC/USDT",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#чому-модель-не-оцінює-лише-рівень-ціни",
-    "href": "03-price-and-returns.html#чому-модель-не-оцінює-лише-рівень-ціни",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.8 Чому модель не оцінює лише рівень ціни",
-    "text": "3.8 Чому модель не оцінює лише рівень ціни\nНехай ціна BTC збільшилася на 1 000 USDT.\n\nз 20 000 до 21 000 USDT - це зростання на 5%;\nзі 100 000 до 101 000 USDT - це зростання лише на 1%.\n\nАбсолютна зміна однакова, але її економічний зміст різний. Саме відносна зміна визначає результат для однакової вкладеної суми.\nМодель рівня ціни також може виглядати точно лише тому, що сусідні годинні ціни зазвичай близькі. Прогноз наступна ціна дорівнює поточній часто дає невелику похибку в USDT, але не доводить можливість заробітку після витрат.\nТому ціна залишається основним спостережуваним показником, але ціль моделі формулюється через її зміну.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#звичайна-дохідність",
     "href": "03-price-and-returns.html#звичайна-дохідність",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.9 Звичайна дохідність",
-    "text": "3.9 Звичайна дохідність\nЗвичайна годинна дохідність визначається як [2, с. 3]:\n\\[\nR_t = \\frac{P_t}{P_{t-1}} - 1.\n\\]\nЯкщо\n\\[\nP_{t-1}=100\\,000, \\qquad P_t=101\\,000,\n\\]\nто\n\\[\nR_t=\\frac{101\\,000}{100\\,000}-1=0.01=1\\%.\n\\]\nОтже, ціна BTCUSDT за цю годину зросла на 1%.",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.8 Звичайна дохідність",
+    "text": "3.8 Звичайна дохідність\nЗвичайна годинна дохідність визначається як [4, Розд. 1.1], с. 3:\n\\[\nR_t = \\frac{P_t}{P_{t-1}} - 1.\n\\]\nЯкщо ціна зросла зі 100 000 до 101 000 USDT, то \\(R_t=0.01\\), або 1%.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#логарифмічна-дохідність",
     "href": "03-price-and-returns.html#логарифмічна-дохідність",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.10 Логарифмічна дохідність",
-    "text": "3.10 Логарифмічна дохідність\nЛогарифмічна годинна дохідність визначається як [2, с. 5]:\n\\[\nr_t = \\ln\\left(\\frac{P_t}{P_{t-1}}\\right)\n    = \\ln(1+R_t).\n\\]\nДля невеликих годинних змін \\(r_t\\) майже дорівнює \\(R_t\\). Для звичайної дохідності 1%:\n\\[\nr_t=\\ln(1.01)\\approx0.00995,\n\\]\nабо приблизно 0.995%.\nЛогарифм перетворює множення змін за кілька періодів на додавання [2, с. 5]:\n\\[\nr_{t-2,t}=r_{t-1}+r_t.\n\\]\nЗворотне перетворення завжди доступне:\n\\[\nR_t=e^{r_t}-1.\n\\]\n\nknitr::kable(\n  make_return_examples(),\n  align = c(\"r\", \"r\"),\n  caption = \"Звичайна та логарифмічна дохідності\"\n)\n\n\n\nTable 3.2: Звичайна та логарифмічна дохідності\n\n\n\n\n\n\nЗвичайна дохідність, %\nЛогарифмічна дохідність, %\n\n\n\n\n-10\n-10.536\n\n\n-5\n-5.129\n\n\n-1\n-1.005\n\n\n1\n0.995\n\n\n5\n4.879\n\n\n10\n9.531\n\n\n\n\n\n\n\n\n\n3.10.1 Перевірка обчислень\n\nconversion_error &lt;- maximum_return_conversion_error(btc_1h)\n\nif (conversion_error &gt; 1e-12) {\n  stop(\"Перетворення між видами дохідності не пройшло перевірку.\")\n}\n\nknitr::kable(\n  tibble::tibble(\n    `Перевірка` = \"Максимальна числова похибка\",\n    `Значення` = format(conversion_error, scientific = TRUE)\n  ),\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка рівності R = exp(r) - 1\"\n)\n\n\n\nTable 3.3: Перевірка рівності R = exp(r) - 1\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nМаксимальна числова похибка\n0e+00",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.9 Логарифмічна дохідність",
+    "text": "3.9 Логарифмічна дохідність\nЛогарифмічна годинна дохідність визначається як [4, Розд. 1.1], с. 5-6:\n\\[\nr_t = \\ln\\left(\\frac{P_t}{P_{t-1}}\\right)\n    = \\ln(1+R_t).\n\\]\nЗворотне перетворення:\n\\[\nR_t=e^{r_t}-1.\n\\]\n\n\nПоказати / приховати код\nknitr::kable(\n  make_return_examples(),\n  align = c(\"r\", \"r\"),\n  caption = \"Звичайна та логарифмічна дохідності\"\n)\n\n\n\n\nTable 3.3: Звичайна та логарифмічна дохідності\n\n\n\n\n\n\nЗвичайна дохідність, %\nЛогарифмічна дохідність, %\n\n\n\n\n-10\n-10.536\n\n\n-5\n-5.129\n\n\n-1\n-1.005\n\n\n1\n0.995\n\n\n5\n4.879\n\n\n10\n9.531\n\n\n\n\n\n\n\n\n\n3.9.1 Перевірка обчислень\n\n\nПоказати / приховати код\nconversion_error &lt;- maximum_return_conversion_error(btc_1h)\nif (conversion_error &gt; 1e-12) {\n  stop(\"Перетворення між видами дохідності не пройшло перевірку.\")\n}\n\nknitr::kable(\n  tibble::tibble(\n    `Перевірка` = \"Максимальна числова похибка\",\n    `Значення` = format(conversion_error, scientific = TRUE)\n  ),\n  align = c(\"l\", \"r\"),\n  caption = \"Перевірка рівності R = exp(r) - 1\"\n)\n\n\n\n\nTable 3.4: Перевірка рівності R = exp(r) - 1\n\n\n\n\n\n\nПеревірка\nЗначення\n\n\n\n\nМаксимальна числова похибка\n0e+00",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
-    "objectID": "03-price-and-returns.html#що-саме-прогнозує-модель",
-    "href": "03-price-and-returns.html#що-саме-прогнозує-модель",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.11 Що саме прогнозує модель",
-    "text": "3.11 Що саме прогнозує модель\nРобочою ціллю першої моделі є логарифмічна дохідність протягом наступної години:\n\\[\ny_t=r_{t+1}\n   =\\ln\\left(\\frac{P_{t+1}}{P_t}\\right).\n\\]\nПісля завершення години \\(t\\) модель використовує лише вже відомі дані та прогнозує зміну до кінця наступної години.\nУ кожному рядку:\n\nprice_usdt_per_btc є відомою ціною \\(P_t\\);\nlog_return_1h описує завершену зміну від \\(P_{t-1}\\) до \\(P_t\\);\ntarget_open_time визначає годину прогнозованого результату;\ntarget_log_return_1h описує майбутню зміну від \\(P_t\\) до \\(P_{t+1}\\).\n\n\n\n\n\n\n\nImportantМайбутні дані не є ознаками\n\n\n\ntarget_log_return_1h використовується лише для навчання та перевірки. Ця змінна не може бути ознакою моделі, оскільки містить майбутню ціну \\(P_{t+1}\\).",
+    "objectID": "03-price-and-returns.html#що-передається-майбутнім-моделям",
+    "href": "03-price-and-returns.html#що-передається-майбутнім-моделям",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.10 Що передається майбутнім моделям",
+    "text": "3.10 Що передається майбутнім моделям\nПідготовлений набір містить сирі OHLC-поля, ціну закриття, ознаки часової суміжності, поточні дохідності та зміну наступної години. Поля наступної години створені як майбутня ціль, але в цьому розділі вони не використовуються для оцінювання будь-якої моделі.\nМайбутній модельний код має:\n\nчитати лише підготовлений RDS;\nне звертатися до API біржі;\nне заповнювати розриви цінами іншого ринку;\nявно відкидати рядки, де потрібна змінна має NA;\nокремо враховувати комісію, спред, прослизання і момент виконання.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#поділ-даних",
-    "href": "03-price-and-returns.html#поділ-даних",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.12 Поділ даних",
-    "text": "3.12 Поділ даних\nОдна вибірка не повинна одночасно використовуватися для налаштування моделі та остаточної оцінки її якості. Часовий ряд ділиться без перемішування [3, с. 70-72].\n\nevaluation_period &lt;- resolve_evaluation_period(\n  run_final_test = analysis_config$run_final_test,\n  validation_start = analysis_config$validation_start,\n  final_test_start = analysis_config$final_test_start,\n  final_test_end = analysis_config$final_test_end\n)\n\nmodel_samples &lt;- split_model_samples(\n  data = btc_1h,\n  evaluation_period = evaluation_period,\n  final_test_start = analysis_config$final_test_start,\n  final_test_end = analysis_config$final_test_end\n)\n\nknitr::kable(\n  model_samples$summary,\n  align = c(\"l\", \"l\", \"l\", \"r\"),\n  caption = paste(\"Поточний режим:\", evaluation_period$name)\n)\n\n\nПоточний режим: Внутрішня перевірка\n\n\n\n\n\n\n\n\nЧастина\nПочаток\nКінець без включення межі\nКількість цільових годин\n\n\n\n\nНавчання\n2020-07-01\n2024-07-01\n35033\n\n\nВнутрішня перевірка\n2024-07-01\n2025-07-01\n8760\n\n\nЗарезервований фінальний тест\n2025-07-01\n2026-07-01\n8760\n\n\n\n\n\nПеріод визначається за target_open_time, тобто за годиною прогнозованого результату. Остання навчальна ціль не потрапляє у внутрішню перевірку, а остання ціль внутрішньої перевірки не потрапляє у фінальний тест.\nПослідовна перевірка зберігає часовий порядок, але сама по собі не усуває ризик переналаштування на одному історичному шляху [4, с. 161-162].",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#найпростіший-орієнтир",
-    "href": "03-price-and-returns.html#найпростіший-орієнтир",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.13 Найпростіший орієнтир",
-    "text": "3.13 Найпростіший орієнтир\nПеред складною моделлю потрібен прогноз, який майже нічого не припускає:\n\\[\n\\widehat r_{t+1}=0.\n\\]\nЙого зміст: наступної години суттєвої зміни не очікується. Для ціни:\n\\[\n\\widehat P_{t+1}=P_t.\n\\]\nНова модель має перевершувати цей орієнтир на даних, які не використовувалися для оцінювання її параметрів.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#перша-базова-модель",
-    "href": "03-price-and-returns.html#перша-базова-модель",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.14 Перша базова модель",
-    "text": "3.14 Перша базова модель\nДля перевірки всього обчислювального процесу використовується проста авторегресія першого порядку:\n\\[\nr_{t+1}=\\alpha+\\beta r_t+\\varepsilon_{t+1}.\n\\]\nВона відповідає на вузьке запитання:\n\nЧи допомагає дохідність завершеної години прогнозувати дохідність наступної години краще, ніж нульовий прогноз?\n\nЦе технічний початок дослідження, а не готова торговельна стратегія.\n\nbaseline_result &lt;- run_ar1_baseline(\n  training = model_samples$training,\n  evaluation = model_samples$evaluation\n)\n\n\n3.14.1 Параметри моделі\n\nknitr::kable(\n  baseline_result$coefficients,\n  digits = 6,\n  align = c(\"l\", \"r\", \"r\", \"r\", \"r\"),\n  caption = \"Параметри базової моделі AR(1)\"\n)\n\n\n\nTable 3.4: Параметри базової моделі AR(1)\n\n\n\n\n\n\n\n\n\n\n\n\n\nПараметр\nОцінка\nСтандартна похибка\nt-статистика\np-значення\n\n\n\n\n(Intercept)\n0.000055\n0.000036\n1.512213\n0.130489\n\n\nlog_return_1h\n-0.007532\n0.005344\n-1.409456\n0.158709\n\n\n\n\n\n\n\n\nЗвичайні стандартні похибки наведено лише як опис найпростішої моделі. Вони не замінюють окрему перевірку залежності та неоднорідності дисперсії похибок.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#якість-прогнозу",
-    "href": "03-price-and-returns.html#якість-прогнозу",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.15 Якість прогнозу",
-    "text": "3.15 Якість прогнозу\nПомилки подаються в базисних пунктах. Один базисний пункт дорівнює 0.01%.\n\nknitr::kable(\n  baseline_result$error_metrics,\n  digits = 3,\n  align = c(\"l\", \"r\", \"r\"),\n  caption = paste(\n    \"Похибка прогнозу. Період:\",\n    evaluation_period$name\n  )\n)\nknitr::kable(\n  baseline_result$direction_metrics,\n  digits = 2,\n  align = c(\"l\", \"r\"),\n  caption = \"Точність прогнозування напряму\"\n)\nknitr::kable(\n  tibble::tibble(\n    `Показник` =\n      \"Позавибірковий R-квадрат відносно нульового прогнозу\",\n    `Значення` = baseline_result$oos_r_squared\n  ),\n  digits = 6,\n  align = c(\"l\", \"r\")\n)\n\n\n\nTable 3.5: Точність прогнозування напряму\n\n\n\n\n\n\nМодель\nMAE, базисні пункти\nRMSE, базисні пункти\n\n\n\n\nНульова зміна\n35.726\n54.731\n\n\nAR(1)\n35.698\n54.719\n\n\n\n\n\n\n\n\nМодель\nПравильний напрям, %\n\n\n\n\nПереважний напрям у навчальних даних\n50.73\n\n\nAR(1)\n51.06\n\n\n\n\n\n\n\n\nПоказник\nЗначення\n\n\n\n\nПозавибірковий R-квадрат відносно нульового прогнозу\n0.000425\n\n\n\n\n\n\n\n\nДодатний позавибірковий \\(R^2\\) означає меншу суму квадратів помилок, ніж у нульового прогнозу. Від'ємне значення означає, що проста модель гірша за припущення про нульову наступну зміну.\nОдин показник не є доказом придатності моделі. Окремо потрібно перевіряти стабільність результату, витрати та практичне правило ухвалення рішення.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#перетворення-прогнозу-назад-у-ціну",
-    "href": "03-price-and-returns.html#перетворення-прогнозу-назад-у-ціну",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.16 Перетворення прогнозу назад у ціну",
-    "text": "3.16 Перетворення прогнозу назад у ціну\nЯкщо модель спрогнозувала \\(\\widehat r_{t+1}\\), звичайна прогнозована дохідність дорівнює\n\\[\n\\widehat R_{t+1}=e^{\\widehat r_{t+1}}-1,\n\\]\nа прогнозована ціна закриття наступної години:\n\\[\n\\widehat P_{t+1}=P_t e^{\\widehat r_{t+1}}.\n\\]\nМоделювання дохідності не означає відмову від ціни. Воно відокремлює поточний рівень ціни від зміни, яку потрібно передбачити.\n\nknitr::kable(\n  make_price_forecast_examples(\n    baseline_result$predictions\n  ),\n  digits = 3,\n  align = c(\"l\", \"r\", \"r\", \"r\", \"r\"),\n  caption = \"Перетворення прогнозованої дохідності в ціну\"\n)\n\n\n\nTable 3.6: Перетворення прогнозованої дохідності в ціну\n\n\n\n\n\n\n\n\n\n\n\n\n\nЦільова година UTC\nПоточна ціна\nФактична наступна ціна\nПрогнозована зміна, %\nПрогнозована наступна ціна\n\n\n\n\n2024-07-01 00:00\n62772.01\n62931.99\n0.007\n62776.42\n\n\n2024-07-01 01:00\n62931.99\n63640.82\n0.004\n62934.23\n\n\n2024-07-01 02:00\n63640.82\n63435.86\n-0.003\n63638.94\n\n\n2024-07-01 03:00\n63435.86\n63437.69\n0.008\n63440.88\n\n\n2024-07-01 04:00\n63437.69\n63279.79\n0.005\n63441.15\n\n\n2024-07-01 05:00\n63279.79\n63432.94\n0.007\n63284.45\n\n\n2024-07-01 06:00\n63432.94\n63404.00\n0.004\n63435.26\n\n\n2024-07-01 07:00\n63404.00\n63277.84\n0.006\n63407.69",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#фактичні-та-прогнозовані-зміни",
-    "href": "03-price-and-returns.html#фактичні-та-прогнозовані-зміни",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.17 Фактичні та прогнозовані зміни",
-    "text": "3.17 Фактичні та прогнозовані зміни\nДля читабельності показано останні 14 днів поточного періоду оцінювання. Цей графік також є широким, невисоким і підтримує обидві теми книги.\n\n#| fig-width: 14\n#| fig-height: 4.2\n\nmake_return_forecast_widget(\n  predictions = baseline_result$predictions,\n  evaluation_name = evaluation_period$name,\n  evaluation_end = evaluation_period$end,\n  displayed_days = 14\n)\n\n\n\n\n\n\n\nFigure 3.2: Фактична та прогнозована годинна дохідність",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#чого-ця-перевірка-ще-не-показує",
-    "href": "03-price-and-returns.html#чого-ця-перевірка-ще-не-показує",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.18 Чого ця перевірка ще не показує",
-    "text": "3.18 Чого ця перевірка ще не показує\nНавіть якщо статистична похибка AR(1) менша за похибку нульового прогнозу, це ще не означає можливість заробітку.\nПоки не враховано:\n\nкомісію Binance;\nрізницю між ціною купівлі та продажу;\nпрослизання під час виконання наказу;\nзатримку між завершенням свічки та угодою;\nправило входу й виходу;\nрозмір позиції;\nризик великих збитків;\nпорівняння зі звичайним утриманням BTC.\n\nЦіна закриття \\(P_t\\) використовується для статистичної цілі. Вона не повинна автоматично вважатися ціною виконання угоди. Для торгової симуляції потрібно окремо визначити доступну ціну після появи прогнозу, наприклад ціну відкриття наступної години з урахуванням комісії та прослизання.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
     "objectID": "03-price-and-returns.html#висновок",
     "href": "03-price-and-returns.html#висновок",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.19 Висновок",
-    "text": "3.19 Висновок\nУ цьому розділі ціна визначена без неоднозначності:\n\\[\nP_t = \\mathrm{close}_t.\n\\]\nВона вимірюється в USDT за 1 BTC. Із послідовних значень \\(P_t\\) обчислюються:\n\nзвичайна дохідність, яка безпосередньо показує відносну зміну ціни;\nлогарифмічна дохідність, яка зручна для статистичного моделювання;\nмайбутня годинна дохідність, яка є ціллю прогнозу.\n\nЦіна залишається в даних і використовується для графіків та інтерпретації. Модель оцінює дохідність, а її прогноз переводиться назад у відсотки та прогнозовану ціну.\nПершою перевіряється найпростіша залежність між сусідніми годинними дохідностями. Фінальний однорічний тест залишається закритим до повної фіксації моделі та правил оцінювання.",
+    "title": "3  Ціна та підготовка дохідностей BTC",
+    "section": "3.11 Висновок",
+    "text": "3.11 Висновок\nОсновним джерелом обрано Bybit Spot BTC/USDT. Від першої доступної години до кінця періоду набір має повну часову сітку без внутрішніх розривів. Дані Binance й Bitstamp не використовуються для його заповнення.\nBinance залишається контрольним ринком на спільному періоді, а його 19 пропущених годин повністю показано в розділі про отримання даних. Отримання, перевірка, підготовка й рендер виконуються окремо. Моделі в цьому розділі не оцінюються.\n\n\n\n\n[1] Bybit, «Get Kline». [Online]. Доступний у: https://bybit-exchange.github.io/docs/v5/market/kline. [Дата звернення: 20-Лип-2026]\n\n\n[2] Binance, «Binance Public Data». [Online]. Доступний у: https://github.com/binance/binance-public-data. [Дата звернення: 20-Лип-2026]\n\n\n[3] Binance, «Kline/Candlestick Data». [Online]. Доступний у: https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market#klinecandlestick-data. [Дата звернення: 20-Лип-2026]\n\n\n[4] R. S. Tsay, Analysis of Financial Time Series, 3ий вид. Wiley, 2010 [Online]. Доступний у: https://www.wiley.com/en-us/Analysis%2Bof%2BFinancial%2BTime%2BSeries%2C%2B3rd%2BEdition-p-9780470414354. [Дата звернення: 20-Лип-2026]",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
-    ]
-  },
-  {
-    "objectID": "03-price-and-returns.html#джерела",
-    "href": "03-price-and-returns.html#джерела",
-    "title": "3  Ціна та дохідність BTC",
-    "section": "3.20 Джерела",
-    "text": "3.20 Джерела\n\nBinance. Spot REST API: Kline/Candlestick data. Розділ \"Kline/Candlestick data\". Доступ: https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market.\nTsay, R. S. Analysis of Financial Time Series. 3rd ed. Wiley,\n\nРозділ 1.1 \"Asset Returns\", с. 2-6, формули (1.1), (1.2) та (1.6).\n\nLinton, O. Financial Econometrics: Models and Methods. Cambridge University Press, 2020. Розділ 2.2.6 \"Forecast Evaluation\", с. 70-72.\nLopez de Prado, M. Advances in Financial Machine Learning. Wiley,\n\nРозділ 12.2 \"The Walk-Forward Method\", с. 161-162.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та дохідність BTC</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Ціна та підготовка дохідностей BTC</span>"
     ]
   },
   {
@@ -394,7 +324,7 @@
     "href": "references.html",
     "title": "Джерела",
     "section": "",
-    "text": "[1] S. Nakamoto, «Bitcoin: A Peer-to-Peer Electronic Cash System». 2008 [Online]. Доступний у: https://bitcoin.org/bitcoin.pdf. [Дата звернення: 14-Лип-2026]\n\n\n[2] A. M. Antonopoulos і D. A. Harding, Mastering Bitcoin: Programming the Open Blockchain, 3ий вид. O’Reilly Media, 2023 [Online]. Доступний у: https://github.com/bitcoinbook/bitcoinbook/blob/6d1c26e1640ae32b28389d5ae4caf1214c2be7db/ch01_intro.adoc. [Дата звернення: 14-Лип-2026]\n\n\n[3] W. Bolt і M. R. C. van Oordt, «On the Value of Virtual Currencies», Bank of Canada, Staff Working Paper 2016-42, 2016 [Online]. Доступний у: https://www.bankofcanada.ca/wp-content/uploads/2016/08/swp2016-42.pdf. [Дата звернення: 14-Лип-2026]\n\n\n[4] Coinbase, «Get Product Ticker». [Online]. Доступний у: https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-ticker. [Дата звернення: 14-Лип-2026]\n\n\n[5] Coinbase, «Get Product Candles». [Online]. Доступний у: https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-candles. [Дата звернення: 14-Лип-2026]\n\n\n[6] Commodity Futures Trading Commission, «Customer Advisory: Understand the Risks of Virtual Currency Trading». U.S. Commodity Futures Trading Commission, 2017 [Online]. Доступний у: https://www.cftc.gov/sites/default/files/idc/groups/public/@customerprotection/documents/file/customeradvisory_urvct121517.pdf. [Дата звернення: 14-Лип-2026]\n\n\n[7] F. de Jong і B. Rindi, The Microstructure of Financial Markets. Cambridge University Press, 2009 [Online]. Доступний у: https://www.cambridge.org/core/books/microstructure-of-financial-markets/3300353451FDD99C50570F427EE4B16D. [Дата звернення: 15-Лип-2026]\n\n\n[8] E. Zivot, «Practical Issues in the Analysis of Univariate GARCH Models», в Handbook of Financial Time Series, T. G. Andersen, R. A. Davis, J.-P. Kreiss, і T. Mikosch, Ред. Springer, 2009, с. 113–155 [Online]. Доступний у: https://link.springer.com/chapter/10.1007/978-3-540-71297-8_5. [Дата звернення: 15-Лип-2026]\n\n\n[9] Binance, «Binance Public Data». [Online]. Доступний у: https://github.com/binance/binance-public-data. [Дата звернення: 15-Лип-2026]\n\n\n[10] Binance, «Kline/Candlestick Data». [Online]. Доступний у: https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market. [Дата звернення: 15-Лип-2026]\n\n\n[11] Binance, «How to Withdraw UAH via Card (Fiat Trade)?» 2025 [Online]. Доступний у: https://www.binance.com/en/support/faq/detail/6ba3d2bb7a404b09a17ae0abd622809d. [Дата звернення: 15-Лип-2026]\n\n\n[12] WhiteBIT, «Market Data». [Online]. Доступний у: https://docs.whitebit.com/api-reference/market-data/overview. [Дата звернення: 15-Лип-2026]\n\n\n[13] WhiteBIT, «WhiteBIT Nova Card Migration». 2026 [Online]. Доступний у: https://help.whitebit.com/hc/en-gb/articles/37251766213277-WhiteBIT-Nova-Card-migration. [Дата звернення: 15-Лип-2026]\n\n\n[14] Bybit, «Get Kline». [Online]. Доступний у: https://bybit-exchange.github.io/docs/v5/market/kline. [Дата звернення: 15-Лип-2026]\n\n\n[15] Bybit, «Supported Countries and Regions for One-Click Buy». 2026 [Online]. Доступний у: https://www.bybit.com/en/help-center/article/Supported-Countries-Regions-for-Bank-Card-Payment. [Дата звернення: 15-Лип-2026]\n\n\n[16] Bybit, «Service Restricted Countries». 2026 [Online]. Доступний у: https://www.bybit.com/en/help-center/article/Service-Restricted-Countries. [Дата звернення: 15-Лип-2026]\n\n\n[17] Tether, «Frequently Asked Questions». [Online]. Доступний у: https://tether.to/faqs/. [Дата звернення: 15-Лип-2026]",
+    "text": "[1] S.\nNakamoto, “Bitcoin: A peer-to-peer electronic cash system.”\n2008 [Online]. Available: https://bitcoin.org/bitcoin.pdf.\n[Accessed: 20-July-2026]\n\n\n[2] Bitcoin.org, “Bitcoin developer guide:\nwallets.” [Online]. Available: https://developer.bitcoin.org/devguide/wallets.html.\n[Accessed: 20-July-2026]\n\n\n[3] Binance Academy, “Binance spot trading\nrules: A comprehensive guide.” 2026 [Online]. Available: https://www.binance.com/en/academy/articles/binance-spot-trading-rules-a-comprehensive-guide.\n[Accessed: 20-July-2026]\n\n\n[4] Binance Academy, “A beginner’s guide to\ncryptocurrency trading.” 2026 [Online]. Available: https://www.binance.com/en/academy/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners.\n[Accessed: 20-July-2026]\n\n\n[5] Tether, “Frequently asked\nquestions.” [Online]. Available: https://tether.to/faqs/. [Accessed:\n20-July-2026]\n\n\n[6] Binance, “Binance public data.”\n[Online]. Available: https://github.com/binance/binance-public-data.\n[Accessed: 20-July-2026]\n\n\n[7] Binance, “Kline/candlestick data.”\n[Online]. Available: https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market#klinecandlestick-data.\n[Accessed: 20-July-2026]\n\n\n[8] Bybit, “Get kline.” [Online].\nAvailable: https://bybit-exchange.github.io/docs/v5/market/kline.\n[Accessed: 20-July-2026]\n\n\n[9] Bybit, “Service restricted\ncountries.” 2026 [Online]. Available: https://www.bybit.com/en/help-center/article/Service-Restricted-Countries.\n[Accessed: 20-July-2026]\n\n\n[10] Bybit, “Trading fee structure.”\n[Online]. Available: https://www.bybit.com/en/help-center/article/Trading-Fee-Structure.\n[Accessed: 20-July-2026]\n\n\n[11] R.\nS. Tsay, Analysis of financial time series, 3rd ed. Wiley, 2010\n[Online]. Available: https://www.wiley.com/en-us/Analysis%2Bof%2BFinancial%2BTime%2BSeries%2C%2B3rd%2BEdition-p-9780470414354.\n[Accessed: 20-July-2026]",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Джерела</span>"
     ]
