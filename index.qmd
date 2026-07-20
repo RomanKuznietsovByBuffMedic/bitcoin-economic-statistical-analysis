@@ -1,8 +1,6 @@
 ---
-toc: true
 number-sections: false
 code-tools: false
-from: markdown-smart
 ---
 
 # Про проєкт {.unnumbered}
@@ -10,7 +8,7 @@ from: markdown-smart
 ::: {.callout-important appearance="simple"}
 ## Головне питання
 
-**Чи може статистика допомогти отримувати прибуток від торгівлі BTC?**
+**Чи може статистика допомогти отримувати прибуток від торгівлі біткоїном?**
 :::
 
 Ця книга описує шлях від простого питання

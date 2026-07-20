@@ -1,9 +1,3 @@
----
-toc: true
-toc-title: "Зміст"
-from: markdown-smart
----
-
 # Що це? {#sec-how-it-works}
 
 ::: {.callout-note appearance="simple"}

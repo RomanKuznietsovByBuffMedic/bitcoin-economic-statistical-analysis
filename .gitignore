@@ -7,3 +7,9 @@
 /*_cache/
 **/*.quarto_ipynb
 /data/
+/APPLY-*.md
+/*.html
+/site_libs/
+/*.knit.md
+/*_files/
+/*.zip

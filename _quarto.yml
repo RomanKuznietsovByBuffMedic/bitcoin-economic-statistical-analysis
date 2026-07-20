@@ -23,8 +23,22 @@ number-sections: true
 number-depth: 6
 toc-depth: 6
 
+execute:
+  echo: true
+  fig-width: 12
+  fig-height: 8
+  fig-dpi: 144
+  warning: false
+  message: false
+
 format:
   html:
+    theme:
+      dark: darkly
+      light: cosmo
+    respect-user-color-scheme: false
+    css: assets/book-figures.css
+    include-in-header: assets/dark-reader-lock.html
     toc: true
     toc-title: "Зміст"
     toc-location: right

@@ -1,187 +1,562 @@
 ---
-toc: true
-toc-title: "Зміст"
-from: markdown-smart
 execute:
   echo: false
-  warning: false
-  message: false
 ---
 
 # Отримання реальних ринкових даних {#sec-data-acquisition}
 
+```{r}
+#| label: setup-data-acquisition
+#| include: false
+
+required_packages <- c(
+  "dplyr",
+  "ggplot2",
+  "htmlwidgets",
+  "knitr",
+  "plotly",
+  "scales",
+  "tibble"
+)
+missing_packages <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing_packages) > 0L) {
+  stop(
+    "Не встановлено пакети: ",
+    paste(missing_packages, collapse = ", ")
+  )
+}
+
+module_files <- c(
+  "R/hourly_ohlc_quality.R",
+  "R/book_charts.R"
+)
+
+missing_modules <- module_files[!file.exists(module_files)]
+if (length(missing_modules) > 0L) {
+  stop(
+    "Не знайдено модулі: ",
+    paste(missing_modules, collapse = ", ")
+  )
+}
+
+for (module_file in module_files) {
+  sys.source(module_file, envir = knitr::knit_global())
+}
+
+full_data_start <- as.POSIXct("2020-07-01 00:00:00", tz = "UTC")
+bybit_data_start <- as.POSIXct("2021-07-05 12:00:00", tz = "UTC")
+data_end <- as.POSIXct("2026-07-01 00:00:00", tz = "UTC")
+
+binance_cache_file <- file.path(
+  "data", "cache", "btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
+)
+bybit_cache_file <- file.path(
+  "data", "cache", "bybit_btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
+)
+bitstamp_cache_file <- file.path(
+  "data", "cache", "bitstamp_btcusd_1h_2020-07-01_2026-06-30.rds"
+)
+
+required_data_files <- c(
+  binance_cache_file,
+  bybit_cache_file,
+  bitstamp_cache_file
+)
+missing_data_files <- required_data_files[!file.exists(required_data_files)]
+if (length(missing_data_files) > 0L) {
+  stop(
+    "Не знайдено локальні кеші: ",
+    paste(missing_data_files, collapse = ", ")
+  )
+}
+
+binance_raw <- readRDS(binance_cache_file)
+bybit_raw <- readRDS(bybit_cache_file)
+bitstamp_raw <- readRDS(bitstamp_cache_file)
+
+binance_quality <- validate_hourly_ohlc(
+  data = binance_raw,
+  start_time = full_data_start,
+  end_time = data_end
+)
+bybit_quality <- validate_hourly_ohlc(
+  data = bybit_raw,
+  start_time = bybit_data_start,
+  end_time = data_end
+)
+bitstamp_quality <- validate_hourly_ohlc(
+  data = bitstamp_raw,
+  start_time = full_data_start,
+  end_time = data_end
+)
+
+quality_value <- function(quality, check_name) {
+  quality$summary$Значення[quality$summary$Перевірка == check_name]
+}
+```
+
 ::: {.callout-important appearance="simple"}
 ## Головне питання
 
-**Які дані можна отримати,
-де їх брати
-і чи можна за ними перевірити реальне торгове правило?**
+**Який конкретний ринковий ряд достатньо повний і перевірений, щоб
+передати його майбутнім моделям без штучного заповнення?**
 :::
 
-Спочатку треба вибрати конкретний ринок.
-Без цього незрозуміло,
-яку саме ціну досліджувати.
+Спочатку визначаються ринок, показники, інтервал і часові межі. Лише
+після цього можна завантажувати дані та оцінювати їхню якість.
 
-## Що означає торгувати BTC?
+## Який ринок досліджується
 
-Торгівля завжди означає обмін одного активу на інший.
+Торгівля BTC означає обмін Bitcoin на інший актив. У цьому дослідженні
+використовується спотова пара `BTCUSDT`:
 
-Щоб купити BTC,
-треба віддати гривні, долари, USDT
-або інший актив.
-Щоб зафіксувати результат,
-BTC треба обміняти назад.
+- `BTC` є базовим активом;
+- `USDT` є активом котирування;
+- значення `BTCUSDT = 60 000` означає 60 000 USDT за 1 BTC.
 
-Якщо просто передати BTC
-з одного гаманця на інший,
-це буде переказ, а не торгівля.
+На цьому етапі не використовуються ф'ючерси, кредитне плече, позичання
+BTC або короткі позиції. Це залишає один зрозумілий ринок: фактичний
+обмін BTC і USDT на spot [1; 2].
 
-Тому для дослідження потрібна торгова пара,
-яка показує два активи обміну.
+## Чому використовується USDT
 
-## Що таке spot і BTCUSDT?
+За заявою емітента, USDT має відповідати долару США [3]. Тому
+котирування BTC/USDT зручно читати приблизно як доларову ціну Bitcoin.
 
-Першим майданчиком буде криптовалютна біржа Binance.
-На ній покупці та продавці подають заявки,
-а угода відбувається,
-коли їхні умови збігаються.
+Проте USDT не є доларом на банківському рахунку. Він має власний ризик,
+а його ціна може відхилятися від одного долара. Саме тому BTC/USDT і
+BTC/USD не змішуються в одному часовому ряді.
 
-На спотовому ринку один актив
-обмінюється на інший за поточною ринковою ціною [1].
+## Які поля потрібні
 
-У цьому проєкті спочатку не використовуються:
+Для кожної свічки використовуються:
 
-- ф'ючерси;
-- кредитне плече;
-- позичання BTC;
-- короткі позиції.
+- час початку;
+- `open` — ціна першої угоди;
+- `high` — найбільша ціна;
+- `low` — найменша ціна;
+- `close` — ціна останньої угоди;
+- `volume` — обсяг BTC.
 
-Першою торговою парою буде `BTCUSDT` [2]:
+Ціна $P_t$ у наступному розділі визначатиметься як `close` завершеної
+свічки. Незавершена поточна година до набору не включається.
 
-- `BTC` - актив, який купують або продають;
-- `USDT` - актив, у якому вказується ціна BTC.
+## Чому інтервал становить одну годину
 
-Наприклад,
-`BTCUSDT = 60 000` означає,
-що один BTC на цьому ринку коштує 60 000 USDT.
+Хвилинні дані дають більше деталей, але суттєво збільшують обсяг,
+мікроструктурний шум і вимоги до обробки. Денні дані простіші, проте
+приховують зміни всередині доби й дають значно менше спостережень.
 
-Торгова операція виглядає просто:
-за USDT купується BTC,
-а пізніше BTC продається назад за USDT.
-Результат оцінюється після віднімання витрат.
+Одна година є проміжним рівнем:
 
-## Що таке USDT?
+- часову сітку легко перевірити;
+- пропуски можна точно локалізувати;
+- даних достатньо для наступних статистичних етапів;
+- обсяг залишається зручним для локальної роботи в R.
 
-USDT - це цифровий токен,
-який випускає компанія Tether.
-За заявою емітента,
-один USDT має відповідати одному долару США [3].
+Це рішення стосується поточного етапу. Воно не доводить, що година є
+найкращим торговим горизонтом.
 
-Тому ціну BTC в USDT
-зручно приблизно сприймати як доларову.
+## Чому обрано саме такі часові межі
 
-Але USDT не є звичайним доларом
-на банківському рахунку.
-Його ціна може відхилятися від одного долара,
-а зберігання на біржі додає окремий ризик.
+Перший аудит Binance і Bitstamp охоплює період від
+2020-07-01 00:00 UTC до 2026-07-01 00:00 UTC без включення правої межі.
+Це рівно 52 584 завершені години та шість років із різними станами
+ринку.
 
-BTC можна купувати й за гривні.
-Однак ціни P2P залежать від оголошення,
-способу оплати та конкретного учасника.
-Такий ринок складніше подати
-як єдиний відтворюваний часовий ряд.
+Bybit не повертає даних BTCUSDT для початкової частини цього вікна.
+Перша доступна через перевірений API свічка має час
+2021-07-05 12:00 UTC. Тому основний період Bybit починається саме з
+цієї фактичної межі, а не з довільно вибраної круглої дати.
 
-Отже, `BTCUSDT` обирається
-не через відсутність ризику,
-а через зручність для першого дослідження.
+```{r}
+#| label: tbl-audit-periods
 
-## Чому Binance?
+period_table <- tibble::tibble(
+  `Призначення` = c(
+    "Початковий аудит джерел",
+    "Основний ряд Bybit"
+  ),
+  `Початок, UTC` = c(
+    "2020-07-01 00:00",
+    "2021-07-05 12:00"
+  ),
+  `Кінець без включення, UTC` = "2026-07-01 00:00",
+  `Очікувано годин` = c(52584, 43716)
+)
 
-Binance обрано як перший майданчик, тому що:
+knitr::kable(
+  period_table,
+  align = c("l", "l", "l", "r"),
+  caption = "Часові межі, визначені до порівняння результатів"
+)
+```
 
-1. Для spot-ринку доступні публічні історичні дані [4].
-2. Дані можна регулярно оновлювати.
-3. Доступні різні часові інтервали.
-4. Дані та майбутня перевірка
-   можуть стосуватися одного ринку.
+## Як отримано дані
 
-Це не означає,
-що Binance є найкращою або найбезпечнішою біржею.
-Висновки спочатку стосуватимуться
-лише ринку Binance Spot `BTCUSDT`.
+### Binance
 
-За потреби їх можна буде
-перевірити на іншій біржі.
+Для Binance використано гібридний процес:
 
-## Які дані потрібні?
+1. Повні місяці завантажуються з офіційних ZIP-архівів Binance
+   Vision [4].
+2. Архіви перевіряються за SHA-256.
+3. Недоступний архів або неповний хвіст запитується через REST API.
+4. Кожний знайдений розрив повторно перевіряється через REST API та
+   щоденні архіви.
+5. Після об'єднання перевіряються дублікати й годинна сітка.
 
-Для першого аналізу зручно використовувати свічки.
-Кожна свічка узагальнює торгівлю
-за хвилину, годину, день або інший інтервал.
+### Bybit
 
-Вона містить:
+Bybit V5 API повертає щонайбільше 1 000 свічок за запит [5]. Період
+поділяється на неперекривні 1000-годинні пакети, які завантажуються
+паралельно. Права межа кожного запиту є часом останньої свічки пакета,
+тому жодна година на межі пакетів не губиться.
 
-- час;
-- ціну відкриття;
-- найвищу та найнижчу ціну;
-- ціну закриття;
-- обсяг торгів;
-- кількість угод та допоміжні показники.
+### Bitstamp
 
-Часовий інтервал не треба обирати наперед.
-Хвилинні дані містять більше деталей і шуму.
-Денні дані простіші,
-але приховують зміни всередині дня.
+Bitstamp BTC/USD завантажено окремо як незалежний контроль. Він дає
+змогу відрізнити проблему конкретного архіву Binance від відсутності
+торгів Bitcoin загалом. Через іншу валюту котирування його ціни не
+вставляються в BTC/USDT.
 
-Спочатку формулюється питання,
-а вже потім обирається інтервал.
+Оновлення кешів і рендер книги розділено. `quarto render` читає локальні
+RDS-файли й не звертається до бірж.
 
-Перед моделюванням також треба перевірити:
+## Що перевіряється до вибору джерела
 
-- пропущені інтервали;
-- дублікати;
-- порядок і часовий пояс;
-- незавершені свічки;
-- неможливі значення.
+Однакова функція перевірки застосовується до всіх трьох наборів:
 
-Інакше модель може знайти
-не ринкову закономірність,
-а помилку в даних.
+1. Наявність обов'язкових OHLC-полів.
+2. Відсутність порожніх часових позначок.
+3. Початок кожної свічки точно на межі години UTC.
+4. Відсутність дублікатів часу.
+5. Відповідність фактичної кількості очікуваній сітці.
+6. Виявлення кожного внутрішнього розриву.
+7. Додатність і числова коректність цін.
+8. Виконання співвідношень `low ≤ open, close ≤ high`.
+9. Невід'ємність і числова коректність обсягу.
+10. Збереження одного джерела ціни без міжбіржового заповнення.
 
-## Скільки даних збирати?
+Тільки після цих перевірок будуються підсумкові таблиці.
 
-Немає потреби збирати все наперед.
+## Результат аудиту джерел
 
-Для кожного етапу спочатку визначаються:
+```{r}
+#| label: tbl-exchange-source-comparison
 
-1. Конкретне питання.
-2. Потрібні показники.
-3. Часовий інтервал.
-4. Необхідний період спостережень.
-5. Спосіб перевірки результату.
+source_comparison <- tibble::tibble(
+  `Джерело` = c(
+    "Binance Spot BTC/USDT",
+    "Bybit Spot BTC/USDT",
+    "Bitstamp Spot BTC/USD"
+  ),
+  `Перевірений період` = c(
+    "2020-07-01 00:00 — 2026-07-01 00:00",
+    "2021-07-05 12:00 — 2026-07-01 00:00",
+    "2020-07-01 00:00 — 2026-07-01 00:00"
+  ),
+  `Очікувано` = c(
+    quality_value(binance_quality, "Очікувана кількість годин"),
+    quality_value(bybit_quality, "Очікувана кількість годин"),
+    quality_value(bitstamp_quality, "Очікувана кількість годин")
+  ),
+  `Наявні свічки` = c(
+    nrow(binance_quality$data),
+    nrow(bybit_quality$data),
+    nrow(bitstamp_quality$data)
+  ),
+  `Пропущено` = c(
+    quality_value(binance_quality, "Пропущені години"),
+    quality_value(bybit_quality, "Пропущені години"),
+    quality_value(bitstamp_quality, "Пропущені години")
+  ),
+  `Внутрішні розриви` = c(
+    nrow(binance_quality$gaps),
+    nrow(bybit_quality$gaps),
+    nrow(bitstamp_quality$gaps)
+  )
+)
 
-Після цього завантажуються лише потрібні дані.
+knitr::kable(
+  source_comparison,
+  format.args = list(big.mark = " ", scientific = FALSE),
+  align = c("l", "l", "r", "r", "r", "r"),
+  caption = "Результати однакової перевірки трьох локальних кешів"
+)
+```
 
-**Спочатку питання.
-Потім дані.
-Лише після цього модель.**
+### Binance: де саме бракує даних
 
-## Коли потрібен бот?
+```{r}
+#| label: tbl-binance-quality
 
-Бот - це не перший крок.
+knitr::kable(
+  binance_quality$summary,
+  format.args = list(big.mark = " ", scientific = FALSE),
+  align = c("l", "r"),
+  caption = "Перевірка Binance Spot BTC/USDT"
+)
+```
 
-Спочатку треба вручну перевірити дані,
-модель, правило дій і витрати.
-Лише відтворюваний процес
-варто автоматизувати.
+```{r}
+#| label: fig-binance-gap-timeline
+#| fig-cap: "Часові розриви Binance; точну дату видно при наведенні, а розмір точки відповідає кількості відсутніх годин"
 
-У майбутньому бот може оновлювати дані,
-будувати графіки
-та пропонувати дію власнику на підтвердження.
+gap_plot_data <- binance_quality$gaps |>
+  dplyr::mutate(
+    gap_date = previous_observation +
+      as.difftime(interval_hours / 2, units = "hours"),
+    label = format(gap_date, "%Y-%m-%d", tz = "UTC")
+  )
+
+gap_chart <- ggplot2::ggplot(
+  gap_plot_data,
+  ggplot2::aes(
+    x = gap_date,
+    y = missing_hours,
+    text = paste0(
+      "Дата: ", label,
+      "<br>Пропущено годин: ", missing_hours
+    )
+  )
+) +
+  ggplot2::geom_hline(yintercept = 0, colour = "#9AA5B1") +
+  ggplot2::geom_point(
+    ggplot2::aes(size = missing_hours),
+    colour = "#D7301F",
+    alpha = 0.85
+  ) +
+  ggplot2::scale_x_datetime(
+    limits = c(full_data_start, data_end),
+    date_breaks = "1 year",
+    date_labels = "%Y"
+  ) +
+  ggplot2::scale_y_continuous(
+    breaks = seq(0, max(gap_plot_data$missing_hours), by = 1),
+    expand = ggplot2::expansion(mult = c(0.05, 0.25))
+  ) +
+  ggplot2::scale_size_continuous(range = c(4, 10), guide = "none") +
+  ggplot2::labs(
+    x = NULL,
+    y = "Пропущено годин",
+    title = "Коли у Binance відсутні годинні свічки"
+  ) +
+  book_ggplot_theme(base_size = 15)
+
+render_book_plot(
+  gap_chart,
+  tooltip = "text",
+  hovermode = "closest",
+  connect_gaps = FALSE
+)
+```
+
+На графіку постійно показано лише розташування та тривалість розривів.
+Точна дата з'являється при наведенні на точку, а всі межі розривів без
+скорочень наведено в таблиці нижче.
+
+```{r}
+#| label: tbl-binance-gaps
+
+binance_gap_table <- binance_quality$gaps |>
+  dplyr::transmute(
+    `Остання свічка перед розривом, UTC` = format(
+      previous_observation,
+      "%Y-%m-%d %H:%M",
+      tz = "UTC"
+    ),
+    `Перша свічка після розриву, UTC` = format(
+      next_observation,
+      "%Y-%m-%d %H:%M",
+      tz = "UTC"
+    ),
+    `Пропущено годин` = missing_hours
+  )
+
+knitr::kable(
+  binance_gap_table,
+  align = c("l", "l", "r"),
+  caption = "Повний перелік розривів Binance"
+)
+```
+
+Повторне отримання з офіційних джерел не відновило ці 19 годин. Вони
+не інтерполюються й не замінюються цінами іншої біржі.
+
+### Bybit: повнота основного періоду
+
+```{r}
+#| label: tbl-bybit-quality
+
+knitr::kable(
+  bybit_quality$summary,
+  format.args = list(big.mark = " ", scientific = FALSE),
+  align = c("l", "r"),
+  caption = "Перевірка Bybit Spot BTC/USDT від першої доступної години"
+)
+```
+
+Від 2021-07-05 12:00 UTC ряд містить усі 43 716 очікуваних свічок.
+Внутрішніх розривів і дублікатів немає.
+
+## Чому основним джерелом став Bybit
+
+::: {.callout-important title="Рішення після аудиту"}
+Основним аналітичним набором є **Bybit Spot BTC/USDT** від
+2021-07-05 12:00 UTC.
+
+Binance має довшу історію, але містить 19 невідновлених годин.
+Bitstamp повний, проте використовує іншу пару BTC/USD. Bybit дає
+суцільний ряд потрібної пари BTC/USDT і може відповідати майбутньому
+ринку виконання операцій.
+:::
+
+Скорочення історії на 8 868 початкових годин зафіксовано явно. Це не
+називається пропуском усередині Bybit і не приховується доповненням з
+іншого джерела.
+
+## Як отримано таблицю узгодженості Binance і Bybit
+
+Порівняння виконується лише на однакових `open_time` у спільному
+періоді. Для кожної такої години обчислюється відносна різниця цін:
+
+$$
+d_t=100\left(\frac{P_t^{Bybit}}{P_t^{Binance}}-1\right).
+$$
+
+Годинні логарифмічні дохідності обчислюються окремо для кожної біржі:
+
+$$
+r_t=\ln\left(\frac{P_t}{P_{t-1}}\right).
+$$
+
+Якщо між двома спільними часовими позначками минуло більше однієї
+години, така пара не входить до порівняння дохідностей. Нижче наведено
+повний код, який створює таблицю безпосередньо з перевірених локальних
+кешів.
+
+```{r}
+#| label: tbl-binance-bybit-agreement
+#| echo: true
+
+common_prices <- bybit_quality$data |>
+  dplyr::select(open_time, bybit_close = close) |>
+  dplyr::inner_join(
+    binance_quality$data |>
+      dplyr::select(open_time, binance_close = close),
+    by = "open_time"
+  ) |>
+  dplyr::arrange(open_time) |>
+  dplyr::mutate(
+    hours_from_previous = as.numeric(
+      difftime(open_time, dplyr::lag(open_time), units = "hours")
+    ),
+    price_difference_percent =
+      100 * (bybit_close / binance_close - 1),
+    bybit_log_return = dplyr::if_else(
+      hours_from_previous == 1,
+      log(bybit_close / dplyr::lag(bybit_close)),
+      NA_real_
+    ),
+    binance_log_return = dplyr::if_else(
+      hours_from_previous == 1,
+      log(binance_close / dplyr::lag(binance_close)),
+      NA_real_
+    )
+  )
+
+common_returns <- common_prices |>
+  dplyr::filter(
+    !is.na(bybit_log_return),
+    !is.na(binance_log_return)
+  )
+
+format_count <- function(x) {
+  format(x, big.mark = " ", scientific = FALSE, trim = TRUE)
+}
+format_decimal <- function(x, digits) {
+  formatC(x, format = "f", digits = digits, decimal.mark = ",")
+}
+
+agreement_table <- tibble::tibble(
+  `Показник` = c(
+    "Спільні годинні ціни",
+    "Спільні суміжні дохідності",
+    "Медіанна абсолютна різниця цін",
+    "95-й процентиль абсолютної різниці цін",
+    "Максимальна абсолютна різниця цін",
+    "Кореляція логарифмічних дохідностей"
+  ),
+  `Результат` = c(
+    format_count(nrow(common_prices)),
+    format_count(nrow(common_returns)),
+    paste0(format_decimal(
+      stats::median(abs(common_prices$price_difference_percent)), 6
+    ), " %"),
+    paste0(format_decimal(
+      stats::quantile(
+        abs(common_prices$price_difference_percent),
+        probs = 0.95,
+        names = FALSE
+      ), 6
+    ), " %"),
+    paste0(format_decimal(
+      max(abs(common_prices$price_difference_percent)), 6
+    ), " %"),
+    format_decimal(
+      stats::cor(
+        common_returns$bybit_log_return,
+        common_returns$binance_log_return
+      ), 6
+    )
+  )
+)
+
+knitr::kable(
+  agreement_table,
+  align = c("l", "r"),
+  caption = "Узгодженість Bybit і Binance у спільному періоді"
+)
+```
+
+Медіана описує типову різницю, 95-й процентиль — межу для 95% годин,
+а максимум показує найекстремальніший окремий випадок. Максимум не
+видаляється автоматично: його треба розглядати як окремий кандидат для
+подальшої перевірки.
+
+Висока кореляція дохідностей означає, що два ринки переважно рухаються
+разом. Вона не означає, що їхні ціни взаємозамінні.
+
+## Комісії та реальна робота на біржі
+
+Якість історичних цін є першим критерієм для поточного етапу. Комісія,
+спред і прослизання не змінюють саму ринкову дохідність, але визначають,
+чи залишиться торгове правило економічно корисним після витрат.
+
+Тому ці параметри додаються пізніше до симуляції виконання операцій.
+Перед реальною роботою також треба перевірити регіональну доступність
+Bybit, способи введення й виведення коштів та персональну ставку
+комісії [6; 7].
+
+## Висновок
+
+Вибір Bybit зроблено після визначення ринку, інтервалу, часових меж і
+однакових правил перевірки. Основний набір має 43 716 послідовних
+годинних свічок BTC/USDT. Binance залишається контрольним джерелом, а
+його 19 пропущених годин показано читачеві повністю.
+
+Жодне джерело не використовується для заповнення іншого. Звичайний
+рендер книги читає локальні кеші й не завантажує дані з мережі.
 
 ## Джерела до розділу
 
-1. [Binance Academy. Binance Spot Trading Rules: A Comprehensive Guide](https://www.binance.com/en/academy/articles/binance-spot-trading-rules-a-comprehensive-guide), розділ «Introduction».
-2. [Binance Academy. A Beginner's Guide to Cryptocurrency Trading](https://www.binance.com/en/academy/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners), розділ «Choose a trading pair».
-3. [Tether. What are Tether tokens and how do they work?](https://tether.to/ru/how-it-works/), розділ про відповідність USD₮ долару США.
-4. [Binance Data Collection](https://data.binance.vision/?prefix=data%2Fspot%2F), каталог історичних даних спотового ринку.
+1. [Binance Academy. Binance Spot Trading Rules](https://www.binance.com/en/academy/articles/binance-spot-trading-rules-a-comprehensive-guide).
+2. [Binance Academy. A Beginner's Guide to Cryptocurrency Trading](https://www.binance.com/en/academy/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners).
+3. [Tether. How Tether tokens work](https://tether.to/ru/how-it-works/).
+4. [Binance Public Data](https://github.com/binance/binance-public-data), щоденні та місячні архіви.
+5. [Bybit V5 API. Get Kline](https://bybit-exchange.github.io/docs/v5/market/kline), публічні історичні свічки.
+6. [Bybit. Service Restricted Countries](https://www.bybit.com/en/help-center/article/Service-Restricted-Countries), територіальні обмеження.
+7. [Bybit. Trading Fee Structure](https://www.bybit.com/en/help-center/article/Trading-Fee-Structure), структура торгових комісій.
