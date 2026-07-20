@@ -45,8 +45,10 @@ format:
     toc-expand: true
     smooth-scroll: true
     code-fold: show
-    code-summary: "Код"
+    code-summary: "Показати / приховати код"
     code-copy: false
+    code-line-numbers: true
+    code-overflow: wrap
     code-tools:
       source: false
       toggle: true
