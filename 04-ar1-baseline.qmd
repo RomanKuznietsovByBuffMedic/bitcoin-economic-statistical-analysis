@@ -1,0 +1,568 @@
+# Перша модель: AR(1) проти простих орієнтирів
+
+Цей розділ перевіряє першу заздалегідь зафіксовану модель. Її мета не
+знайти прибуток будь-якою ціною, а встановити нижню межу, яку складніші
+методи повинні перевершити.
+
+::: {.callout-important title="Головне питання"}
+Чи дає денний AR(1) практично помітно кращий прогноз, ніж припущення
+«наступна ціна дорівнює поточній», і чи краще його просте правило
+BTC або USDT за «купи й тримай» після витрат і з урахуванням ризику?
+:::
+
+```{r}
+#| label: setup-ar1
+
+sys.source(
+  "R/book_setup.R",
+  envir = knitr::knit_global()
+)
+
+load_book_environment(
+  packages = c(
+    "dplyr",
+    "ggplot2",
+    "htmlwidgets",
+    "knitr",
+    "plotly",
+    "scales",
+    "tibble",
+    "yaml"
+  ),
+  modules = c(
+    "R/project_config.R",
+    "R/project_io.R",
+    "R/data_provenance.R",
+    "R/hourly_ohlc_quality.R",
+    "R/book_charts.R",
+    "R/ar1_baseline.R"
+  ),
+  envir = knitr::knit_global()
+)
+
+config <- read_project_config()
+manifest_check <- validate_data_manifest(config)
+
+btc_1h <- read_rds_required(
+  config$paths$prepared,
+  "підготовлений набір ціни й дохідностей"
+)
+primary_raw_sha256 <- sha256_file(
+  config$paths$cache[[config$primary$id]]
+)
+if (
+  !identical(
+    attr(btc_1h, "raw_sha256"),
+    primary_raw_sha256
+  )
+) {
+  stop(
+    paste(
+      "Підготовлений набір створено не з поточного основного кешу.",
+      "Виконайте Rscript scripts/prepare_price_returns.R."
+    )
+  )
+}
+
+data_check <- require_complete_hourly_ohlc(
+  data = btc_1h,
+  start_time = config$study$data_start,
+  end_time = config$study$data_end_exclusive,
+  source_label = "Підготовлений набір"
+)
+btc_1h <- data_check$data
+
+experiment <- run_ar1_development_experiment(
+  hourly_data = btc_1h,
+  config = config
+)
+
+daily_data <- experiment$daily
+forecasts <- experiment$forecasts
+refits <- experiment$refits
+forecast_metrics <- experiment$forecast_metrics
+strategy_summary <- experiment$strategies$summary
+strategy_paths <- experiment$strategies$paths
+
+format_percent <- function(value, digits = 2L) {
+  paste0(
+    formatC(100 * value, format = "f", digits = digits),
+    "%"
+  )
+}
+
+format_number <- function(value, digits = 2L) {
+  formatC(
+    value,
+    format = "f",
+    digits = digits,
+    big.mark = " "
+  )
+}
+
+options(scipen = 999, digits = 7)
+```
+
+## Що саме порівнюється
+
+Прогноз і торгова стратегія відповідають на різні питання. Тому
+«поточна ціна» та «купи й тримай» не зводяться до однієї таблиці.
+
+| Завдання | Метод | Що він робить |
+|---|---|---|
+| Прогноз | AR(1) | Оцінює наступну денну лог-доходність за попередньою |
+| Прогноз | Поточна ціна | Припускає нульову дохідність і не навчається |
+| Торгівля | AR(1): BTC або USDT | Тримає BTC лише за додатного прогнозу |
+| Торгівля | Купи й тримай | Купує BTC один раз і не прогнозує |
+| Торгівля | USDT без торгівлі | Не приймає ринкового ризику |
+
+«Купи й тримай» не є моделлю прогнозу. Це базове правило, з яким
+потрібно порівняти практичний результат торгового сигналу.
+
+## Часовий поділ без використання фінального тесту
+
+Годинний ряд Bybit спочатку агрегується у повні UTC-дні. Кожний день
+містить рівно 24 години. Денна ціна закриття є останнім `close` дня,
+а денна лог-доходність дорівнює
+
+$$
+r_t = \log\left(\frac{P_t}{P_{t-1}}\right).
+$$
+
+```{r}
+#| label: tbl-ar1-time-split
+
+initial_fit_days <- sum(
+  daily_data$day_start < experiment$validation$start
+)
+test_days <- sum(
+  daily_data$day_start >= experiment$sealed_test$start &
+    daily_data$day_start < experiment$sealed_test$end_exclusive
+)
+
+model_time_split <- tibble::tibble(
+  `Частина` = c(
+    "Початкове навчання",
+    "Внутрішній validation",
+    "Фінальний test"
+  ),
+  `Початок, UTC` = c(
+    format_utc(config$study$data_start),
+    format_utc(experiment$validation$start),
+    format_utc(experiment$sealed_test$start)
+  ),
+  `Кінець без включення, UTC` = c(
+    format_utc(experiment$validation$start),
+    format_utc(experiment$validation$end_exclusive),
+    format_utc(experiment$sealed_test$end_exclusive)
+  ),
+  `Днів` = c(
+    initial_fit_days,
+    experiment$validation$days,
+    test_days
+  ),
+  `Використання` = c(
+    "Перше оцінювання параметрів",
+    "Порівняння прогнозів і правил",
+    "Не використовується в цьому розділі"
+  )
+)
+
+knitr::kable(
+  model_time_split,
+  align = c("l", "l", "l", "r", "l"),
+  caption = "Три послідовні часові частини"
+)
+```
+
+Усі наведені нижче результати отримано на
+`r experiment$validation$days` днях від
+`r format_utc(experiment$validation$start)` до
+`r format_utc(experiment$validation$end_exclusive)` UTC без включення
+правої межі.
+
+::: {.callout-warning title="Фінальний рік залишається закритим"}
+Період від `r format_utc(experiment$sealed_test$start)` до
+`r format_utc(experiment$sealed_test$end_exclusive)` UTC не
+використано для оцінювання параметрів, вибору правила або наведених
+результатів. Перша ціна відкриття на межі test є лише кінцевою ціною
+вже завершеної validation-угоди.
+:::
+
+## Чому саме AR(1)
+
+AR(1) є найпростішою авторегресійною моделлю. Вона перевіряє лише одну
+ідею: чи містить учорашня дохідність лінійну інформацію про сьогоднішню.
+
+> “In the time series literature, model (2.8) is referred to as an
+> autoregressive (AR) model of order 1 or simply an AR(1) model.”
+>
+> Переклад: у теорії часових рядів модель (2.8) називають
+> авторегресійною моделлю першого порядку, або просто AR(1).
+>
+> Джерело: [@tsay2010, розд. 2.4, с. 37].
+
+Формула моделі:
+
+$$
+r_t = \phi_0 + \phi_1 r_{t-1} + \varepsilon_t.
+$$
+
+Тут:
+
+- $r_t$ є денною лог-доходністю;
+- $\phi_0$ є сталою середньою складовою;
+- $\phi_1$ показує лінійний зв'язок із попередньою дохідністю;
+- $\varepsilon_t$ є непередбаченою частиною.
+
+Однокроковий прогноз має вигляд
+
+$$
+\widehat r_t = \widehat\phi_0 +
+  \widehat\phi_1 r_{t-1}.
+$$
+
+Порядок $p=1$ зафіксовано до перегляду validation-результату. У цьому
+пілоті не перебираються AR(2), AR(3), пороги або інші варіанти.
+
+## Чому «поточна ціна» є обов'язковим орієнтиром
+
+Для випадкового блукання найкращий точковий прогноз майбутньої
+логарифмічної ціни дорівнює поточній логарифмічній ціні.
+
+> “For all forecast horizons, point forecasts of a random-walk model are
+> simply the value of the series at the forecast origin.”
+>
+> Переклад: для будь-якого горизонту точковий прогноз моделі випадкового
+> блукання дорівнює значенню ряду в момент прогнозу.
+>
+> Джерело: [@tsay2010, розд. 2.7.1, с. 72].
+
+Для одного дня це означає
+
+$$
+\widehat P_t^{\,naive} = P_{t-1},
+\qquad
+\widehat r_t^{\,naive} = 0.
+$$
+
+Якщо AR(1) не покращує цей орієнтир, його складність не виправдана.
+
+## Протокол walk-forward
+
+Для кожного validation-дня виконуються однакові кроки:
+
+1. Використовуються лише дохідності, відомі до цього дня.
+2. На початку нового місяця AR(1) переоцінюється на розширюваному
+   вікні.
+3. За останньою відомою дохідністю прогнозується наступна.
+4. Прогноз ціни порівнюється з фактичним закриттям дня.
+5. Торговий сигнал виконується не раніше відкриття наступного дня.
+
+Модель переоцінено `r nrow(refits)` разів. Між переоцінюваннями
+коефіцієнти незмінні, але прогноз щодня використовує нову останню
+дохідність.
+
+## Що показало початкове оцінювання
+
+```{r}
+#| label: tbl-ar1-initial-fit
+
+initial_fit <- refits[1L, , drop = FALSE]
+
+initial_fit_table <- tibble::tibble(
+  `Показник` = c(
+    "Пар дохідностей",
+    "Стала, на день",
+    "Коефіцієнт phi[1]",
+    "Стандартна похибка phi[1]",
+    "p-value для phi[1]",
+    "R-squared",
+    paste0(
+      "p-value Ljung-Box, лаг ",
+      initial_fit$residual_ljung_box_lag
+    )
+  ),
+  `Значення` = c(
+    format(initial_fit$n_pairs, big.mark = " "),
+    format_percent(initial_fit$intercept, 4L),
+    format_number(initial_fit$phi, 5L),
+    format_number(initial_fit$phi_standard_error, 5L),
+    format_number(initial_fit$phi_p_value, 3L),
+    format_percent(initial_fit$r_squared, 3L),
+    format_number(
+      initial_fit$residual_ljung_box_p_value,
+      3L
+    )
+  )
+)
+
+knitr::kable(
+  initial_fit_table,
+  align = c("l", "r"),
+  caption = "AR(1), оцінений перед першим validation-прогнозом"
+)
+```
+
+Початковий коефіцієнт $\widehat\phi_1$ дорівнює
+`r format_number(initial_fit$phi, 5L)` і є дуже малим. Значення
+p-value дорівнює
+`r format_number(initial_fit$phi_p_value, 3L)` і не дає підстав
+відрізняти цей коефіцієнт від нуля на звичних рівнях значущості.
+Модель пояснює лише
+`r format_percent(initial_fit$r_squared, 3L)` варіації наступної
+дохідності.
+
+Під час `r nrow(refits)` переоцінювань
+$\widehat\phi_1$ залишався в межах від
+`r format_number(min(refits$phi), 5L)` до
+`r format_number(max(refits$phi), 5L)`. Тест Ljung-Box не виявляє
+очевидної залишкової лінійної автокореляції в початковій моделі, але
+це не робить її прогноз практично корисним.
+
+## AR(1) проти прогнозу поточною ціною
+
+Спочатку порівнюється саме прогноз, без торгового правила. Менше MAE
+і RMSE означає меншу помилку.
+
+```{r}
+#| label: tbl-ar1-return-accuracy
+
+return_accuracy <- forecast_metrics |>
+  dplyr::transmute(
+    `Метод` = method,
+    `MAE доходності` = format_percent(return_mae, 3L),
+    `RMSE доходності` = format_percent(return_rmse, 3L)
+  )
+
+knitr::kable(
+  return_accuracy,
+  align = c("l", "r", "r"),
+  caption = "Помилки прогнозу денної лог-доходності"
+)
+```
+
+```{r}
+#| label: tbl-ar1-price-accuracy
+
+price_accuracy <- forecast_metrics |>
+  dplyr::transmute(
+    `Метод` = method,
+    `MAE, USDT` = format_number(price_mae, 2L),
+    `RMSE, USDT` = format_number(price_rmse, 2L)
+  )
+
+knitr::kable(
+  price_accuracy,
+  align = c("l", "r", "r"),
+  caption = "Помилки прогнозу денної ціни закриття"
+)
+```
+
+AR(1) зменшив RMSE дохідності лише на
+`r format_percent(experiment$return_rmse_improvement, 3L)` і RMSE
+ціни лише на
+`r format_percent(experiment$price_rmse_improvement, 3L)` відносно
+прогнозу поточною ціною. Це числове покращення, але його розмір
+практично нульовий.
+
+AR(1) правильно вгадав знак дохідності у
+`r format_percent(forecast_metrics$directional_accuracy[forecast_metrics$method == "AR(1)"], 2L)`
+днів. Проте додатний прогноз був у
+`r format_percent(mean(forecasts$ar1_log_return_forecast > 0), 2L)`
+днів, а фактична дохідність була додатною у
+`r format_percent(mean(forecasts$actual_log_return > 0), 2L)` днів.
+Отже, показник напряму майже повністю пояснюється тим, що модель
+переважно прогнозувала невелике зростання.
+
+::: {.callout-important title="Висновок щодо прогнозу"}
+AR(1) не дав практично помітної переваги над правилом «наступна ціна
+дорівнює поточній». Різниця RMSE близька до нуля, а коефіцієнт
+попередньої дохідності дуже малий.
+:::
+
+## Від прогнозу до торгового правила
+
+Позиція на день визначається без підібраного порога:
+
+$$
+w_t =
+\begin{cases}
+1, & \widehat r_t > 0,\\
+0, & \widehat r_t \le 0.
+\end{cases}
+$$
+
+$w_t=1$ означає тримати BTC, а $w_t=0$ означає залишатися в USDT.
+Коротких позицій і кредитного плеча немає.
+
+Сигнал формується після попереднього закриття, виконується на
+наступному денному `open`, а результат позиції вимірюється до
+наступного `open`. Це не дозволяє виконати рішення за вже відомою
+ціною закриття.
+
+## Які витрати враховано
+
+Для кожного входу, виходу або зміни позиції використано:
+
+- комісію `r format_percent(config$trading$fee_rate, 2L)`;
+- прослизання `r format_percent(config$trading$slippage_rate, 2L)`;
+- разом `r format_percent(config$trading$total_cost_rate, 2L)` від
+  вартості зміни позиції.
+
+Ставка комісії відповідає базовій taker-комісії VIP 0 для spot
+crypto-to-crypto на сторінці Bybit. Фактична ставка залежить від
+регіону, рівня акаунта та може змінюватися
+[@bybitTradingFees]. Прослизання є консервативним припущенням
+експерименту, а не тарифом біржі.
+
+Повний вхід і наступний вихід коштують
+`r format_percent(2 * config$trading$total_cost_rate, 2L)` без
+урахування зміни капіталу між операціями. Початковий капітал дорівнює
+`r format_number(config$trading$starting_capital_quote, 2L)`
+`r config$primary$quote_currency`.
+
+Усі правила починаються й завершуються в USDT. Тому «купи й тримай»
+також сплачує один вхід і один фінальний вихід. USDT у розрахунку має
+нульову ринкову дохідність, але це не означає відсутність ризику
+емітента або біржі.
+
+## Торговий результат проти простих правил
+
+```{r}
+#| label: tbl-ar1-strategy-result
+
+strategy_result_table <- strategy_summary |>
+  dplyr::transmute(
+    `Правило` = strategy,
+    `Кінцевий капітал, USDT` = format_number(final_capital, 2L),
+    `Дохідність до витрат` = format_percent(gross_return, 2L),
+    `Дохідність після витрат` = format_percent(net_return, 2L),
+    `Витрати, USDT` = format_number(paid_costs, 2L),
+    `Ордерів` = orders
+  )
+
+knitr::kable(
+  strategy_result_table,
+  align = c("l", "r", "r", "r", "r", "r"),
+  caption = "Результат за внутрішній validation-період"
+)
+```
+
+```{r}
+#| label: tbl-ar1-strategy-risk
+
+strategy_risk_table <- strategy_summary |>
+  dplyr::transmute(
+    `Правило` = strategy,
+    `Час у BTC` = format_percent(time_in_market, 1L),
+    `Річна волатильність` =
+      format_percent(annualized_volatility, 1L),
+    `Максимальне просідання` =
+      format_percent(maximum_drawdown, 1L),
+    `Sharpe, r[f] = 0` = ifelse(
+      is.na(sharpe_zero_rate),
+      "не визначено",
+      format_number(sharpe_zero_rate, 2L)
+    )
+  )
+
+knitr::kable(
+  strategy_risk_table,
+  align = c("l", "r", "r", "r", "r"),
+  caption = "Ризик за внутрішній validation-період"
+)
+```
+
+```{r}
+#| label: fig-ar1-capital
+#| fig-cap: "Капітал трьох правил у внутрішньому validation-періоді"
+
+capital_chart <- ggplot2::ggplot(
+  strategy_paths,
+  ggplot2::aes(
+    x = time,
+    y = wealth,
+    colour = strategy
+  )
+) +
+  ggplot2::geom_line(linewidth = 0.9) +
+  ggplot2::scale_y_continuous(
+    labels = scales::label_number(
+      accuracy = 1,
+      big.mark = " "
+    )
+  ) +
+  ggplot2::labs(
+    x = "Дата, UTC",
+    y = "Капітал, USDT",
+    colour = "Правило"
+  ) +
+  book_ggplot_theme()
+
+render_book_plot(
+  capital_chart,
+  tooltip = c("x", "y", "colour")
+)
+```
+
+AR(1) завершив validation із
+`r format_number(strategy_summary$final_capital[strategy_summary$strategy_id == "ar1_long_cash"], 2L)`
+USDT проти
+`r format_number(strategy_summary$final_capital[strategy_summary$strategy_id == "buy_and_hold"], 2L)`
+USDT для «купи й тримай». Але модель перебувала в BTC
+`r format_percent(strategy_summary$time_in_market[strategy_summary$strategy_id == "ar1_long_cash"], 1L)`
+часу. Вона відрізнялася від «купи й тримай» лише протягом
+`r sum(forecasts$ar1_log_return_forecast <= 0)` днів і створила
+`r strategy_summary$orders[strategy_summary$strategy_id == "ar1_long_cash"]`
+ордерів замість
+`r strategy_summary$orders[strategy_summary$strategy_id == "buy_and_hold"]`.
+
+Невелика перевага кінцевого капіталу виникла тому, що саме у цьому
+році кілька днів поза BTC виявилися вдалими. Вона не узгоджується з
+майже нульовим покращенням прогнозної помилки й не доводить, що AR(1)
+створив стійку торгову перевагу.
+
+## Обмеження пілоту
+
+- Перевірено лише один внутрішній рік, у якому BTC загалом сильно
+  зростав.
+- Прослизання задано сталою ставкою. Реальна величина залежить від
+  обсягу, ліквідності та типу ордера.
+- Виконання на наступному денному `open` не моделює окремо затримку
+  обчислення й надсилання ордера.
+- Не враховано податки, поповнення, виведення та зберігання активів.
+- AR(1) оцінює лише лінійний зв'язок із одним попереднім днем і не
+  моделює змінну волатильність.
+
+## Що можна і чого не можна стверджувати
+
+Можна стверджувати:
+
+- код моделі, правило, витрати й базові орієнтири визначені
+  однозначно;
+- walk-forward прогноз не використовує майбутні дохідності;
+- AR(1) майже не покращив прогноз поточною ціною;
+- торгове правило майже весь час повторювало «купи й тримай».
+
+Не можна стверджувати:
+
+- що AR(1) стабільно заробляє;
+- що різниця одного validation-року повториться;
+- що підібраний після цього поріг збереже результат;
+- що фінальний test або контрольний Bitstamp підтвердили модель.
+
+## Висновок
+
+::: {.callout-important title="Підсумок першої моделі"}
+Перша найпростіша статистична модель не показала практично важливої
+переваги в прогнозі. Її торговий результат трохи перевищив «купи й
+тримай», але правило
+`r format_percent(strategy_summary$time_in_market[strategy_summary$strategy_id == "ar1_long_cash"], 1L)`
+часу просто тримало BTC, мало більше витрат і не мало переконливо
+кращої прогнозної точності.
+
+Тому AR(1) залишається корисним базовим орієнтиром, але не готовим
+торговим методом. Фінальний test і одноразова перевірка на Bitstamp
+залишаються невикористаними.
+:::

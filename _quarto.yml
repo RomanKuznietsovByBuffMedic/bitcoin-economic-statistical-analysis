@@ -14,6 +14,7 @@ book:
     - 01-how-it-works.qmd
     - 02-data-acquisition.qmd
     - 03-price-and-returns.qmd
+    - 04-ar1-baseline.qmd
     - references.qmd
   repo-url: https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis
   repo-actions: [source]

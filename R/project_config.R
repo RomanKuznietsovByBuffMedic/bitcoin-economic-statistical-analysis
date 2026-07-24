@@ -242,10 +242,15 @@ normalize_exchange_config <- function(
   exchange
 }
 
-calendar_years_before <- function(value, years, timezone) {
+calendar_years_before <- function(
+  value,
+  years,
+  timezone,
+  name = "evaluation.test_years"
+) {
   years <- require_integer(
     years,
-    "evaluation.test_years",
+    name,
     minimum = 1
   )
   value_text <- format(
@@ -361,6 +366,8 @@ read_project_config <- function(path = "config.yml") {
       c(
         "study",
         "evaluation",
+        "model",
+        "trading",
         "visualization",
         "exchanges",
         "runtime"
@@ -373,7 +380,7 @@ read_project_config <- function(path = "config.yml") {
         "config.yml повинен містити розділи",
         paste(
           "study, evaluation, visualization,",
-          "exchanges і runtime."
+          "model, trading, exchanges і runtime."
         )
       )
     )
@@ -514,6 +521,11 @@ read_project_config <- function(path = "config.yml") {
     "evaluation.test_years",
     minimum = 1
   )
+  validation_years <- require_integer(
+    raw_config$evaluation$validation_years,
+    "evaluation.validation_years",
+    minimum = 1
+  )
   forecast_horizon_periods <- require_integer(
     raw_config$evaluation$forecast_horizon_periods,
     "evaluation.forecast_horizon_periods",
@@ -557,7 +569,8 @@ read_project_config <- function(path = "config.yml") {
   test_start <- calendar_years_before(
     value = data_end_exclusive,
     years = test_years,
-    timezone = timezone
+    timezone = timezone,
+    name = "evaluation.test_years"
   )
   if (test_start <= data_start) {
     stop(
@@ -567,6 +580,65 @@ read_project_config <- function(path = "config.yml") {
       )
     )
   }
+  validation_start <- calendar_years_before(
+    value = test_start,
+    years = validation_years,
+    timezone = timezone,
+    name = "evaluation.validation_years"
+  )
+  if (validation_start <= data_start) {
+    stop(
+      paste(
+        "Початковий навчальний період порожній або занадто короткий:",
+        "зменште evaluation.validation_years або розширте дані."
+      )
+    )
+  }
+
+  model_family <- tolower(require_config_value(
+    raw_config$model$family,
+    "model.family"
+  ))
+  if (!identical(model_family, "ar")) {
+    stop("Поточний пілот підтримує лише model.family = ar.")
+  }
+  model_order <- require_integer(
+    raw_config$model$order,
+    "model.order",
+    minimum = 1,
+    maximum = 1
+  )
+  target_interval <- tolower(require_config_value(
+    raw_config$model$target_interval,
+    "model.target_interval"
+  ))
+  if (!identical(target_interval, "1d")) {
+    stop(
+      "Поточний пілот підтримує лише model.target_interval = 1d."
+    )
+  }
+
+  starting_capital_quote <- require_finite_number(
+    raw_config$trading$starting_capital_quote,
+    "trading.starting_capital_quote",
+    minimum = 0.01
+  )
+  signal_threshold_log_return <- require_finite_number(
+    raw_config$trading$signal_threshold_log_return,
+    "trading.signal_threshold_log_return"
+  )
+  fee_rate <- require_finite_number(
+    raw_config$trading$fee_rate,
+    "trading.fee_rate",
+    minimum = 0,
+    maximum = 0.1
+  )
+  slippage_rate <- require_finite_number(
+    raw_config$trading$slippage_rate,
+    "trading.slippage_rate",
+    minimum = 0,
+    maximum = 0.1
+  )
 
   config <- list(
     study = list(
@@ -582,6 +654,9 @@ read_project_config <- function(path = "config.yml") {
       reference_exchange = reference_id
     ),
     evaluation = list(
+      validation_years = validation_years,
+      validation_start = validation_start,
+      validation_end_exclusive = test_start,
       test_years = test_years,
       test_start = test_start,
       test_end_exclusive = data_end_exclusive,
@@ -590,6 +665,18 @@ read_project_config <- function(path = "config.yml") {
       execution_price = execution_price,
       refit_every_months = refit_every_months,
       training_window = training_window
+    ),
+    model = list(
+      family = model_family,
+      order = model_order,
+      target_interval = target_interval
+    ),
+    trading = list(
+      starting_capital_quote = starting_capital_quote,
+      signal_threshold_log_return = signal_threshold_log_return,
+      fee_rate = fee_rate,
+      slippage_rate = slippage_rate,
+      total_cost_rate = fee_rate + slippage_rate
     ),
     visualization = list(
       price_amount_btc = price_amount_btc,
@@ -623,6 +710,7 @@ read_project_config <- function(path = "config.yml") {
 
   boundary_seconds <- c(
     as.numeric(data_start),
+    as.numeric(validation_start),
     as.numeric(test_start),
     as.numeric(data_end_exclusive),
     vapply(

@@ -26,14 +26,22 @@ parameter_table <- tibble::tibble(
     "Початок даних",
     "Кінець даних без включення",
     "Тривалість даних, календарних років",
+    "Початок внутрішнього validation",
+    "Кінець validation без включення",
+    "Тривалість validation, календарних років",
     "Початок фінального тесту",
     "Кінець фінального тесту без включення",
     "Тривалість тесту, календарних років",
+    "Перша модель",
+    "Інтервал моделі",
     "Горизонт прогнозу, періодів",
     "Затримка виконання, періодів",
     "Ціна виконання",
     "Частота переоцінювання, місяців",
-    "Навчальне вікно"
+    "Навчальне вікно",
+    "Початковий капітал",
+    "Комісія за зміну позиції",
+    "Прослизання за зміну позиції"
   ),
   `Значення` = c(
     config$candidate$name,
@@ -52,17 +60,39 @@ parameter_table <- tibble::tibble(
       include_seconds = TRUE
     ),
     config$study$data_years,
+    format_utc(
+      config$evaluation$validation_start,
+      include_seconds = TRUE
+    ),
+    format_utc(
+      config$evaluation$validation_end_exclusive,
+      include_seconds = TRUE
+    ),
+    config$evaluation$validation_years,
     format_utc(config$evaluation$test_start, include_seconds = TRUE),
     format_utc(
       config$evaluation$test_end_exclusive,
       include_seconds = TRUE
     ),
     config$evaluation$test_years,
+    paste0(
+      toupper(config$model$family),
+      "(",
+      config$model$order,
+      ")"
+    ),
+    config$model$target_interval,
     config$evaluation$forecast_horizon_periods,
     config$evaluation$execution_lag_periods,
     "відкриття наступної свічки",
     config$evaluation$refit_every_months,
-    "розширюване"
+    "розширюване",
+    paste(
+      config$trading$starting_capital_quote,
+      config$primary$quote_currency
+    ),
+    paste0(100 * config$trading$fee_rate, "%"),
+    paste0(100 * config$trading$slippage_rate, "%")
   )
 )
 

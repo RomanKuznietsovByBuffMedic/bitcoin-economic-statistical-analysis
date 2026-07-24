@@ -56,6 +56,8 @@ data_config <- list(
   timezone = config$study$timezone,
   data_start = config$study$data_start,
   data_end = config$study$data_end_exclusive,
+  validation_start = config$evaluation$validation_start,
+  validation_end = config$evaluation$validation_end_exclusive,
   test_start = config$evaluation$test_start,
   test_end = config$evaluation$test_end_exclusive,
   price_amount_btc = config$visualization$price_amount_btc,
@@ -86,9 +88,13 @@ experiment_parameters <- tibble::tibble(
     "Часова зона",
     "Початок даних",
     "Кінець даних без включення",
+    "Початок внутрішнього validation",
+    "Кінець validation без включення",
     "Початок фінального тесту",
     "Кінець фінального тесту без включення",
     "Тривалість фінального тесту",
+    "Перша модель",
+    "Інтервал моделі",
     "Горизонт прогнозу",
     "Затримка виконання",
     "Ціна виконання",
@@ -107,6 +113,8 @@ experiment_parameters <- tibble::tibble(
     data_config$timezone,
     format_utc(data_config$data_start),
     format_utc(data_config$data_end),
+    format_utc(data_config$validation_start),
+    format_utc(data_config$validation_end),
     format_utc(data_config$test_start),
     format_utc(data_config$test_end),
     if (config$evaluation$test_years == 1L) {
@@ -114,13 +122,20 @@ experiment_parameters <- tibble::tibble(
     } else {
       paste(config$evaluation$test_years, "календарних років")
     },
+    paste0(
+      toupper(config$model$family),
+      "(",
+      config$model$order,
+      ")"
+    ),
+    config$model$target_interval,
     paste(
       config$evaluation$forecast_horizon_periods,
-      "базовий період"
+      "модельний період"
     ),
     paste(
       config$evaluation$execution_lag_periods,
-      "базовий період"
+      "модельний період"
     ),
     "відкриття наступної свічки",
     if (config$evaluation$refit_every_months == 1L) {
@@ -149,7 +164,7 @@ experiment_parameters <- tibble::tibble(
 knitr::kable(
   experiment_parameters,
   align = c("l", "l"),
-  caption = "Параметри даних і майбутнього оцінювання з config.yml"
+  caption = "Параметри даних і оцінювання з config.yml"
 )
 ```
 
@@ -545,10 +560,14 @@ knitr::kable(
 )
 ```
 
-У поточній конфігурації модель навчатиметься на
-`r format(nrow(training_data), big.mark = " ")` рядках до
-`r format_utc(data_config$test_start)` UTC. Її прогнозні показники й
-результат торгового правила оцінюватимуться на тих самих
+У поточній конфігурації всі
+`r format(nrow(training_data), big.mark = " ")` рядків до
+`r format_utc(data_config$test_start)` UTC доступні для розробки.
+Останній рік цієї частини використовується як внутрішній
+walk-forward validation у наступному розділі.
+
+Фінальні прогнозні показники й результат зафіксованого торгового
+правила оцінюватимуться на
 `r format(nrow(test_data), big.mark = " ")` рядках від
 `r format_utc(data_config$test_start)` до
 `r format_utc(data_config$test_end)` UTC без включення правої межі.
@@ -570,16 +589,15 @@ walk-forward перевіркою. `test_data` не можна використ�
 [@lopezDePrado2018, розд. 12.2, с. 161-162].
 :::
 
-## Межа поточного етапу
+## Межа цього розділу
 
 Підготовлений набір містить сирі OHLC-поля, ціну закриття, часову
-відстань до попередньої свічки та поточні дохідності. Навчальна й
-тестова частини вже визначені однозначно, але ще не використані для
-моделювання.
+відстань до попередньої свічки та поточні дохідності. У цьому розділі
+вони лише готуються й діляться в часі.
 
-Цільову змінну, модель, торговий сигнал, витрати та показники ризику
-ще не створено. Вони належать до окремого наступного етапу після
-формулювання конкретної гіпотези.
+Цільову змінну, AR(1), торговий сигнал, витрати та показники ризику
+визначено окремо в наступному розділі. Такий поділ не змішує
+отримання даних із висновками моделі.
 
 ## Висновок
 
