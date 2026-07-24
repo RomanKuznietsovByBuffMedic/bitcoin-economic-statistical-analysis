@@ -1,0 +1,66 @@
+# Параметри, які можна змінювати для нового експерименту.
+#
+# Формат часу: YYYY-MM-DD HH:MM:SS
+# YYYY = рік, MM = місяць, DD = день.
+#
+# Кінець періоду обчислюється автоматично:
+# study.data_start + study.data_years.
+# Права межа не включається.
+study:
+  # Binance використовується лише для початкового порівняння з Bybit.
+  candidate_exchange: "binance"
+  primary_exchange: "bybit"
+  reference_exchange: "bitstamp"
+  market_type: "spot"
+  interval: "1h"
+  price_field: "close"
+  timezone: "UTC"
+  data_start: "2021-07-06 00:00:00"
+  data_years: 5
+
+# Моделі ще немає. Ці значення фіксують майбутній план оцінювання.
+# Фінальний тест охоплює останній календарний рік перед правою межею.
+evaluation:
+  test_years: 1
+  forecast_horizon_periods: 1
+  execution_lag_periods: 1
+  execution_price: "next_open"
+  refit_every_months: 1
+  training_window: "expanding"
+
+# Графік ціни порівнює вартість 1 BTC з малою часткою нижче.
+# 0.001 BTC дорівнює 100 000 сатоші й коштує у 1000 разів менше.
+# Зміна цього параметра не змінює дані й не запускає їх завантаження.
+visualization:
+  price_amount_btc: 0.001
+
+exchanges:
+  binance:
+    name: "Binance"
+    symbol: "BTCUSDT"
+    base_currency: "BTC"
+    quote_currency: "USDT"
+    documentation_url: "https://github.com/binance/binance-public-data"
+    archive_base_url: "https://data.binance.vision/data/spot/monthly/klines"
+    rest_endpoint: "https://data-api.binance.vision/api/v3/klines"
+  bybit:
+    name: "Bybit"
+    symbol: "BTCUSDT"
+    base_currency: "BTC"
+    quote_currency: "USDT"
+    available_start: "2021-07-05 12:00:00"
+    documentation_url: "https://bybit-exchange.github.io/docs/v5/market/kline"
+    endpoint: "https://api.bybit.com/v5/market/kline"
+  bitstamp:
+    name: "Bitstamp"
+    symbol: "btcusd"
+    base_currency: "BTC"
+    quote_currency: "USD"
+    documentation_url: "https://www.bitstamp.net/api/#tag/Market-info/operation/GetOHLCData"
+    endpoint: "https://www.bitstamp.net/api/v2/ohlc"
+
+runtime:
+  workers: 2
+  # true: перший рендер автоматично отримує відсутні або несумісні дані.
+  # false: рендер зупиняється й не виконує мережевих запитів до бірж.
+  auto_download_data: true

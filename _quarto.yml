@@ -1,5 +1,7 @@
 project:
   type: book
+  pre-render:
+    - Rscript scripts/bootstrap_project.R
 
 bibliography: references.bib
 csl: ieee-with-url.csl
@@ -23,16 +25,32 @@ number-sections: true
 number-depth: 6
 toc-depth: 6
 
+execute:
+  echo: true
+  fig-width: 12
+  fig-height: 8
+  fig-dpi: 144
+  warning: false
+  message: false
+
 format:
   html:
+    theme:
+      dark: darkly
+      light: cosmo
+    respect-user-color-scheme: false
+    css: assets/book-figures.css
+    include-in-header: assets/dark-reader-lock.html
     toc: true
     toc-title: "Зміст"
     toc-location: right
     toc-expand: true
     smooth-scroll: true
     code-fold: show
-    code-summary: "Код"
+    code-summary: "Показати / приховати код"
     code-copy: false
+    code-line-numbers: true
+    code-overflow: wrap
     code-tools:
       source: false
       toggle: true

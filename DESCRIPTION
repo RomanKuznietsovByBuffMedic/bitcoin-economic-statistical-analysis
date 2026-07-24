@@ -14,10 +14,5 @@ Imports:
     renv,
     rmarkdown,
     scales,
-    tibble
-Suggests:
-    miniUI,
-    quarto,
-    shrtcts
-Remotes:
-    gadenbuie/shrtcts
+    tibble,
+    yaml
