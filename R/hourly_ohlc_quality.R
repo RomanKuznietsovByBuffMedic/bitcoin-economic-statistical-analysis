@@ -1,18 +1,5 @@
 # Generic hourly OHLC quality checks --------------------------------------
 
-sha256_file <- function(path) {
-  executable <- Sys.which("sha256sum")
-  if (!nzchar(executable)) {
-    stop("Для контрольної суми потрібна системна команда sha256sum.")
-  }
-  output <- system2(executable, path, stdout = TRUE, stderr = TRUE)
-  status <- attr(output, "status")
-  if (!is.null(status) && status != 0) {
-    stop("Не вдалося обчислити SHA-256 для файлу: ", path)
-  }
-  strsplit(trimws(output[[1]]), "[[:space:]]+")[[1]][[1]]
-}
-
 find_hourly_gaps <- function(data) {
   open_times <- sort(unique(data$open_time))
   if (length(open_times) < 2L) {
@@ -36,6 +23,16 @@ find_hourly_gaps <- function(data) {
 }
 
 validate_hourly_ohlc <- function(data, start_time, end_time) {
+  if (
+    length(start_time) != 1L ||
+      length(end_time) != 1L ||
+      is.na(start_time) ||
+      is.na(end_time) ||
+      start_time >= end_time
+  ) {
+    stop("Некоректні часові межі для перевірки OHLC.")
+  }
+
   required_columns <- c("open_time", "open", "high", "low", "close")
   missing_columns <- setdiff(required_columns, names(data))
   if (length(missing_columns) > 0) {
@@ -51,6 +48,10 @@ validate_hourly_ohlc <- function(data, start_time, end_time) {
 
   period_data <- data |>
     dplyr::filter(open_time >= start_time, open_time < end_time)
+
+  if (nrow(period_data) == 0L) {
+    stop("У заданому періоді немає жодної OHLC-свічки.")
+  }
 
   duplicate_rows <- sum(duplicated(period_data$open_time))
   clean_data <- period_data |>
@@ -135,4 +136,74 @@ validate_hourly_ohlc <- function(data, start_time, end_time) {
   )
 
   list(data = clean_data, gaps = gaps, summary = summary)
+}
+
+require_bounded_hourly_ohlc <- function(
+  data,
+  start_time,
+  end_time,
+  source_label = "Ринковий ряд",
+  allow_internal_gaps = FALSE
+) {
+  result <- validate_hourly_ohlc(
+    data = data,
+    start_time = start_time,
+    end_time = end_time
+  )
+
+  expected_rows <- as.numeric(
+    difftime(end_time, start_time, units = "hours")
+  )
+  expected_last <- end_time - 60 * 60
+  duplicate_rows <- result$summary$Значення[
+    result$summary$Перевірка == "Повторені години"
+  ]
+  boundaries_match <- identical(
+    as.numeric(min(result$data$open_time)),
+    as.numeric(start_time)
+  ) && identical(
+    as.numeric(max(result$data$open_time)),
+    as.numeric(expected_last)
+  )
+
+  if (
+    duplicate_rows != 0 ||
+      !boundaries_match ||
+      (
+        !isTRUE(allow_internal_gaps) &&
+          (
+            nrow(result$data) != expected_rows ||
+              nrow(result$gaps) != 0L
+          )
+      )
+  ) {
+    stop(
+      source_label,
+      if (isTRUE(allow_internal_gaps)) {
+        paste(
+          " не має правильних меж",
+          "або містить повторені години."
+        )
+      } else {
+        " не має повного погодинного покриття заданого періоду."
+      }
+    )
+  }
+
+  result
+}
+
+require_complete_hourly_ohlc <- function(
+  data,
+  start_time,
+  end_time,
+  source_label = "Ринковий ряд"
+) {
+  require_bounded_hourly_ohlc(
+    data = data,
+    start_time = start_time,
+    end_time = end_time,
+    source_label = source_label,
+    allow_internal_gaps = FALSE
+  )
 }

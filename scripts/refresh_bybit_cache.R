@@ -5,26 +5,26 @@ source("R/project_io.R")
 source("R/data_provenance.R")
 source("R/hourly_ohlc_quality.R")
 source("R/download_progress.R")
-source("R/bitstamp_ohlc.R")
+source("R/bybit_klines.R")
 
 config <- read_project_config()
-exchange <- config$exchanges$bitstamp
+exchange <- config$exchanges$bybit
 start_time <- config$study$data_start
 end_time <- config$study$data_end_exclusive
-cache_file <- config$paths$cache$bitstamp
+cache_file <- config$paths$cache$bybit
 
 workers <- suppressWarnings(as.integer(Sys.getenv(
-  "BITSTAMP_WORKERS",
+  "BYBIT_WORKERS",
   as.character(config$runtime$workers)
 )))
 if (is.na(workers) || workers < 1L) {
-  stop("BITSTAMP_WORKERS має бути додатним цілим числом.")
+  stop("BYBIT_WORKERS має бути додатним цілим числом.")
 }
 
-step_seconds <- switch(
+bybit_interval <- switch(
   config$study$interval,
-  "1h" = 3600L,
-  stop("Bitstamp: непідтримуваний інтервал.")
+  "1h" = "60",
+  stop("Bybit: непідтримуваний інтервал.")
 )
 
 cat(
@@ -35,33 +35,37 @@ cat(
   ".\n",
   sep = ""
 )
+cat("Використовуються лише публічні ринкові дані.\n")
 cat("Паралельних процесів:", workers, "\n\n")
 
-bitstamp_raw <- download_bitstamp_ohlc(
-  market_symbol = exchange$symbol,
+bybit_raw <- download_bybit_klines(
   start_time = start_time,
   end_time = end_time,
-  step_seconds = step_seconds,
+  category = config$study$market_type,
+  symbol = exchange$symbol,
+  interval = bybit_interval,
   workers = workers,
   endpoint = exchange$endpoint
 )
+
 data_check <- require_complete_hourly_ohlc(
-  data = bitstamp_raw,
+  data = bybit_raw,
   start_time = start_time,
   end_time = end_time,
   source_label = exchange$market_label
 )
 
-bitstamp_raw <- attach_source_metadata(
-  data = bitstamp_raw,
+bybit_raw <- attach_source_metadata(
+  data = bybit_raw,
   config = config,
   exchange_id = exchange$id,
   verification_level = "verified_on_download"
 )
 
-save_rds_atomic(bitstamp_raw, cache_file)
+save_rds_atomic(bybit_raw, cache_file)
 
 print(data_check$summary, n = Inf, digits = 7)
+
 cat(
   "\n[ГОТОВО] ",
   exchange$market_label,

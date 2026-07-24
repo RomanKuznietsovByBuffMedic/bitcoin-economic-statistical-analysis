@@ -4,6 +4,9 @@
 # - downloading kline data from official Binance sources;
 # - verifying and reusing local archive and data caches;
 # - checking the integrity of hourly observations.
+#
+# Shared SHA-256 and time-gap helpers are defined in R/project_io.R and
+# R/hourly_ohlc_quality.R.
 
 binance_kline_columns <- function() {
   c(
@@ -197,21 +200,6 @@ download_binance_klines <- function(
   data
 }
 
-sha256_file <- function(path) {
-  executable <- Sys.which("sha256sum")
-  if (!nzchar(executable)) {
-    stop("Для перевірки архівів потрібна системна команда sha256sum.")
-  }
-
-  output <- system2(executable, path, stdout = TRUE, stderr = TRUE)
-  status <- attr(output, "status")
-  if (!is.null(status) && status != 0) {
-    stop("Не вдалося обчислити SHA-256 для файлу: ", path)
-  }
-
-  strsplit(trimws(output[[1]]), "[[:space:]]+")[[1]][[1]]
-}
-
 read_binance_checksum <- function(path) {
   line <- readLines(path, n = 1L, warn = FALSE)
   if (length(line) == 0) {
@@ -367,46 +355,33 @@ complete_months_in_period <- function(start_time, end_time) {
   )]
 }
 
-find_hourly_gaps <- function(data) {
-  open_times <- sort(unique(data$open_time))
-  if (length(open_times) < 2L) {
-    return(tibble::tibble(
-      previous_observation = as.POSIXct(character(), tz = "UTC"),
-      next_observation = as.POSIXct(character(), tz = "UTC"),
-      interval_hours = numeric(),
-      missing_hours = numeric()
-    ))
-  }
-
-  step_hours <- as.numeric(diff(open_times), units = "hours")
-  gap_indices <- which(step_hours != 1)
-
-  tibble::tibble(
-    previous_observation = open_times[gap_indices],
-    next_observation = open_times[gap_indices + 1L],
-    interval_hours = step_hours[gap_indices],
-    missing_hours = step_hours[gap_indices] - 1
-  )
-}
-
-recheck_binance_gaps <- function(data, symbol, interval) {
+recheck_binance_gaps <- function(
+  data,
+  symbol,
+  interval,
+  endpoint
+) {
   gaps <- find_hourly_gaps(data)
   if (nrow(gaps) == 0) {
     return(list(data = data, recovered_rows = 0L))
   }
 
-  recovered <- lapply(
-    seq_len(nrow(gaps)),
-    function(index) {
+  recovered <- download_progress_lapply(
+    values = seq_len(nrow(gaps)),
+    function_to_apply = function(index) {
       download_binance_klines(
         symbol = symbol,
         interval = interval,
         start_time = gaps$previous_observation[[index]] + 60 * 60,
         end_time = gaps$next_observation[[index]],
+        endpoint = endpoint,
         request_pause = 0,
         allow_empty = TRUE
       )
-    }
+    },
+    workers = 1L,
+    label = "Перевірка розривів",
+    unit = "розривів"
   )
 
   recovered_data <- dplyr::bind_rows(recovered)
@@ -426,8 +401,12 @@ download_binance_hybrid_klines <- function(
   start_time,
   end_time,
   archive_dir = "data/cache/binance-archives",
-  workers = 8L,
-  refresh_checksums = FALSE
+  workers = 2L,
+  refresh_checksums = FALSE,
+  archive_base_url =
+    "https://data.binance.vision/data/spot/monthly/klines",
+  rest_endpoint =
+    "https://data-api.binance.vision/api/v3/klines"
 ) {
   months <- complete_months_in_period(start_time, end_time)
   workers <- max(1L, as.integer(workers))
@@ -448,7 +427,8 @@ download_binance_hybrid_klines <- function(
           start_time = period_start,
           end_time = period_end,
           archive_dir = archive_dir,
-          refresh_checksum = refresh_checksums
+          refresh_checksum = refresh_checksums,
+          base_url = archive_base_url
         ),
         source = "archive",
         month = format(month, "%Y-%m"),
@@ -460,7 +440,8 @@ download_binance_hybrid_klines <- function(
             symbol = symbol,
             interval = interval,
             start_time = period_start,
-            end_time = period_end
+            end_time = period_end,
+            endpoint = rest_endpoint
           ),
           source = "rest_fallback",
           month = format(month, "%Y-%m"),
@@ -470,18 +451,16 @@ download_binance_hybrid_klines <- function(
     )
   }
 
-  message("Завантаження ", length(months), " повних місячних архівів Binance.")
   if (length(months) == 0) {
     monthly_results <- list()
-  } else if (.Platform$OS.type == "unix" && workers > 1L) {
-    monthly_results <- parallel::mclapply(
-      months,
-      download_month,
-      mc.cores = min(workers, length(months)),
-      mc.preschedule = TRUE
-    )
   } else {
-    monthly_results <- lapply(months, download_month)
+    monthly_results <- download_progress_lapply(
+      values = months,
+      function_to_apply = download_month,
+      workers = min(workers, length(months)),
+      label = "Завантаження Binance",
+      unit = "місяців"
+    )
   }
 
   data_parts <- lapply(monthly_results, `[[`, "data")
@@ -497,14 +476,17 @@ download_binance_hybrid_klines <- function(
 
   rest_tail_rows <- 0L
   if (tail_start < end_time) {
+    cat("Binance: додатковий неповний місяць.\n")
     rest_tail <- download_binance_klines(
       symbol = symbol,
       interval = interval,
       start_time = tail_start,
-      end_time = end_time
+      end_time = end_time,
+      endpoint = rest_endpoint
     )
     data_parts[[length(data_parts) + 1L]] <- rest_tail
     rest_tail_rows <- nrow(rest_tail)
+    cat("[ГОТОВО] Binance: неповний місяць.\n")
   }
 
   data <- dplyr::bind_rows(data_parts) |>
@@ -517,7 +499,12 @@ download_binance_hybrid_klines <- function(
   }
 
   gaps_before <- find_hourly_gaps(data)
-  rechecked <- recheck_binance_gaps(data, symbol, interval)
+  rechecked <- recheck_binance_gaps(
+    data = data,
+    symbol = symbol,
+    interval = interval,
+    endpoint = rest_endpoint
+  )
   data <- rechecked$data
   gaps_after <- find_hourly_gaps(data)
 
@@ -538,6 +525,11 @@ download_binance_hybrid_klines <- function(
   acquisition_info <- list(
     method = "Місячні архіви Binance Vision + REST API",
     downloaded_at_utc = format(Sys.time(), "%Y-%m-%d %H:%M:%S UTC", tz = "UTC"),
+    archive_base_url = archive_base_url,
+    rest_endpoint = rest_endpoint,
+    symbol = symbol,
+    interval = interval,
+    archive_checksums_verified = TRUE,
     archive_months_requested = length(months),
     archive_months_used = sum(sources == "archive"),
     rest_fallback_months = fallback_months,
@@ -550,79 +542,4 @@ download_binance_hybrid_klines <- function(
   )
   attr(data, "acquisition_info") <- acquisition_info
   data
-}
-
-load_or_download_binance_klines <- function(
-  symbol,
-  interval,
-  start_time,
-  end_time,
-  cache_file,
-  archive_dir = "data/cache/binance-archives",
-  workers = 8L,
-  refresh_checksums = FALSE
-) {
-  if (file.exists(cache_file)) {
-    return(readRDS(cache_file))
-  }
-
-  data <- download_binance_hybrid_klines(
-    symbol = symbol,
-    interval = interval,
-    start_time = start_time,
-    end_time = end_time,
-    archive_dir = archive_dir,
-    workers = workers,
-    refresh_checksums = refresh_checksums
-  )
-
-  dir.create(dirname(cache_file), recursive = TRUE, showWarnings = FALSE)
-  saveRDS(data, cache_file, compress = "gzip")
-  data
-}
-
-validate_hourly_klines <- function(data, start_time, end_time) {
-  duplicate_rows <- sum(duplicated(data$open_time))
-
-  clean_data <- data |>
-    dplyr::filter(open_time >= start_time, open_time < end_time) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
-
-  gaps <- find_hourly_gaps(clean_data)
-
-  nonpositive_prices <- sum(
-    !is.finite(clean_data$close) |
-      clean_data$close <= 0
-  )
-  if (nonpositive_prices > 0) {
-    stop("Виявлено недодатні або нечислові ціни.")
-  }
-
-  expected_rows <- as.numeric(difftime(end_time, start_time, units = "hours"))
-  missing_hours <- max(expected_rows - nrow(clean_data), 0)
-  completeness <- 100 * nrow(clean_data) / expected_rows
-
-  summary <- tibble::tibble(
-    `Перевірка` = c(
-      "Очікувана кількість годин",
-      "Фактична кількість свічок",
-      "Пропущені години",
-      "Повнота, %",
-      "Повторені години",
-      "Часові розриви",
-      "Недодатні або нечислові ціни"
-    ),
-    `Значення` = c(
-      expected_rows,
-      nrow(clean_data),
-      missing_hours,
-      round(completeness, 4),
-      duplicate_rows,
-      nrow(gaps),
-      nonpositive_prices
-    )
-  )
-
-  list(data = clean_data, gaps = gaps, summary = summary)
 }

@@ -1,114 +1,104 @@
+#!/usr/bin/env Rscript
+
+source("R/project_config.R")
+source("R/project_io.R")
+source("R/data_provenance.R")
 source("R/hourly_ohlc_quality.R")
 source("R/price_returns.R")
-source("R/exchange_comparison.R")
+source("R/time_split.R")
 
-start_time <- as.POSIXct("2021-07-05 12:00:00", tz = "UTC")
-end_time <- as.POSIXct("2026-07-01 00:00:00", tz = "UTC")
+config <- read_project_config()
+start_time <- config$study$data_start
+end_time <- config$study$data_end_exclusive
 
-bybit_file <- file.path(
-  "data",
-  "cache",
-  "bybit_btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
-)
-binance_file <- file.path(
-  "data",
-  "cache",
-  "btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
-)
-prepared_file <- file.path(
-  "data",
-  "processed",
-  "bybit_btcusdt_1h_price_returns_2021-07-05_2026-06-30.rds"
-)
-comparison_file <- file.path(
-  "data",
-  "processed",
-  "bybit_binance_btcusdt_1h_comparison_2021-07-05_2026-06-30.rds"
+primary_file <- config$paths$cache[[config$primary$id]]
+prepared_file <- config$paths$prepared
+
+primary_raw <- read_rds_required(
+  primary_file,
+  paste("кеш", config$primary$name)
 )
 
-required_files <- c(bybit_file, binance_file)
-missing_files <- required_files[!file.exists(required_files)]
-if (length(missing_files) > 0L) {
-  stop(
-    "Не знайдено кеші: ",
-    paste(missing_files, collapse = ", "),
-    ". Спочатку виконайте відповідні скрипти аудиту або оновлення."
+source_metadata_summary(
+  config = config,
+  data_by_exchange = setNames(
+    list(primary_raw),
+    config$primary$id
   )
-}
+)
 
-save_rds_atomic <- function(object, path) {
-  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-  temporary_file <- tempfile(
-    pattern = paste0(basename(path), "."),
-    tmpdir = dirname(path)
-  )
-  on.exit(unlink(temporary_file), add = TRUE)
-  saveRDS(object, temporary_file, version = 3)
-  if (!file.rename(temporary_file, path)) {
-    stop("Не вдалося атомарно зберегти файл: ", path)
-  }
-  invisible(path)
-}
-
-bybit_raw <- readRDS(bybit_file)
-bybit_quality <- validate_hourly_ohlc(
-  data = bybit_raw,
+primary_quality <- require_complete_hourly_ohlc(
+  data = primary_raw,
   start_time = start_time,
-  end_time = end_time
+  end_time = end_time,
+  source_label = config$primary$market_label
 )
 
-if (nrow(bybit_quality$gaps) > 0L) {
-  stop("Основний ряд Bybit містить часові розриви.")
-}
-
-expected_rows <- as.numeric(
-  difftime(end_time, start_time, units = "hours")
+prepared_data <- build_price_return_features(
+  data = primary_quality$data,
+  price_column = config$study$price_field
 )
-if (nrow(bybit_quality$data) != expected_rows) {
-  stop(
-    "Основний ряд Bybit неповний: очікувалося ",
-    expected_rows,
-    ", отримано ",
-    nrow(bybit_quality$data),
-    "."
-  )
-}
-
-prepared_data <- build_price_return_features(bybit_quality$data)
-attr(prepared_data, "data_source") <- "Bybit Spot BTCUSDT"
-attr(prepared_data, "interval") <- "1h"
-attr(prepared_data, "period_start_utc") <- format(start_time, tz = "UTC")
-attr(prepared_data, "period_end_exclusive_utc") <- format(end_time, tz = "UTC")
-attr(prepared_data, "raw_sha256") <- sha256_file(bybit_file)
-attr(prepared_data, "prepared_at_utc") <- format(Sys.time(), tz = "UTC")
-
-binance_raw <- readRDS(binance_file)
-binance_quality <- validate_hourly_ohlc(
-  data = binance_raw,
-  start_time = start_time,
-  end_time = end_time
+attr(prepared_data, "data_source") <- config$primary$market_label
+attr(prepared_data, "primary_exchange_id") <- config$primary$id
+attr(prepared_data, "market_symbol") <- config$primary$symbol
+attr(prepared_data, "market_type") <- config$study$market_type
+attr(prepared_data, "interval") <- config$study$interval
+attr(prepared_data, "price_field") <- config$study$price_field
+attr(prepared_data, "period_start_utc") <- format_utc(
+  start_time,
+  include_seconds = TRUE
 )
-comparison <- compare_hourly_exchanges(
-  primary = bybit_quality$data,
-  reference = binance_quality$data,
-  primary_name = "Bybit",
-  reference_name = "Binance"
+attr(prepared_data, "period_end_exclusive_utc") <- format_utc(
+  end_time,
+  include_seconds = TRUE
 )
-attr(comparison, "period_start_utc") <- format(start_time, tz = "UTC")
-attr(comparison, "period_end_exclusive_utc") <- format(end_time, tz = "UTC")
+attr(prepared_data, "raw_sha256") <- sha256_file(primary_file)
+attr(prepared_data, "test_start_utc") <- format_utc(
+  config$evaluation$test_start,
+  include_seconds = TRUE
+)
+attr(prepared_data, "test_end_exclusive_utc") <- format_utc(
+  config$evaluation$test_end_exclusive,
+  include_seconds = TRUE
+)
+attr(prepared_data, "prepared_at_utc") <- format(
+  Sys.time(),
+  "%Y-%m-%d %H:%M:%S UTC",
+  tz = "UTC"
+)
 
 save_rds_atomic(prepared_data, prepared_file)
-save_rds_atomic(comparison, comparison_file)
+write_data_manifest(config)
 
-cat("Основний підготовлений набір Bybit створено:\n", prepared_file, "\n")
+data_split <- split_time_series(
+  data = prepared_data,
+  training_start = config$study$data_start,
+  test_start = config$evaluation$test_start,
+  test_end_exclusive = config$evaluation$test_end_exclusive
+)
+
+cat("Підготовлений набір створено:\n", prepared_file, "\n")
+cat("Джерело:", config$primary$market_label, "\n")
 cat("Рядків:", nrow(prepared_data), "\n")
+cat(
+  "Пропущених годин:",
+  expected_hour_count(start_time, end_time) - nrow(prepared_data),
+  "\n"
+)
 cat(
   "Годин із логарифмічною дохідністю:",
   sum(!is.na(prepared_data$log_return_1h)),
   "\n"
 )
-cat("Внутрішніх часових розривів:", nrow(bybit_quality$gaps), "\n")
-cat("Порівняння Bybit і Binance створено:\n", comparison_file, "\n")
-cat("Спільних годин:", nrow(comparison$data), "\n")
+cat(
+  "Навчальних рядків:",
+  nrow(data_split$training),
+  "\n"
+)
+cat(
+  "Тестових рядків:",
+  nrow(data_split$test),
+  "\n"
+)
 cat("SHA-256 основного набору:", sha256_file(prepared_file), "\n")
-cat("SHA-256 порівняння:", sha256_file(comparison_file), "\n")
+cat("Маніфест оновлено: data-manifest.yml\n")

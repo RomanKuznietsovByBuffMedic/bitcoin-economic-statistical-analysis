@@ -1,14 +1,31 @@
 # Cross-exchange comparison -----------------------------------------------
 #
-# Binance and Bybit are compared only at common hourly timestamps.
+# Bybit and Bitstamp are compared only at common hourly timestamps.
 # Prices from one exchange are never inserted into the other exchange.
 
 compare_hourly_exchanges <- function(
   primary,
   reference,
   primary_name = "Bybit",
-  reference_name = "Binance"
+  reference_name = "Bitstamp"
 ) {
+  required_columns <- c("open_time", "close")
+  missing_primary <- setdiff(required_columns, names(primary))
+  missing_reference <- setdiff(required_columns, names(reference))
+
+  if (length(missing_primary) > 0L) {
+    stop(
+      "В основному наборі бракує полів: ",
+      paste(missing_primary, collapse = ", ")
+    )
+  }
+  if (length(missing_reference) > 0L) {
+    stop(
+      "У контрольному наборі бракує полів: ",
+      paste(missing_reference, collapse = ", ")
+    )
+  }
+
   primary_prices <- primary |>
     dplyr::select(open_time, close) |>
     dplyr::rename(primary_close = close)
@@ -42,11 +59,19 @@ compare_hourly_exchanges <- function(
       )
     )
 
+  if (nrow(common) == 0L) {
+    stop("Основний і контрольний ринки не мають спільних годин.")
+  }
+
   valid_returns <- common |>
     dplyr::filter(
       !is.na(primary_log_return),
       !is.na(reference_log_return)
     )
+
+  if (nrow(valid_returns) < 2L) {
+    stop("Недостатньо спільних суміжних дохідностей для порівняння.")
+  }
 
   summary <- tibble::tibble(
     `Перевірка` = c(

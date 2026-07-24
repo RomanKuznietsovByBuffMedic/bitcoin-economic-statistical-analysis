@@ -1,5 +1,7 @@
 project:
   type: book
+  pre-render:
+    - Rscript scripts/bootstrap_project.R
 
 bibliography: references.bib
 csl: ieee-with-url.csl

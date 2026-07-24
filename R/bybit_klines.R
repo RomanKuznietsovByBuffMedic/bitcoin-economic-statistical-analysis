@@ -18,6 +18,7 @@ empty_bybit_klines <- function() {
 
 bybit_request_url <- function(
   endpoint,
+  category,
   symbol,
   interval,
   start_ms,
@@ -26,10 +27,11 @@ bybit_request_url <- function(
 ) {
   sprintf(
     paste0(
-      "%s?category=spot&symbol=%s&interval=%s",
+      "%s?category=%s&symbol=%s&interval=%s",
       "&start=%.0f&end=%.0f&limit=%d"
     ),
     endpoint,
+    utils::URLencode(category, reserved = TRUE),
     utils::URLencode(symbol, reserved = TRUE),
     utils::URLencode(interval, reserved = TRUE),
     start_ms,
@@ -41,6 +43,7 @@ bybit_request_url <- function(
 download_bybit_window <- function(
   start_ms,
   end_ms,
+  category = "spot",
   symbol = "BTCUSDT",
   interval = "60",
   limit = 1000L,
@@ -59,6 +62,7 @@ download_bybit_window <- function(
   # drop the earliest candle because results are returned newest first.
   url <- bybit_request_url(
     endpoint = endpoint,
+    category = category,
     symbol = symbol,
     interval = interval,
     start_ms = start_ms,
@@ -91,6 +95,23 @@ download_bybit_window <- function(
       response$retCode,
       ": ",
       response$retMsg
+    )
+  }
+
+  returned_category <- as.character(response$result$category)
+  returned_symbol <- as.character(response$result$symbol)
+  if (
+    length(returned_category) != 1L ||
+      !identical(tolower(returned_category), tolower(category)) ||
+      length(returned_symbol) != 1L ||
+      !identical(toupper(returned_symbol), toupper(symbol))
+  ) {
+    stop(
+      paste(
+        "Bybit повернув дані іншого ринку або символу:",
+        returned_category,
+        returned_symbol
+      )
     )
   }
 
@@ -131,11 +152,22 @@ download_bybit_window <- function(
 download_bybit_klines <- function(
   start_time,
   end_time,
+  category = "spot",
   symbol = "BTCUSDT",
   interval = "60",
-  workers = 4L,
+  workers = 2L,
   endpoint = "https://api.bybit.com/v5/market/kline"
 ) {
+  if (
+    length(start_time) != 1L ||
+      length(end_time) != 1L ||
+      is.na(start_time) ||
+      is.na(end_time) ||
+      start_time >= end_time
+  ) {
+    stop("Некоректні часові межі для завантаження Bybit.")
+  }
+
   hour_ms <- 60 * 60 * 1000
   start_ms <- as.numeric(start_time) * 1000
   end_ms <- as.numeric(end_time) * 1000
@@ -155,6 +187,7 @@ download_bybit_klines <- function(
     download_bybit_window(
       start_ms = window[["start"]],
       end_ms = window[["end"]],
+      category = category,
       symbol = symbol,
       interval = interval,
       endpoint = endpoint
@@ -162,16 +195,13 @@ download_bybit_klines <- function(
   }
 
   workers <- max(1L, min(as.integer(workers), length(windows)))
-  if (.Platform$OS.type == "unix" && workers > 1L) {
-    batches <- parallel::mclapply(
-      windows,
-      fetch_window,
-      mc.cores = workers,
-      mc.preschedule = FALSE
-    )
-  } else {
-    batches <- lapply(windows, fetch_window)
-  }
+  batches <- download_progress_lapply(
+    values = windows,
+    function_to_apply = fetch_window,
+    workers = workers,
+    label = "Завантаження Bybit",
+    unit = "частин"
+  )
 
   failed <- vapply(batches, inherits, logical(1), what = "try-error")
   if (any(failed)) {
@@ -184,7 +214,26 @@ download_bybit_klines <- function(
     dplyr::distinct(open_time, .keep_all = TRUE)
 
   if (nrow(data) == 0L) {
-    stop("Bybit не повернув свічок BTCUSDT у заданому періоді.")
+    stop(
+      "Bybit не повернув свічок ",
+      symbol,
+      " у заданому періоді."
+    )
   }
+
+  attr(data, "acquisition_info") <- list(
+    method = "Bybit V5 market kline API",
+    downloaded_at_utc = format(
+      Sys.time(),
+      "%Y-%m-%d %H:%M:%S UTC",
+      tz = "UTC"
+    ),
+    endpoint = endpoint,
+    category = category,
+    symbol = symbol,
+    interval = interval,
+    identity_checked = TRUE,
+    request_windows = length(windows)
+  )
   data
 }

@@ -1,4 +1,4 @@
-# Що це? {#sec-how-it-works}
+# Що таке біткоїн? {#sec-how-it-works}
 
 ::: {.callout-note appearance="simple"}
 ## Коротка відповідь

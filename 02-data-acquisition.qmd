@@ -3,463 +3,750 @@
 ```{r}
 #| label: setup-data-acquisition
 
-required_packages <- c(
-  "dplyr",
-  "ggplot2",
-  "htmlwidgets",
-  "knitr",
-  "plotly",
-  "scales",
-  "tibble"
-)
-missing_packages <- required_packages[
-  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
-]
-if (length(missing_packages) > 0L) {
-  stop(
-    "Не встановлено пакети: ",
-    paste(missing_packages, collapse = ", ")
-  )
-}
-
-module_files <- c(
-  "R/hourly_ohlc_quality.R",
-  "R/book_charts.R"
+sys.source(
+  "R/book_setup.R",
+  envir = knitr::knit_global()
 )
 
-missing_modules <- module_files[!file.exists(module_files)]
-if (length(missing_modules) > 0L) {
-  stop(
-    "Не знайдено модулі: ",
-    paste(missing_modules, collapse = ", ")
-  )
-}
-
-for (module_file in module_files) {
-  sys.source(module_file, envir = knitr::knit_global())
-}
-
-full_data_start <- as.POSIXct("2020-07-01 00:00:00", tz = "UTC")
-bybit_data_start <- as.POSIXct("2021-07-05 12:00:00", tz = "UTC")
-data_end <- as.POSIXct("2026-07-01 00:00:00", tz = "UTC")
-
-binance_cache_file <- file.path(
-  "data", "cache", "btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
-)
-bybit_cache_file <- file.path(
-  "data", "cache", "bybit_btcusdt_spot_1h_2020-07-01_2026-06-30.rds"
-)
-bitstamp_cache_file <- file.path(
-  "data", "cache", "bitstamp_btcusd_1h_2020-07-01_2026-06-30.rds"
+load_book_environment(
+  packages = c(
+    "dplyr",
+    "ggplot2",
+    "htmlwidgets",
+    "knitr",
+    "plotly",
+    "scales",
+    "tibble",
+    "yaml"
+  ),
+  modules = c(
+    "R/project_config.R",
+    "R/project_io.R",
+    "R/data_provenance.R",
+    "R/hourly_ohlc_quality.R",
+    "R/exchange_comparison.R",
+    "R/book_charts.R"
+  ),
+  envir = knitr::knit_global()
 )
 
-required_data_files <- c(
-  binance_cache_file,
-  bybit_cache_file,
-  bitstamp_cache_file
-)
-missing_data_files <- required_data_files[!file.exists(required_data_files)]
-if (length(missing_data_files) > 0L) {
-  stop(
-    "Не знайдено локальні кеші: ",
-    paste(missing_data_files, collapse = ", ")
-  )
-}
+config <- read_project_config()
+data_start <- config$study$data_start
+data_end <- config$study$data_end_exclusive
 
-binance_raw <- readRDS(binance_cache_file)
-bybit_raw <- readRDS(bybit_cache_file)
-bitstamp_raw <- readRDS(bitstamp_cache_file)
+raw_data_by_exchange <- lapply(
+  config$paths$cache,
+  read_rds_required,
+  description = "кеш ринкових даних"
+)
 
-binance_quality <- validate_hourly_ohlc(
-  data = binance_raw,
-  start_time = full_data_start,
-  end_time = data_end
+candidate_raw <- raw_data_by_exchange[[config$candidate$id]]
+primary_raw <- raw_data_by_exchange[[config$primary$id]]
+reference_raw <- raw_data_by_exchange[[config$reference$id]]
+
+source_provenance <- source_metadata_summary(
+  config = config,
+  data_by_exchange = raw_data_by_exchange
 )
-bybit_quality <- validate_hourly_ohlc(
-  data = bybit_raw,
-  start_time = bybit_data_start,
-  end_time = data_end
+manifest_check <- validate_data_manifest(config)
+
+candidate_quality <- require_bounded_hourly_ohlc(
+  data = candidate_raw,
+  start_time = data_start,
+  end_time = data_end,
+  source_label = config$candidate$market_label,
+  allow_internal_gaps = TRUE
 )
-bitstamp_quality <- validate_hourly_ohlc(
-  data = bitstamp_raw,
-  start_time = full_data_start,
-  end_time = data_end
+primary_quality <- require_complete_hourly_ohlc(
+  data = primary_raw,
+  start_time = data_start,
+  end_time = data_end,
+  source_label = config$primary$market_label
+)
+reference_quality <- require_complete_hourly_ohlc(
+  data = reference_raw,
+  start_time = data_start,
+  end_time = data_end,
+  source_label = config$reference$market_label
 )
 
 quality_value <- function(quality, check_name) {
-  quality$summary$Значення[quality$summary$Перевірка == check_name]
+  quality$summary$Значення[
+    quality$summary$Перевірка == check_name
+  ]
+}
+format_count <- function(value) {
+  format(
+    value,
+    big.mark = " ",
+    scientific = FALSE,
+    trim = TRUE
+  )
+}
+format_decimal <- function(value, digits) {
+  formatC(
+    value,
+    format = "f",
+    digits = digits,
+    decimal.mark = ","
+  )
 }
 ```
 
 ::: {.callout-important appearance="simple"}
 ## Головне питання
 
-**Який конкретний ринковий ряд достатньо повний і перевірений, щоб
-передати його майбутнім моделям без штучного заповнення?**
+**Який погодинний ряд BTC достатньо повний, щоб використовувати його
+для графіків, статистичного аналізу, моделі та торгового правила без
+прихованого заповнення пропусків?**
 :::
 
-Спочатку визначаються ринок, показники, інтервал і часові межі. Лише
-після цього можна завантажувати дані та оцінювати їхню якість.
+## Binance як початкове джерело
 
-## Що саме завантажується
+Спочатку для проєкту було обрано
+`r config$candidate$market_label`. Це спотовий ринок, де ціна показує,
+скільки `r config$candidate$quote_currency` коштує один BTC. Дані
+отримуються з офіційних місячних архівів Binance з перевіркою SHA-256,
+а неповний останній місяць і знайдені розриви повторно перевіряються
+через REST API [@binancePublicData; @binanceSpotKlines].
 
-Поняття BTC, USDT і spot пояснено в розділі @sec-how-it-works. Тут
-порівнюються погодинні дані спотового ринку BTC/USDT на Bybit і Binance.
-Bitstamp BTC/USD використовується лише для незалежної перевірки.
+Один рядок даних відповідає одній завершеній годині UTC. Для кожної
+свічки використовуються:
 
-Для кожної свічки використовуються:
+- `open` - ціна першої угоди;
+- `high` - найбільша ціна;
+- `low` - найменша ціна;
+- `close` - ціна останньої угоди;
+- `volume` - обсяг BTC.
 
-- час початку;
-- `open` — ціна першої угоди;
-- `high` — найбільша ціна;
-- `low` — найменша ціна;
-- `close` — ціна останньої угоди;
-- `volume` — обсяг BTC.
+Ціна $P_t$ у наступному розділі визначається як `close`. Незавершена
+поточна година до набору не включається.
 
-Ціна $P_t$ у наступному розділі визначатиметься як `close` завершеної
-свічки. Незавершена поточна година до набору не включається.
+### Період і формат дати
 
-Один рядок дорівнює одній завершеній годині UTC. Це дає більше деталей,
-ніж денні дані, але менше шуму й обсягу, ніж хвилинні.
+Початок задається у `config.yml`, а кінець автоматично обчислюється як
+початок плюс ціла кількість календарних років.
 
-Binance і Bitstamp перевіряються за шість років. Основний ряд Bybit
-починається з першої доступної свічки. Точні межі наведено нижче.
+::: {.callout-note title="Як читати дату і час"}
+Формат `YYYY-MM-DD HH:MM:SS` означає:
+
+- `YYYY` - рік;
+- `MM` - місяць;
+- `DD` - день;
+- `HH` - година;
+- `MM` після пробілу - хвилини;
+- `SS` - секунди.
+
+Наприклад, `2021-07-06 00:00:00` означає 6 липня 2021 року, початок
+доби за UTC.
+:::
 
 ```{r}
-#| label: tbl-audit-periods
+#| label: tbl-study-period
 
 period_table <- tibble::tibble(
-  `Призначення` = c(
-    "Початковий аудит джерел",
-    "Основний ряд Bybit"
+  `Параметр` = c(
+    "Початок, включно",
+    "Кінець, без включення",
+    "Остання включена година",
+    "Тривалість, календарних років",
+    "Очікувана кількість годин"
   ),
-  `Початок, UTC` = c(
-    "2020-07-01 00:00",
-    "2021-07-05 12:00"
-  ),
-  `Кінець без включення, UTC` = "2026-07-01 00:00",
-  `Очікувано годин` = c(52584, 43716)
-)
-
-knitr::kable(
-  period_table,
-  align = c("l", "l", "l", "r"),
-  caption = "Часові межі, визначені до порівняння результатів"
-)
-```
-
-## Як отримано дані
-
-- **Binance:** місячні й денні архіви та їхні контрольні суми SHA-256
-  [@binancePublicData]. Для кожного знайденого розриву код окремо
-  повторює запит через REST API.
-- **Bybit:** API повертає до 1 000 свічок за запит, тому період поділено
-  на неперекривні 1000-годинні частини [@bybitKline].
-- **Bitstamp:** BTC/USD завантажено лише як незалежний контроль. Ці
-  значення не вставляються в ряд BTC/USDT.
-
-Оновлення кешів і рендер книги розділено. `quarto render` читає локальні
-RDS-файли й не звертається до бірж.
-
-## Що перевіряється до вибору джерела
-
-Для всіх джерел перевіряються:
-
-- потрібні поля та часові позначки UTC;
-- дублікати й пропущені години;
-- додатні числові ціни та співвідношення `low ≤ open, close ≤ high`;
-- невід'ємний обсяг;
-- відсутність підміни даними іншої біржі.
-
-## Результат аудиту джерел
-
-```{r}
-#| label: tbl-exchange-source-comparison
-
-source_comparison <- tibble::tibble(
-  `Джерело` = c(
-    "Binance Spot BTC/USDT",
-    "Bybit Spot BTC/USDT",
-    "Bitstamp Spot BTC/USD"
-  ),
-  `Перевірений період` = c(
-    "2020-07-01 00:00 — 2026-07-01 00:00",
-    "2021-07-05 12:00 — 2026-07-01 00:00",
-    "2020-07-01 00:00 — 2026-07-01 00:00"
-  ),
-  `Очікувано` = c(
-    quality_value(binance_quality, "Очікувана кількість годин"),
-    quality_value(bybit_quality, "Очікувана кількість годин"),
-    quality_value(bitstamp_quality, "Очікувана кількість годин")
-  ),
-  `Наявні свічки` = c(
-    nrow(binance_quality$data),
-    nrow(bybit_quality$data),
-    nrow(bitstamp_quality$data)
-  ),
-  `Пропущено` = c(
-    quality_value(binance_quality, "Пропущені години"),
-    quality_value(bybit_quality, "Пропущені години"),
-    quality_value(bitstamp_quality, "Пропущені години")
-  ),
-  `Внутрішні розриви` = c(
-    nrow(binance_quality$gaps),
-    nrow(bybit_quality$gaps),
-    nrow(bitstamp_quality$gaps)
+  `Значення` = c(
+    paste0(format_utc(data_start, include_seconds = TRUE), " UTC"),
+    paste0(format_utc(data_end, include_seconds = TRUE), " UTC"),
+    paste0(
+      format_utc(data_end - 60 * 60, include_seconds = TRUE),
+      " UTC"
+    ),
+    config$study$data_years,
+    format_count(expected_hour_count(data_start, data_end))
   )
 )
 
 knitr::kable(
-  source_comparison,
-  format.args = list(big.mark = " ", scientific = FALSE),
-  align = c("l", "l", "r", "r", "r", "r"),
-  caption = "Результати однакової перевірки трьох локальних кешів"
+  period_table,
+  align = c("l", "l"),
+  caption = "Повний багаторічний період із config.yml"
 )
 ```
 
-### Binance: де саме бракує даних
+Початкова та кінцева межі мають однакові місяць, день і час. Вони
+відрізняються лише роком. Завдяки цьому період дорівнює рівно
+`r config$study$data_years` календарним рокам, а не приблизній
+кількості днів.
+
+::: {.callout-tip title="Чи поширюється зміна config.yml на всю роботу?"}
+Так. Розділи книги та сценарії даних викликають
+`read_project_config()`.
+
+Якщо змінити `study.data_start`, `study.data_years`, біржу, символ,
+інтервал або інше джерельне значення, старі кеші перестануть
+відповідати метаданим. Перед рендером вони будуть отримані заново, а
+підготовлений набір, таблиці, часовий поділ і графіки перебудуються.
+
+Кінцеву дату не потрібно змінювати окремо: вона завжди обчислюється як
+`study.data_start + study.data_years`. Параметри, яких немає в
+`config.yml`, наприклад текст пояснень або формули, автоматично не
+змінюються.
+:::
+
+### Перевірка повноти Binance
+
+Для кожної біржі одна функція перевіряє:
+
+- потрібні поля та часові позначки UTC;
+- точний початок і кінець періоду;
+- дублікати та пропущені години;
+- додатні числові OHLC-ціни;
+- співвідношення `low ≤ open, close ≤ high`;
+- невід'ємний обсяг.
+
+Для Binance внутрішні розриви не приховуються і не зупиняють побудову
+цього розділу. Вони є результатом аудиту, який потрібно показати.
 
 ```{r}
 #| label: tbl-binance-quality
 
 knitr::kable(
-  binance_quality$summary,
-  format.args = list(big.mark = " ", scientific = FALSE),
+  candidate_quality$summary,
+  format.args = list(
+    big.mark = " ",
+    scientific = FALSE
+  ),
   align = c("l", "r"),
-  caption = "Перевірка Binance Spot BTC/USDT"
+  caption = paste(
+    "Перевірка",
+    config$candidate$market_label,
+    "на повному спільному проміжку"
+  )
 )
 ```
+
+### Де саме є розриви Binance
 
 ```{r}
 #| label: fig-binance-gap-timeline
-#| fig-cap: "Часові розриви Binance; точну дату видно при наведенні, а розмір точки відповідає кількості відсутніх годин"
+#| fig-cap: "Розриви Binance на повному спільному проміжку; наведення показує точні межі та кількість пропущених годин"
 
-gap_plot_data <- binance_quality$gaps |>
+gap_plot_data <- candidate_quality$gaps |>
   dplyr::mutate(
-    gap_date = previous_observation +
+    gap_time = previous_observation +
       as.difftime(interval_hours / 2, units = "hours"),
-    label = format(gap_date, "%Y-%m-%d", tz = "UTC")
-  )
-
-gap_chart <- ggplot2::ggplot(
-  gap_plot_data,
-  ggplot2::aes(
-    x = gap_date,
-    y = missing_hours,
-    text = paste0(
-      "Дата: ", label,
-      "<br>Пропущено годин: ", missing_hours
+    hover_text = paste0(
+      "Після: ",
+      format(
+        previous_observation,
+        "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      " UTC",
+      "<br>До: ",
+      format(
+        next_observation,
+        "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      " UTC",
+      "<br>Пропущено годин: ",
+      missing_hours
     )
   )
-) +
-  ggplot2::geom_hline(yintercept = 0, colour = "#9AA5B1") +
-  ggplot2::geom_point(
-    ggplot2::aes(size = missing_hours),
-    colour = "#D7301F",
-    alpha = 0.85
-  ) +
-  ggplot2::scale_x_datetime(
-    limits = c(full_data_start, data_end),
-    date_breaks = "1 year",
-    date_labels = "%Y"
-  ) +
-  ggplot2::scale_y_continuous(
-    breaks = seq(0, max(gap_plot_data$missing_hours), by = 1),
-    expand = ggplot2::expansion(mult = c(0.05, 0.25))
-  ) +
-  ggplot2::scale_size_continuous(range = c(4, 10), guide = "none") +
-  ggplot2::labs(
-    x = NULL,
-    y = "Пропущено годин",
-    title = "Коли у Binance відсутні годинні свічки"
-  ) +
-  book_ggplot_theme(base_size = 15)
 
-render_book_plot(
-  gap_chart,
-  tooltip = "text",
-  hovermode = "closest",
-  connect_gaps = FALSE
-)
+if (nrow(gap_plot_data) > 0L) {
+  maximum_gap <- max(gap_plot_data$missing_hours)
+  gap_chart <- ggplot2::ggplot(
+    gap_plot_data,
+    ggplot2::aes(
+      x = gap_time,
+      y = missing_hours,
+      text = hover_text
+    )
+  ) +
+    ggplot2::geom_hline(
+      yintercept = 0,
+      colour = "#9AA5B1"
+    ) +
+    ggplot2::geom_point(
+      ggplot2::aes(size = missing_hours),
+      colour = "#D7301F",
+      alpha = 0.9
+    ) +
+    ggplot2::scale_x_datetime(
+      limits = c(data_start, data_end),
+      date_breaks = "1 year",
+      date_labels = "%Y"
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, maximum_gap, by = 1),
+      expand = ggplot2::expansion(mult = c(0.05, 0.25))
+    ) +
+    ggplot2::scale_size_continuous(
+      range = c(5, 11),
+      guide = "none"
+    ) +
+    ggplot2::labs(
+      x = "Час, UTC",
+      y = "Пропущено годин",
+      title = "Коли в погодинному ряді Binance бракує свічок"
+    ) +
+    book_ggplot_theme(base_size = 15)
+
+  gap_widget <- render_book_plot(
+    gap_chart,
+    tooltip = "text",
+    hovermode = "closest",
+    connect_gaps = FALSE
+  )
+} else {
+  gap_widget <- plotly::plot_ly(
+    type = "scatter",
+    mode = "markers"
+  ) |>
+    plotly::layout(
+      title = "Розривів Binance у вибраному періоді немає",
+      xaxis = list(visible = FALSE),
+      yaxis = list(visible = FALSE)
+    ) |>
+    render_book_widget(
+      hovermode = "closest",
+      showlegend = FALSE,
+      height = 480
+    )
+}
+
+gap_widget
 ```
-
-Точну дату видно при наведенні, а повні межі наведено в таблиці.
 
 ```{r}
 #| label: tbl-binance-gaps
 
-binance_gap_table <- binance_quality$gaps |>
-  dplyr::transmute(
-    `Остання свічка перед розривом, UTC` = format(
-      previous_observation,
-      "%Y-%m-%d %H:%M",
-      tz = "UTC"
-    ),
-    `Перша свічка після розриву, UTC` = format(
-      next_observation,
-      "%Y-%m-%d %H:%M",
-      tz = "UTC"
-    ),
-    `Пропущено годин` = missing_hours
+if (nrow(candidate_quality$gaps) > 0L) {
+  binance_gap_table <- candidate_quality$gaps |>
+    dplyr::transmute(
+      `Остання свічка перед розривом, UTC` = format(
+        previous_observation,
+        "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      `Перша свічка після розриву, UTC` = format(
+        next_observation,
+        "%Y-%m-%d %H:%M",
+        tz = "UTC"
+      ),
+      `Пропущено годин` = missing_hours
+    )
+} else {
+  binance_gap_table <- tibble::tibble(
+    `Остання свічка перед розривом, UTC` = "Розривів немає",
+    `Перша свічка після розриву, UTC` = "",
+    `Пропущено годин` = 0
   )
+}
 
 knitr::kable(
   binance_gap_table,
   align = c("l", "l", "r"),
-  caption = "Повний перелік розривів Binance"
+  caption = "Повний перелік розривів Binance у вибраному періоді"
 )
 ```
 
-Повторне отримання з офіційних джерел не відновило ці 19 годин. Вони
-не інтерполюються й не замінюються цінами іншої біржі.
+Повторна адресна перевірка через офіційний REST API не відновила
+`r format_count(quality_value(candidate_quality, "Пропущені години"))`
+годин. Їх не можна непомітно інтерполювати або замінити цінами іншої
+біржі.
 
-### Bybit: повнота основного періоду
+## Bybit як альтернатива на тому самому проміжку
+
+Наступним кандидатом є `r config$primary$market_label`. Порівняння
+чесне, тому що Binance і Bybit мають:
+
+- той самий спотовий ринок;
+- ту саму пару BTC/USDT;
+- той самий погодинний інтервал;
+- ті самі початкову й кінцеву межі;
+- ту саму очікувану кількість годин.
+
+Bybit отримується через офіційний Kline API [@bybitKline].
 
 ```{r}
-#| label: tbl-bybit-quality
+#| label: tbl-binance-bybit-coverage
+
+selection_quality <- tibble::tibble(
+  `Роль на цьому етапі` = c(
+    "Початковий кандидат",
+    "Альтернатива"
+  ),
+  `Джерело` = c(
+    config$candidate$market_label,
+    config$primary$market_label
+  ),
+  `Перевірений період, UTC` = format_utc_period(
+    data_start,
+    data_end
+  ),
+  `Очікувано годин` = c(
+    quality_value(
+      candidate_quality,
+      "Очікувана кількість годин"
+    ),
+    quality_value(
+      primary_quality,
+      "Очікувана кількість годин"
+    )
+  ),
+  `Наявні свічки` = c(
+    nrow(candidate_quality$data),
+    nrow(primary_quality$data)
+  ),
+  `Пропущено годин` = c(
+    quality_value(candidate_quality, "Пропущені години"),
+    quality_value(primary_quality, "Пропущені години")
+  ),
+  `Внутрішні розриви` = c(
+    nrow(candidate_quality$gaps),
+    nrow(primary_quality$gaps)
+  ),
+  `Висновок` = c(
+    if (
+      quality_value(candidate_quality, "Пропущені години") > 0
+    ) {
+      "Неповний"
+    } else {
+      "Повний"
+    },
+    "Повний"
+  )
+)
 
 knitr::kable(
-  bybit_quality$summary,
-  format.args = list(big.mark = " ", scientific = FALSE),
-  align = c("l", "r"),
-  caption = "Перевірка Bybit Spot BTC/USDT від першої доступної години"
+  selection_quality,
+  format.args = list(
+    big.mark = " ",
+    scientific = FALSE
+  ),
+  align = c("l", "l", "l", "r", "r", "r", "r", "l"),
+  caption = "Binance і Bybit на точно однаковому проміжку"
 )
 ```
 
-Від 2021-07-05 12:00 UTC ряд містить усі 43 716 очікуваних свічок.
-Внутрішніх розривів і дублікатів немає.
+Отже, різниця не пояснюється довшим періодом Binance або коротшим
+періодом Bybit. На тих самих часових межах Bybit має всі
+`r format_count(expected_hour_count(data_start, data_end))`
+очікуваних свічок, а Binance залишається неповним.
 
-## Чому основним джерелом став Bybit
+## Вибір основного джерела
 
-::: {.callout-important title="Рішення після аудиту"}
-Основним аналітичним набором є **Bybit Spot BTC/USDT** від
-2021-07-05 12:00 UTC.
+::: {.callout-important title="Рішення після однакового аудиту"}
+Основним рядом стає `r config$primary$market_label`.
 
-Binance має довшу історію, але містить 19 невідновлених годин.
-Bitstamp повний, проте використовує іншу пару BTC/USD. Bybit дає
-суцільний ряд потрібної пари BTC/USDT і може відповідати майбутньому
-ринку виконання операцій.
+Binance зберігається в `config.yml`, локальному кеші, маніфесті та
+цьому розділі лише для відтворюваного початкового порівняння з Bybit.
+Воно не використовується для підготовленого набору, графіків ціни й
+дохідностей, навчання моделі або торгового правила.
 :::
 
-Історія Bybit коротша на 8 868 початкових годин, але всередині обраного
-періоду пропусків немає.
+Підготовлений файл будується лише з кешу біржі, визначеної в
+`study.primary_exchange`. Зараз це Bybit. Пропуски Binance не
+заповнюються даними Bybit, а дані двох бірж не змішуються.
 
-## Перевірка узгодженості Binance і Bybit
+Сам вибір повного джерела ще не доводить можливість заробітку. Він
+лише усуває відому технічну проблему перед статистичним аналізом.
 
-Порівнюються лише однакові години. Різниця цін обчислюється так:
+## Навіщо потрібна контрольна біржа
 
-$$
-d_t=100\left(\frac{P_t^{Bybit}}{P_t^{Binance}}-1\right).
-$$
+Після вибору Bybit потрібна ще одна повна й незалежна біржа. Її
+головна роль з'явиться після побудови моделі та торгового правила.
 
-Дохідність кожної біржі обчислюється окремо:
+На Bybit виконуватимуться:
+
+- побудова ознак;
+- вибір моделі;
+- налаштування параметрів;
+- коригування порогів торгового правила;
+- аналіз помилок у навчальній частині.
+
+Після цього модель і правило фіксуються. На контрольну біржу без змін
+переносяться:
+
+- спосіб обчислення ознак;
+- навчена на Bybit модель без перенавчання;
+- пороги відкриття та закриття позиції;
+- напрям сигналу;
+- правило розміру позиції;
+- порядок обчислення результату.
+
+::: {.callout-warning title="Контроль не можна перетворювати на нове навчання"}
+Критерії прийнятної різниці результатів потрібно визначити до
+перегляду фінального результату контрольної біржі.
+
+Якщо після першої перевірки змінити модель або правило з урахуванням
+контрольного результату, ця біржа більше не буде незалежним
+контролем.
+:::
+
+Якщо незмінені модель і правило дають співрозмірний результат на
+іншій біржі, це буде аргументом, що вони вловили закономірність руху
+BTC, а не лише особливість Bybit. Це не абсолютний доказ, але
+сильніша перевірка, ніж тест лише на одній біржі.
+
+Контрольна біржа має і додаткову роль ще до моделювання. Вона
+допомагає виявити зміщення часу, переплутані поля або іншу помилку,
+яка могла створити повний, але неправильний ряд Bybit.
+
+## Bitstamp як контрольна біржа
+
+Контрольним рядом є `r config$reference$market_label`, отриманий через
+офіційний OHLC API [@bitstampOhlc].
+
+Bitstamp і Bybit перевіряються на тому самому
+`r config$study$data_years`-річному погодинному проміжку. Для обох
+джерел повнота є обов'язковою: якщо хоча б одна година відсутня,
+рендер зупиняється.
+
+```{r}
+#| label: tbl-bybit-bitstamp-coverage
+
+control_quality <- tibble::tibble(
+  `Роль` = c("Основний ряд", "Контроль"),
+  `Джерело` = c(
+    config$primary$market_label,
+    config$reference$market_label
+  ),
+  `Очікувано годин` = c(
+    quality_value(
+      primary_quality,
+      "Очікувана кількість годин"
+    ),
+    quality_value(
+      reference_quality,
+      "Очікувана кількість годин"
+    )
+  ),
+  `Наявні свічки` = c(
+    nrow(primary_quality$data),
+    nrow(reference_quality$data)
+  ),
+  `Пропущено` = c(
+    quality_value(primary_quality, "Пропущені години"),
+    quality_value(reference_quality, "Пропущені години")
+  ),
+  `Дублікати` = c(
+    quality_value(primary_quality, "Повторені години"),
+    quality_value(reference_quality, "Повторені години")
+  ),
+  `Внутрішні розриви` = c(
+    nrow(primary_quality$gaps),
+    nrow(reference_quality$gaps)
+  )
+)
+
+knitr::kable(
+  control_quality,
+  format.args = list(
+    big.mark = " ",
+    scientific = FALSE
+  ),
+  align = c("l", "l", "r", "r", "r", "r", "r"),
+  caption = "Однакова перевірка повноти Bybit і Bitstamp"
+)
+```
+
+### Поточна технічна перевірка даних
+
+Bybit показує BTC/USDT, а Bitstamp показує BTC/USD. Тому рівні цін не
+повинні точно збігатися. Для поточного технічного аудиту порівнюються
+лише однакові години та погодинні логарифмічні дохідності:
 
 $$
 r_t=\ln\left(\frac{P_t}{P_{t-1}}\right).
 $$
 
-Несуміжні години не входять до порівняння дохідностей. Таблицю нижче
-повністю створює показаний код.
-
 ```{r}
-#| label: tbl-binance-bybit-agreement
+#| label: tbl-bybit-bitstamp-agreement
 
-common_prices <- bybit_quality$data |>
-  dplyr::select(open_time, bybit_close = close) |>
-  dplyr::inner_join(
-    binance_quality$data |>
-      dplyr::select(open_time, binance_close = close),
-    by = "open_time"
-  ) |>
-  dplyr::arrange(open_time) |>
-  dplyr::mutate(
-    hours_from_previous = as.numeric(
-      difftime(open_time, dplyr::lag(open_time), units = "hours")
-    ),
-    price_difference_percent =
-      100 * (bybit_close / binance_close - 1),
-    bybit_log_return = dplyr::if_else(
-      hours_from_previous == 1,
-      log(bybit_close / dplyr::lag(bybit_close)),
-      NA_real_
-    ),
-    binance_log_return = dplyr::if_else(
-      hours_from_previous == 1,
-      log(binance_close / dplyr::lag(binance_close)),
-      NA_real_
-    )
-  )
-
-common_returns <- common_prices |>
-  dplyr::filter(
-    !is.na(bybit_log_return),
-    !is.na(binance_log_return)
-  )
-
-format_count <- function(x) {
-  format(x, big.mark = " ", scientific = FALSE, trim = TRUE)
-}
-format_decimal <- function(x, digits) {
-  formatC(x, format = "f", digits = digits, decimal.mark = ",")
-}
-
+agreement <- compare_hourly_exchanges(
+  primary = primary_quality$data,
+  reference = reference_quality$data,
+  primary_name = config$primary$name,
+  reference_name = config$reference$name
+)
+agreement_values <- agreement$summary$Значення
 agreement_table <- tibble::tibble(
-  `Показник` = c(
-    "Спільні годинні ціни",
-    "Спільні суміжні дохідності",
-    "Медіанна абсолютна різниця цін",
-    "95-й процентиль абсолютної різниці цін",
-    "Максимальна абсолютна різниця цін",
-    "Кореляція логарифмічних дохідностей"
-  ),
+  `Показник` = agreement$summary$Перевірка,
   `Результат` = c(
-    format_count(nrow(common_prices)),
-    format_count(nrow(common_returns)),
-    paste0(format_decimal(
-      stats::median(abs(common_prices$price_difference_percent)), 6
-    ), " %"),
-    paste0(format_decimal(
-      stats::quantile(
-        abs(common_prices$price_difference_percent),
-        probs = 0.95,
-        names = FALSE
-      ), 6
-    ), " %"),
-    paste0(format_decimal(
-      max(abs(common_prices$price_difference_percent)), 6
-    ), " %"),
-    format_decimal(
-      stats::cor(
-        common_returns$bybit_log_return,
-        common_returns$binance_log_return
-      ), 6
-    )
+    format_count(agreement_values[[1]]),
+    format_count(agreement_values[[2]]),
+    paste0(format_decimal(agreement_values[[3]], 6), " %"),
+    paste0(format_decimal(agreement_values[[4]], 6), " %"),
+    paste0(format_decimal(agreement_values[[5]], 6), " %"),
+    format_decimal(agreement_values[[6]], 6)
   )
 )
 
 knitr::kable(
   agreement_table,
   align = c("l", "r"),
-  caption = "Узгодженість Bybit і Binance у спільному періоді"
+  caption = paste(
+    "Технічна узгодженість",
+    config$primary$name,
+    "і",
+    config$reference$name,
+    "до моделювання"
+  )
 )
 ```
 
-Медіана показує типову різницю, а 95-й процентиль і максимум - більші
-відхилення. Висока кореляція означає схожий рух ринків, але не робить
-їхні ціни взаємозамінними.
+Висока кореляція дохідностей означає, що два незалежні джерела
+показують дуже схожий погодинний рух BTC. Вона не доводить
+правильність кожної ціни, не робить BTC/USDT та BTC/USD
+взаємозамінними й ще не є перевіркою майбутньої моделі.
 
-## Комісії та реальна робота на біржі
+## Як джерела та кеші контролюються
 
-Спочатку потрібні якісні ціни. Комісію, спред і прослизання буде додано
-під час перевірки торгового правила. До реальної торгівлі також треба
-перевірити, чи доступні послуги Bybit у країні користувача
-[@bybitRestrictedCountries]. Актуальні способи введення й виведення коштів
-треба перевірити в особистому кабінеті. Там само слід перевірити власну
-ставку комісії, оскільки вона залежить від регіону й рівня користувача
-[@bybitTradingFees].
+Перед кожним рендером `scripts/ensure_project_data.R` звіряє локальні
+RDS із `config.yml`. Мережевий запит виконується лише тоді, коли
+потрібного файла немає, він не читається, його походження не
+підтверджено або метадані не відповідають конфігурації.
+
+У таблиці показано короткі назви посилань замість довгих URL.
+
+```{r}
+#| label: tbl-data-provenance
+
+exchange_ids <- names(config$exchanges)
+exchange_names <- vapply(
+  config$exchanges,
+  `[[`,
+  character(1),
+  "name"
+)
+source_roles <- stats::setNames(
+  c(
+    "Початкове порівняння",
+    "Основні дані",
+    "Контроль"
+  ),
+  c(
+    config$candidate$id,
+    config$primary$id,
+    config$reference$id
+  )
+)
+source_links <- c(
+  binance = paste0(
+    "<a href=\"",
+    config$exchanges$binance$documentation_url,
+    "\">Public Data</a>"
+  ),
+  bybit = paste0(
+    "<a href=\"",
+    config$exchanges$bybit$documentation_url,
+    "\">Документація Kline API</a>"
+  ),
+  bitstamp = paste0(
+    "<a href=\"",
+    config$exchanges$bitstamp$documentation_url,
+    "\">Документація OHLC API</a>"
+  )
+)
+
+provenance_table <- source_provenance |>
+  dplyr::mutate(
+    `Ідентифікатор` = exchange_ids[
+      match(`Джерело`, exchange_names)
+    ],
+    `Роль` = unname(source_roles[`Ідентифікатор`]),
+    `Запит` = paste0(
+      `Пара`,
+      ", <code>",
+      `Символ API`,
+      "</code>, ",
+      `Інтервал`,
+      ", UTC"
+    ),
+    `Офіційне джерело` = unname(
+      source_links[`Ідентифікатор`]
+    ),
+    `Статус` = ifelse(
+      `Метадані відповідають config.yml`,
+      "Підтверджено",
+      "Помилка"
+    )
+  ) |>
+  dplyr::transmute(
+    `Роль`,
+    `Джерело`,
+    `Запит`,
+    `Офіційне джерело`,
+    `Статус`
+  )
+
+knitr::kable(
+  provenance_table,
+  escape = FALSE,
+  align = c("l", "l", "l", "l", "l"),
+  caption = "Роль і перевірені параметри кожного джерела"
+)
+```
+
+SHA-256 зв'язує метадані з точним вмістом кожного локального RDS.
+Значення зберігаються в `data-manifest.yml`.
+
+```{r}
+#| label: tbl-data-manifest
+
+manifest_table <- manifest_check |>
+  dplyr::transmute(
+    `Файл`,
+    `Існує`,
+    `Шлях збігається` = `Шлях відповідає маніфесту`,
+    `SHA-256 збігається` = `SHA-256 відповідає маніфесту`
+  )
+
+knitr::kable(
+  manifest_table,
+  align = c("l", "c", "c", "c"),
+  caption = "Перевірка локальних файлів за SHA-256"
+)
+```
+
+::: {.callout-note title="Перший рендер із чистого архіву"}
+У GitHub немає готових ринкових даних. Одна команда
+`quarto render` відновлює зафіксовані R-пакети, отримує Binance для
+початкового порівняння, отримує Bybit і Bitstamp, перевіряє джерела,
+готує дохідності з Bybit і будує книгу.
+
+Якщо локальні файли вже відповідають `config.yml`, повторний рендер
+виконує перевірки без нового завантаження.
+:::
+
+## Які дані використовуються далі
+
+::: {.callout-important title="Три джерела мають три різні ролі"}
+- `r config$candidate$market_label` використовується лише в цьому
+  розділі для відтворюваного порівняння повноти з Bybit.
+- `r config$primary$market_label` є єдиним джерелом підготовлених
+  даних, графіків, розробки моделі й коригування торгового правила.
+- `r config$reference$market_label` зберігається окремо для
+  технічного аудиту та майбутньої одноразової перевірки незмінених
+  моделі й правила.
+:::
+
+Останній календарний рік Bybit уже зарезервовано для фінального
+часового тесту. Bitstamp не використовується для вибору моделі,
+параметрів або торгового правила. Комісію, спред, ліквідність і
+прослизання буде враховано на етапі практичного тесту
+[@bybitRestrictedCountries; @bybitTradingFees].
 
 ## Висновок
 
-Основний набір Bybit має 43 716 послідовних годинних свічок BTC/USDT.
-Binance залишається контролем із 19 явно показаними пропусками. Дані
-різних бірж не змішуються.
+Спочатку перевірено Binance. Графік і таблиця показують його розриви
+на тому самому повному багаторічному проміжку, на якому перевірено
+Bybit. Оскільки Bybit має повний ряд, воно обране єдиним основним
+джерелом.
+
+Після цього Bitstamp введено як незалежний контроль. Зараз він
+додатково перевіряє часову й числову узгодженість даних. Пізніше на
+ньому один раз застосовуватимуть ту саму навчену на Bybit модель і те
+саме торгове правило без коригування. Дані трьох бірж не змішуються.

@@ -1,8 +1,8 @@
 # Shared chart system -----------------------------------------------------
 #
 # Every chart displayed in the HTML book must pass through
-# `render_book_plot()`.  This keeps dimensions, Plotly controls and the
-# light/dark appearance consistent across data and model chapters.
+# `render_book_plot()` or `render_book_widget()`. This keeps dimensions,
+# Plotly controls and the light/dark appearance consistent across chapters.
 
 plotly_quarto_theme_file <- file.path(
   "assets",
@@ -22,23 +22,32 @@ read_plotly_quarto_theme <- function(
   )
 }
 
-apply_quarto_plotly_theme <- function(widget) {
+apply_quarto_plotly_theme <- function(
+  widget,
+  height = NULL
+) {
   htmlwidgets::onRender(
     widget,
-    read_plotly_quarto_theme()
+    read_plotly_quarto_theme(),
+    data = list(height = height)
   )
 }
 
 apply_book_plotly_layout <- function(
   widget,
-  hovermode = "x unified"
+  hovermode = "x unified",
+  margin = list(l = 115, r = 30, t = 90, b = 70),
+  legend = list(orientation = "h", x = 0, y = 1.08),
+  showlegend = TRUE,
+  height = NULL
 ) {
   widget |>
     plotly::layout(
       autosize = TRUE,
       hovermode = hovermode,
-      margin = list(l = 115, r = 30, t = 90, b = 70),
-      legend = list(orientation = "h", x = 0, y = 1.08),
+      margin = margin,
+      legend = legend,
+      showlegend = showlegend,
       paper_bgcolor = "rgba(0, 0, 0, 0)",
       plot_bgcolor = "rgba(0, 0, 0, 0)"
     ) |>
@@ -46,20 +55,52 @@ apply_book_plotly_layout <- function(
       displaylogo = FALSE,
       responsive = TRUE
     ) |>
-    apply_quarto_plotly_theme()
+    apply_quarto_plotly_theme(height = height)
 }
 
 disable_plotly_gap_connection <- function(widget) {
-  widget$x$data <- lapply(
-    widget$x$data,
-    function(trace) {
-      if (!is.null(trace$mode) && grepl("lines", trace$mode, fixed = TRUE)) {
-        trace$connectgaps <- FALSE
-      }
-      trace
+  disable_trace_gaps <- function(trace) {
+    if (!is.null(trace$mode) && grepl("lines", trace$mode, fixed = TRUE)) {
+      trace$connectgaps <- FALSE
     }
-  )
+    trace
+  }
+
+  if (length(widget$x$data) > 0) {
+    widget$x$data <- lapply(widget$x$data, disable_trace_gaps)
+  }
+  if (length(widget$x$attrs) > 0) {
+    widget$x$attrs <- lapply(widget$x$attrs, disable_trace_gaps)
+  }
+
   widget
+}
+
+render_book_widget <- function(
+  widget,
+  hovermode = "x unified",
+  connect_gaps = FALSE,
+  margin = list(l = 115, r = 30, t = 90, b = 70),
+  legend = list(orientation = "h", x = 0, y = 1.08),
+  showlegend = TRUE,
+  height = NULL
+) {
+  if (!inherits(widget, "plotly")) {
+    stop("render_book_widget() очікує об'єкт plotly.")
+  }
+
+  if (!isTRUE(connect_gaps)) {
+    widget <- disable_plotly_gap_connection(widget)
+  }
+
+  apply_book_plotly_layout(
+    widget,
+    hovermode = hovermode,
+    margin = margin,
+    legend = legend,
+    showlegend = showlegend,
+    height = height
+  )
 }
 
 book_ggplot_theme <- function(base_size = 15) {
@@ -101,12 +142,9 @@ render_book_plot <- function(
     tooltip = tooltip
   )
 
-  if (!isTRUE(connect_gaps)) {
-    widget <- disable_plotly_gap_connection(widget)
-  }
-
-  apply_book_plotly_layout(
+  render_book_widget(
     widget,
-    hovermode = hovermode
+    hovermode = hovermode,
+    connect_gaps = connect_gaps
   )
 }
