@@ -1,150 +1,213 @@
 # Shared chart system -----------------------------------------------------
 #
-# Every chart displayed in the HTML book must pass through
-# `render_book_plot()` or `render_book_widget()`. This keeps dimensions,
-# Plotly controls and the light/dark appearance consistent across chapters.
+# The book uses one fixed chart theme for all interactive graphics. This makes
+# text readable in both light and dark Quarto themes and avoids white-on-white
+# or black-on-black combinations.
 
-plotly_quarto_theme_file <- file.path(
-  "assets",
-  "plotly-quarto-theme.js"
-)
+book_plot_palette <- function() {
+  c(
+    ar1 = "#3B82F6",
+    naive = "#F59E0B",
+    buy_hold = "#10B981",
+    cash = "#A855F7",
+    actual = "#F8FAFC",
+    positive = "#22C55E",
+    negative = "#F43F5E",
+    accent = "#38BDF8",
+    neutral = "#94A3B8",
+    grid = "#334155",
+    background = "rgba(0,0,0,0)",
+    panel = "rgba(0,0,0,0)",
+    text = "#F8FAFC"
+  )
+}
 
-read_plotly_quarto_theme <- function(
-  path = plotly_quarto_theme_file
-) {
-  if (!file.exists(path)) {
-    stop("Не знайдено файл теми Plotly: ", path)
+book_forecast_colours <- function() {
+  palette <- book_plot_palette()
+  c(
+    "AR(1)" = palette[["ar1"]],
+    "Наївний прогноз" = palette[["naive"]]
+  )
+}
+
+book_strategy_colours <- function() {
+  palette <- book_plot_palette()
+  c(
+    "AR(1): BTC або USDT" = palette[["ar1"]],
+    "Купи й тримай" = palette[["buy_hold"]],
+    "USDT без торгівлі" = palette[["cash"]]
+  )
+}
+
+book_plot_title <- function(text) {
+  list(
+    text = text,
+    x = 0,
+    xanchor = "left",
+    y = 0.985,
+    yanchor = "top",
+    pad = list(b = 14)
+  )
+}
+
+book_axis_style <- function(title = NULL) {
+  palette <- book_plot_palette()
+  list(
+    title = list(text = title, font = list(color = palette[["text"]], size = 15)),
+    color = palette[["text"]],
+    tickfont = list(color = palette[["text"]], size = 13),
+    gridcolor = palette[["grid"]],
+    zerolinecolor = palette[["neutral"]],
+    linecolor = palette[["neutral"]],
+    automargin = TRUE,
+    fixedrange = FALSE
+  )
+}
+
+book_time_range <- function(times, hours) {
+  times <- sort(as.POSIXct(times, tz = "UTC"))
+  if (length(times) == 0L) {
+    return(NULL)
   }
 
-  paste(
-    readLines(path, warn = FALSE, encoding = "UTF-8"),
-    collapse = "\n"
+  end_time <- utils::tail(times, 1L)
+  start_time <- max(
+    utils::head(times, 1L),
+    end_time - as.difftime(hours, units = "hours")
+  )
+
+  format(
+    c(start_time, end_time),
+    "%Y-%m-%d %H:%M:%S",
+    tz = "UTC"
   )
 }
 
-apply_quarto_plotly_theme <- function(
-  widget,
-  height = NULL
-) {
-  htmlwidgets::onRender(
-    widget,
-    read_plotly_quarto_theme(),
-    data = list(height = height)
+book_time_axis <- function(title = "Дата і час, UTC", range = NULL) {
+  axis <- book_axis_style(title)
+  axis$type <- "date"
+  if (!is.null(range)) {
+    axis$range <- range
+  }
+  axis$rangeslider <- list(
+    visible = TRUE,
+    thickness = 0.10,
+    bgcolor = "rgba(148,163,184,0.10)",
+    bordercolor = "rgba(148,163,184,0.45)",
+    borderwidth = 1
   )
+  axis$showspikes <- FALSE
+  axis
 }
 
-apply_book_plotly_layout <- function(
+render_book_widget <- function(
   widget,
-  hovermode = "x unified",
-  margin = list(l = 115, r = 30, t = 90, b = 70),
-  legend = list(orientation = "h", x = 0, y = 1.08),
+  hovermode = "closest",
+  height = 720,
+  margin = list(l = 90, r = 26, t = 108, b = 78),
+  legend = list(
+    orientation = "h",
+    x = 0,
+    y = 1.07,
+    xanchor = "left",
+    yanchor = "bottom",
+    bgcolor = "rgba(0,0,0,0)",
+    font = list(size = 13)
+  ),
   showlegend = TRUE,
-  height = NULL
+  auto_y_on_x = FALSE
 ) {
-  widget |>
+  if (!inherits(widget, "plotly")) {
+    stop("render_book_widget() очікує об'єкт plotly.")
+  }
+
+  palette <- book_plot_palette()
+
+  widget <- widget |>
     plotly::layout(
       autosize = TRUE,
       hovermode = hovermode,
       margin = margin,
       legend = legend,
       showlegend = showlegend,
-      paper_bgcolor = "rgba(0, 0, 0, 0)",
-      plot_bgcolor = "rgba(0, 0, 0, 0)"
+      paper_bgcolor = "rgba(0,0,0,0)",
+      plot_bgcolor = "rgba(0,0,0,0)",
+      font = list(
+        color = palette[["text"]],
+        family = "system-ui, sans-serif",
+        size = 15
+      ),
+      hoverlabel = list(
+        bgcolor = "rgba(11,18,32,0.98)",
+        bordercolor = palette[["neutral"]],
+        font = list(color = palette[["text"]])
+      ),
+      meta = list(
+        book_chart = TRUE,
+        auto_y_on_x = isTRUE(auto_y_on_x)
+      ),
+      dragmode = "zoom"
     ) |>
     plotly::config(
       displaylogo = FALSE,
-      responsive = TRUE
-    ) |>
-    apply_quarto_plotly_theme(height = height)
-}
+      responsive = TRUE,
+      scrollZoom = FALSE,
+      doubleClick = "reset",
+      modeBarButtonsToRemove = c(
+        "lasso2d",
+        "select2d",
+        "autoScale2d",
+        "toggleSpikelines"
+      )
+    )
 
-disable_plotly_gap_connection <- function(widget) {
-  disable_trace_gaps <- function(trace) {
-    if (!is.null(trace$mode) && grepl("lines", trace$mode, fixed = TRUE)) {
-      trace$connectgaps <- FALSE
-    }
-    trace
-  }
-
-  if (length(widget$x$data) > 0) {
-    widget$x$data <- lapply(widget$x$data, disable_trace_gaps)
-  }
-  if (length(widget$x$attrs) > 0) {
-    widget$x$attrs <- lapply(widget$x$attrs, disable_trace_gaps)
-  }
+  widget$height <- height
+  widget$sizingPolicy <- htmlwidgets::sizingPolicy(
+    defaultHeight = height,
+    browser.fill = FALSE,
+    viewer.fill = FALSE,
+    padding = 0
+  )
 
   widget
 }
 
-render_book_widget <- function(
-  widget,
-  hovermode = "x unified",
-  connect_gaps = FALSE,
-  margin = list(l = 115, r = 30, t = 90, b = 70),
-  legend = list(orientation = "h", x = 0, y = 1.08),
-  showlegend = TRUE,
-  height = NULL
-) {
-  if (!inherits(widget, "plotly")) {
-    stop("render_book_widget() очікує об'єкт plotly.")
-  }
-
-  if (!isTRUE(connect_gaps)) {
-    widget <- disable_plotly_gap_connection(widget)
-  }
-
-  apply_book_plotly_layout(
-    widget,
-    hovermode = hovermode,
-    margin = margin,
-    legend = legend,
-    showlegend = showlegend,
-    height = height
-  )
-}
-
 book_ggplot_theme <- function(base_size = 15) {
+  palette <- book_plot_palette()
+
   ggplot2::theme_minimal(base_size = base_size) +
     ggplot2::theme(
-      plot.title = ggplot2::element_text(face = "bold"),
+      text = ggplot2::element_text(colour = palette[["text"]]),
+      axis.text = ggplot2::element_text(colour = palette[["text"]]),
+      axis.title = ggplot2::element_text(colour = palette[["text"]]),
+      plot.title = ggplot2::element_text(colour = palette[["text"]], face = "bold"),
+      plot.subtitle = ggplot2::element_text(colour = palette[["neutral"]]),
+      plot.caption = ggplot2::element_text(colour = palette[["neutral"]]),
+      legend.text = ggplot2::element_text(colour = palette[["text"]]),
+      legend.title = ggplot2::element_text(colour = palette[["text"]]),
+      panel.grid.major = ggplot2::element_line(colour = palette[["grid"]], linewidth = 0.35),
       panel.grid.minor = ggplot2::element_blank(),
-      plot.background = ggplot2::element_rect(
-        fill = "transparent",
-        colour = NA
-      ),
-      panel.background = ggplot2::element_rect(
-        fill = "transparent",
-        colour = NA
-      ),
-      legend.background = ggplot2::element_rect(
-        fill = "transparent",
-        colour = NA
-      ),
-      legend.key = ggplot2::element_rect(
-        fill = "transparent",
-        colour = NA
-      )
+      plot.background = ggplot2::element_rect(fill = palette[["background"]], colour = palette[["background"]]),
+      panel.background = ggplot2::element_rect(fill = palette[["panel"]], colour = palette[["panel"]]),
+      legend.background = ggplot2::element_rect(fill = palette[["background"]], colour = NA),
+      legend.key = ggplot2::element_rect(fill = palette[["background"]], colour = NA),
+      plot.margin = ggplot2::margin(16, 18, 14, 16)
     )
 }
 
 render_book_plot <- function(
   chart,
   tooltip = "all",
-  hovermode = "x unified",
-  connect_gaps = FALSE
+  hovermode = "closest",
+  height = 720
 ) {
   if (!inherits(chart, "ggplot")) {
     stop("render_book_plot() очікує об'єкт ggplot.")
   }
 
-  widget <- plotly::ggplotly(
-    chart,
-    tooltip = tooltip
-  )
-
-  render_book_widget(
-    widget,
-    hovermode = hovermode,
-    connect_gaps = connect_gaps
-  )
+  plotly::ggplotly(chart, tooltip = tooltip) |>
+    render_book_widget(
+      hovermode = hovermode,
+      height = height
+    )
 }

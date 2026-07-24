@@ -1,0 +1,260 @@
+# Найпростіший прогноз без статистичної моделі
+
+Почнемо з питання, яке не потребує жодної моделі:
+
+::: {.callout-important appearance="simple" title="Перше питання"}
+**Що прогнозувати на наступну годину, якщо ми ще не знайшли жодної
+надійної закономірності?**
+:::
+
+Відповідь потрібна не для того, щоб одразу торгувати. Вона створює
+простий орієнтир, з яким надалі порівнюватимуться всі статистичні
+моделі.
+
+```{r}
+#| label: setup-naive
+
+sys.source(
+  "R/book_setup.R",
+  envir = knitr::knit_global()
+)
+
+load_book_environment(
+  packages = c(
+    "dplyr",
+    "knitr",
+    "plotly",
+    "scales",
+    "tibble",
+    "yaml"
+  ),
+  modules = c(
+    "R/project_config.R",
+    "R/project_io.R",
+    "R/data_provenance.R",
+    "R/hourly_ohlc_quality.R",
+    "R/book_charts.R",
+    "R/naive_baseline.R",
+    "R/naive_baseline_charts.R"
+  ),
+  envir = knitr::knit_global()
+)
+
+config <- read_project_config()
+manifest_check <- validate_data_manifest(config)
+
+btc_1h <- read_rds_required(
+  config$paths$prepared,
+  "підготовлений набір ціни й дохідностей"
+)
+
+primary_raw_sha256 <- sha256_file(
+  config$paths$cache[[config$primary$id]]
+)
+if (!identical(attr(btc_1h, "raw_sha256"), primary_raw_sha256)) {
+  stop(
+    paste(
+      "Підготовлений набір створено не з поточного основного кешу.",
+      "Виконайте Rscript scripts/prepare_price_returns.R."
+    )
+  )
+}
+
+btc_1h <- require_complete_hourly_ohlc(
+  data = btc_1h,
+  start_time = config$study$data_start,
+  end_time = config$study$data_end_exclusive,
+  source_label = "Підготовлений набір"
+)$data
+
+naive_experiment <- run_naive_baseline_experiment(
+  hourly_data = btc_1h,
+  config = config
+)
+naive_forecasts <- naive_experiment$forecasts
+naive_metrics <- naive_experiment$forecast_metrics
+naive_chart_data <- prepare_naive_chart_data(naive_forecasts)
+
+time_split_chart_data <- data.frame(
+  part = factor(
+    c("Навчання", "Перевірка", "Закритий тест"),
+    levels = rev(c("Навчання", "Перевірка", "Закритий тест"))
+  ),
+  start = c(
+    config$study$data_start,
+    naive_experiment$validation$start,
+    naive_experiment$sealed_test$start
+  ),
+  end = c(
+    naive_experiment$validation$start,
+    naive_experiment$validation$end_exclusive,
+    naive_experiment$sealed_test$end_exclusive
+  )
+)
+
+format_number <- function(value, digits = 2L) {
+  formatC(value, format = "f", digits = digits, big.mark = " ")
+}
+
+options(scipen = 999, digits = 7)
+```
+
+## Наївний прогноз
+
+Найпростіше правило називається **наївним прогнозом**
+(*naive forecast*) або **прогнозом збереження поточного рівня**
+(*persistence forecast*):
+
+$$
+\widehat P_{t+1}=P_t.
+$$
+
+Для логарифмічної дохідності це те саме, що
+
+$$
+\widehat r_{t+1}=0.
+$$
+
+Простими словами: прогноз на наступну годину дорівнює ціні, яку ми
+бачимо зараз. Правило не навчається, не має коефіцієнтів і ніколи не
+змінюється.
+
+Для моделі випадкового блукання поточна ціна є стандартним точковим
+прогнозом майбутньої ціни
+[@tsay2010, розд. 2.7.1, с. 72-73].
+
+::: {.callout-note title="Чого цей прогноз не стверджує"}
+Наївний прогноз не стверджує, що ціна справді залишиться незмінною.
+Він лише відповідає на питання: що прогнозувати, коли складнішого
+обґрунтованого правила ще немає?
+:::
+
+## Чому інтервал дорівнює одній годині
+
+Вихідні дані складаються з годинних свічок `1h`. Тому один модельний
+період у цьому проєкті також дорівнює одній годині:
+
+- у момент завершення години відома поточна ціна;
+- прогноз робиться на наступну годину;
+- статистична модель у наступному розділі також використовує годинні
+  дохідності;
+- порівняння відбувається на тих самих моментах часу.
+
+Агрегування до днів тут не виконується. Воно змінило б початкове
+питання і втратило б частину годинної інформації.
+
+## Як відокремлено розробку від фінального тесту
+
+```{r}
+#| label: fig-naive-time-split
+#| fig-cap: "Часовий поділ даних для годинного прогнозування"
+
+plot_model_time_split(time_split_chart_data)
+```
+
+Наукові назви частин:
+
+- **training sample**, або навчальна вибірка: ранні дані, доступні для
+  побудови моделей;
+- **validation**, або внутрішня перевірка: період для порівняння ідей;
+- **sealed test**, або закритий тест: останній рік, який поки не
+  використовується.
+
+У validation є
+`r format(naive_experiment$validation$hours, big.mark = " ")`
+послідовних годинних прогнозів. Рядки не перемішуються, тому майбутнє
+не потрапляє в минуле.
+
+## Як виглядає прогноз
+
+```{r}
+#| label: fig-naive-price-forecast
+#| fig-cap: "Фактична ціна і наївний прогноз на наступну годину"
+
+plot_naive_price_forecast(naive_chart_data)
+```
+
+Спочатку показано весь період validation. Повзунок під графіком
+дозволяє вибрати коротший проміжок. Після зміни проміжку вісь ціни
+перебудовується під видимі значення. Подвійне клацання повертає весь
+період.
+
+Дві лінії часто майже збігаються, бо за одну годину ціна зазвичай
+змінюється значно менше, ніж її загальний рівень. Для оцінювання
+якості тому потрібен не лише графік ціни, а й окремий графік похибки.
+
+## Де прогноз помиляється найбільше
+
+```{r}
+#| label: fig-naive-absolute-error
+#| fig-cap: "Абсолютна похибка наївного прогнозу в кожну годину"
+
+plot_naive_absolute_error(naive_chart_data)
+```
+
+**Абсолютна похибка** означає відстань між прогнозованою і фактичною
+ціною без урахування знака. Значення 500 USDT означає промах на 500
+USDT незалежно від того, прогноз був завеликим чи замалим.
+
+Великі піки показують години різкого руху. Саме такі години сильніше
+впливають на RMSE.
+
+## Як розподіляються годинні зміни
+
+```{r}
+#| label: fig-naive-return-distribution
+#| fig-cap: "Розподіл фактичних годинних логарифмічних дохідностей"
+
+plot_naive_return_distribution(naive_chart_data)
+```
+
+**Гістограма** групує схожі значення у стовпчики. Високий стовпчик
+біля нуля означає, що багато годин мали невелику зміну. Далекі
+стовпчики показують рідкісні, але великі рухи.
+
+## Два числа для майбутніх порівнянь
+
+```{r}
+#| label: tbl-naive-metrics
+
+naive_metric_table <- tibble::tibble(
+  `Показник` = c(
+    "MAE ціни",
+    "RMSE ціни",
+    "MAE лог-дохідності",
+    "RMSE лог-дохідності"
+  ),
+  `Значення` = c(
+    paste0(format_number(naive_metrics$price_mae, 2), " USDT"),
+    paste0(format_number(naive_metrics$price_rmse, 2), " USDT"),
+    paste0(format_number(100 * naive_metrics$return_mae, 4), " в.п."),
+    paste0(format_number(100 * naive_metrics$return_rmse, 4), " в.п.")
+  )
+)
+
+knitr::kable(
+  naive_metric_table,
+  align = c("l", "r"),
+  caption = "Точні значення якості наївного прогнозу"
+)
+```
+
+**MAE**, або середня абсолютна похибка, показує типовий розмір
+промаху.
+
+**RMSE**, або корінь із середньої квадратичної похибки, сильніше
+збільшується через великі промахи. Тому RMSE зазвичай більша за MAE.
+
+Ці числа самі по собі не доводять, що прогноз добрий чи поганий.
+Вони стають корисними як **benchmark**, тобто контрольний орієнтир:
+кожна наступна модель повинна показати меншу похибку на тих самих
+годинах.
+
+## Межа цього розділу
+
+Наївний прогноз не є статистичною моделлю і не створює нового
+торгового правила. Він лише фіксує мінімальний рівень, який складніша
+модель повинна перевершити.
+
+У наступному розділі виникає нове питання: чи містить дохідність
+попередньої години інформацію про наступну?

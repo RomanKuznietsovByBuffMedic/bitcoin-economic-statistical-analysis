@@ -1,0 +1,203 @@
+<script>
+(function () {
+  "use strict";
+
+  function isDarkTheme() {
+    return document.body.classList.contains("quarto-dark") ||
+      document.documentElement.getAttribute("data-bs-theme") === "dark";
+  }
+
+  function themeColours() {
+    const dark = isDarkTheme();
+    const bodyStyle = window.getComputedStyle(document.body);
+    const pageBackground = bodyStyle.backgroundColor ||
+      (dark ? "#212121" : "#FFFFFF");
+    const pageText = bodyStyle.color ||
+      (dark ? "#F3F4F6" : "#111827");
+
+    return dark
+      ? {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: "#465266",
+          axis: "#CBD5E1",
+          slider: "rgba(148,163,184,0.14)",
+          sliderBorder: "rgba(203,213,225,0.45)",
+          hover: "rgba(17,24,39,0.98)"
+        }
+      : {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: "#D1D5DB",
+          axis: "#4B5563",
+          slider: "rgba(107,114,128,0.10)",
+          sliderBorder: "rgba(75,85,99,0.35)",
+          hover: "rgba(255,255,255,0.98)"
+        };
+  }
+
+  function visibleNumericYRange(plot, xMin, xMax) {
+    let yMin = Infinity;
+    let yMax = -Infinity;
+
+    (plot.data || []).forEach(function (trace) {
+      if (!trace || trace.visible === "legendonly") return;
+      if (!trace.x || !trace.y) return;
+      const traceType = trace.type || "scatter";
+      if (traceType.indexOf("scatter") !== 0) return;
+
+      const n = Math.min(trace.x.length || 0, trace.y.length || 0);
+      for (let i = 0; i < n; i += 1) {
+        const xVal = new Date(trace.x[i]).getTime();
+        const yVal = Number(trace.y[i]);
+        if (!Number.isFinite(xVal) || !Number.isFinite(yVal)) continue;
+        if (xVal >= xMin && xVal <= xMax) {
+          if (yVal < yMin) yMin = yVal;
+          if (yVal > yMax) yMax = yVal;
+        }
+      }
+    });
+
+    if (!Number.isFinite(yMin) || !Number.isFinite(yMax)) return null;
+
+    if (yMin === yMax) {
+      const pad = Math.abs(yMin) > 0 ? Math.abs(yMin) * 0.08 : 1;
+      return [yMin - pad, yMax + pad];
+    }
+
+    const pad = (yMax - yMin) * 0.10;
+    return [yMin - pad, yMax + pad];
+  }
+
+  function themeUpdate(plot) {
+    const colours = themeColours();
+    const update = {
+      paper_bgcolor: colours.page,
+      plot_bgcolor: colours.plot,
+      "font.color": colours.text,
+      "title.font.color": colours.text,
+      "legend.font.color": colours.text,
+      "hoverlabel.bgcolor": colours.hover,
+      "hoverlabel.font.color": colours.text,
+      "hoverlabel.bordercolor": colours.axis
+    };
+
+    Object.keys(plot.layout || {}).forEach(function (key) {
+      if (!/^xaxis\d*$/.test(key) && !/^yaxis\d*$/.test(key)) return;
+      update[key + ".color"] = colours.text;
+      update[key + ".tickfont.color"] = colours.text;
+      update[key + ".title.font.color"] = colours.text;
+      update[key + ".gridcolor"] = colours.grid;
+      update[key + ".linecolor"] = colours.axis;
+      update[key + ".zerolinecolor"] = colours.axis;
+
+      if (/^xaxis\d*$/.test(key) && plot.layout[key].rangeslider) {
+        update[key + ".rangeslider.bgcolor"] = colours.slider;
+        update[key + ".rangeslider.bordercolor"] = colours.sliderBorder;
+      }
+    });
+
+    (plot.layout.annotations || []).forEach(function (_, index) {
+      update["annotations[" + index + "].font.color"] = colours.text;
+    });
+
+    Plotly.relayout(plot, update);
+
+    (plot.data || []).forEach(function (trace, index) {
+      if (!trace || (!trace.colorbar && trace.type !== "histogram2d")) return;
+      Plotly.restyle(
+        plot,
+        {
+          "colorbar.tickfont.color": colours.text,
+          "colorbar.title.font.color": colours.text
+        },
+        [index]
+      );
+    });
+  }
+
+  function resizePlot(plot) {
+    if (!window.Plotly || !plot) return;
+    const container = plot.parentElement || plot;
+    const width = Math.max(320, container.clientWidth || plot.clientWidth || 720);
+    const height = Math.min(980, Math.max(640, Math.round(width * 1.08)));
+    plot.style.height = height + "px";
+    Plotly.relayout(plot, { height: height, autosize: true });
+  }
+
+  function bindAutoY(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    if (plot.__bookAutoYBound) return;
+    if (!(plot.layout.meta && plot.layout.meta.auto_y_on_x === true)) return;
+
+    plot.__bookAutoYBound = true;
+    let updating = false;
+
+    plot.on("plotly_relayout", function (eventData) {
+      if (updating) return;
+      const keys = Object.keys(eventData || {});
+      const xChanged = keys.some(function (key) {
+        return key.indexOf("xaxis.range") === 0 || key === "xaxis.autorange";
+      });
+      if (!xChanged) return;
+
+      if (eventData["xaxis.autorange"] === true) {
+        updating = true;
+        Plotly.relayout(plot, { "yaxis.autorange": true })
+          .finally(function () { updating = false; });
+        return;
+      }
+
+      const xRange = plot.layout.xaxis && plot.layout.xaxis.range;
+      if (!Array.isArray(xRange) || xRange.length !== 2) return;
+
+      const xMin = new Date(xRange[0]).getTime();
+      const xMax = new Date(xRange[1]).getTime();
+      if (!Number.isFinite(xMin) || !Number.isFinite(xMax)) return;
+
+      const yRange = visibleNumericYRange(plot, xMin, xMax);
+      if (!yRange) return;
+
+      updating = true;
+      Plotly.relayout(plot, { "yaxis.range": yRange })
+        .finally(function () { updating = false; });
+    });
+  }
+
+  function preparePlot(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    themeUpdate(plot);
+    resizePlot(plot);
+    bindAutoY(plot);
+  }
+
+  function prepareAllPlots() {
+    document.querySelectorAll(".js-plotly-plot").forEach(preparePlot);
+  }
+
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      document.querySelectorAll(".js-plotly-plot").forEach(resizePlot);
+    }, 160);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    [80, 300, 900].forEach(function (delay) {
+      window.setTimeout(prepareAllPlots, delay);
+    });
+  });
+
+  document.addEventListener("quarto:themeChanged", function () {
+    window.setTimeout(prepareAllPlots, 40);
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".quarto-color-scheme-toggle")) return;
+    window.setTimeout(prepareAllPlots, 120);
+  });
+})();
+</script>

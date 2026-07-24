@@ -12,9 +12,7 @@ load_book_environment(
   packages = c(
     "dplyr",
     "ggplot2",
-    "htmlwidgets",
     "knitr",
-    "plotly",
     "scales",
     "tibble",
     "yaml"
@@ -227,7 +225,7 @@ knitr::kable(
 
 ```{r}
 #| label: fig-binance-gap-timeline
-#| fig-cap: "Розриви Binance на повному спільному проміжку; наведення показує точні межі та кількість пропущених годин"
+#| fig-cap: "Розриви Binance на повному спільному проміжку"
 
 gap_plot_data <- candidate_quality$gaps |>
   dplyr::mutate(
@@ -259,8 +257,7 @@ if (nrow(gap_plot_data) > 0L) {
     gap_plot_data,
     ggplot2::aes(
       x = gap_time,
-      y = missing_hours,
-      text = hover_text
+      y = missing_hours
     )
   ) +
     ggplot2::geom_hline(
@@ -292,30 +289,30 @@ if (nrow(gap_plot_data) > 0L) {
     ) +
     book_ggplot_theme(base_size = 15)
 
-  gap_widget <- render_book_plot(
-    gap_chart,
-    tooltip = "text",
-    hovermode = "closest",
-    connect_gaps = FALSE
-  )
+  gap_chart <- render_book_plot(gap_chart)
 } else {
-  gap_widget <- plotly::plot_ly(
-    type = "scatter",
-    mode = "markers"
-  ) |>
-    plotly::layout(
-      title = "Розривів Binance у вибраному періоді немає",
-      xaxis = list(visible = FALSE),
-      yaxis = list(visible = FALSE)
-    ) |>
-    render_book_widget(
-      hovermode = "closest",
-      showlegend = FALSE,
-      height = 480
+  palette <- book_plot_palette()
+  gap_chart <- ggplot2::ggplot() +
+    ggplot2::annotate(
+      "text",
+      x = 0,
+      y = 0,
+      label = "Розривів Binance у вибраному періоді немає",
+      colour = palette[["positive"]],
+      size = 5
+    ) +
+    ggplot2::xlim(-1, 1) +
+    ggplot2::ylim(-1, 1) +
+    ggplot2::theme_void() +
+    ggplot2::theme(
+      plot.background = ggplot2::element_rect(
+        fill = palette[["background"]],
+        colour = NA
+      )
     )
 }
 
-gap_widget
+gap_chart
 ```
 
 ```{r}

@@ -368,7 +368,6 @@ read_project_config <- function(path = "config.yml") {
         "evaluation",
         "model",
         "trading",
-        "visualization",
         "exchanges",
         "runtime"
       ) %in%
@@ -379,8 +378,8 @@ read_project_config <- function(path = "config.yml") {
       paste(
         "config.yml повинен містити розділи",
         paste(
-          "study, evaluation, visualization,",
-          "model, trading, exchanges і runtime."
+          "study, evaluation, model, trading,",
+          "exchanges і runtime."
         )
       )
     )
@@ -497,24 +496,6 @@ read_project_config <- function(path = "config.yml") {
     "runtime.auto_download_data"
   )
 
-  price_amount_btc <- require_finite_number(
-    raw_config$visualization$price_amount_btc,
-    "visualization.price_amount_btc",
-    minimum = 1e-8,
-    maximum = 1
-  )
-  price_amount_satoshis <- price_amount_btc * 1e8
-  if (
-    abs(price_amount_satoshis - round(price_amount_satoshis)) >
-      1e-6
-  ) {
-    stop(
-      paste(
-        "visualization.price_amount_btc має містити",
-        "цілу кількість сатоші."
-      )
-    )
-  }
 
   test_years <- require_integer(
     raw_config$evaluation$test_years,
@@ -612,10 +593,13 @@ read_project_config <- function(path = "config.yml") {
     raw_config$model$target_interval,
     "model.target_interval"
   ))
-  if (!identical(target_interval, "1d")) {
+  if (!identical(target_interval, "1h")) {
     stop(
-      "Поточний пілот підтримує лише model.target_interval = 1d."
+      "Поточний пілот підтримує лише model.target_interval = 1h."
     )
+  }
+  if (!identical(target_interval, interval)) {
+    stop("Інтервал моделі має збігатися з базовим інтервалом даних.")
   }
 
   starting_capital_quote <- require_finite_number(
@@ -677,12 +661,6 @@ read_project_config <- function(path = "config.yml") {
       fee_rate = fee_rate,
       slippage_rate = slippage_rate,
       total_cost_rate = fee_rate + slippage_rate
-    ),
-    visualization = list(
-      price_amount_btc = price_amount_btc,
-      price_amount_satoshis = as.integer(
-        round(price_amount_satoshis)
-      )
     ),
     exchanges = exchanges,
     candidate = exchanges[[candidate_id]],

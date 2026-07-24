@@ -1,0 +1,405 @@
+# Чи допомагає попередня година: AR(1)
+
+Попередній розділ зафіксував наївний прогноз:
+
+$$
+\widehat P_{t+1}=P_t,
+\qquad
+\widehat r_{t+1}=0.
+$$
+
+Тепер виникає наступне питання.
+
+::: {.callout-important appearance="simple" title="Нове питання"}
+**Чи пов'язана дохідність наступної години з дохідністю попередньої
+години?**
+:::
+
+Найпростіша статистична модель для такого питання має назву
+**авторегресійна модель першого порядку**, або **AR(1)**.
+
+```{r}
+#| label: setup-ar1
+
+sys.source(
+  "R/book_setup.R",
+  envir = knitr::knit_global()
+)
+
+load_book_environment(
+  packages = c(
+    "dplyr",
+    "knitr",
+    "plotly",
+    "scales",
+    "tibble",
+    "yaml"
+  ),
+  modules = c(
+    "R/project_config.R",
+    "R/project_io.R",
+    "R/data_provenance.R",
+    "R/hourly_ohlc_quality.R",
+    "R/book_charts.R",
+    "R/naive_baseline.R",
+    "R/ar1_baseline.R",
+    "R/ar1_baseline_charts.R"
+  ),
+  envir = knitr::knit_global()
+)
+
+config <- read_project_config()
+manifest_check <- validate_data_manifest(config)
+
+btc_1h <- read_rds_required(
+  config$paths$prepared,
+  "підготовлений набір ціни й дохідностей"
+)
+
+primary_raw_sha256 <- sha256_file(
+  config$paths$cache[[config$primary$id]]
+)
+if (!identical(attr(btc_1h, "raw_sha256"), primary_raw_sha256)) {
+  stop(
+    paste(
+      "Підготовлений набір створено не з поточного основного кешу.",
+      "Виконайте Rscript scripts/prepare_price_returns.R."
+    )
+  )
+}
+
+btc_1h <- require_complete_hourly_ohlc(
+  data = btc_1h,
+  start_time = config$study$data_start,
+  end_time = config$study$data_end_exclusive,
+  source_label = "Підготовлений набір"
+)$data
+
+experiment <- run_ar1_development_experiment(
+  hourly_data = btc_1h,
+  config = config
+)
+forecasts <- experiment$forecasts
+refits <- experiment$refits
+forecast_metrics <- experiment$forecast_metrics
+strategy_summary <- experiment$strategies$summary
+
+ar1_chart_data <- prepare_ar1_chart_data(
+  forecasts = forecasts,
+  refits = refits,
+  forecast_metrics = forecast_metrics,
+  strategy_paths = experiment$strategies$paths,
+  signal_threshold = config$trading$signal_threshold_log_return,
+  rolling_window = 168L,
+  acf_max_lag = 48L
+)
+
+phi_significant_refits <- sum(
+  ar1_chart_data$refits$phi_ci_excludes_zero
+)
+forecast_correlation <- stats::cor(
+  ar1_chart_data$forecast_density$forecast,
+  ar1_chart_data$forecast_density$actual
+)
+final_loss_advantage <- utils::tail(
+  ar1_chart_data$loss_advantage$cumulative_mean_advantage_pp_squared,
+  1L
+)
+acf_significant_lags <- sum(
+  abs(ar1_chart_data$forecast_error_acf$autocorrelation) >
+    ar1_chart_data$forecast_error_acf$upper_bound
+)
+
+format_percent <- function(value, digits = 2L) {
+  paste0(formatC(100 * value, format = "f", digits = digits), "%")
+}
+
+format_number <- function(value, digits = 2L) {
+  formatC(value, format = "f", digits = digits, big.mark = " ")
+}
+
+options(scipen = 999, digits = 7)
+```
+
+## Що означає AR(1)
+
+Модель записується так:
+
+$$
+r_t=\phi_0+\phi_1r_{t-1}+\varepsilon_t.
+$$
+
+Тут:
+
+- $r_t$ - логарифмічна дохідність поточної години;
+- $r_{t-1}$ - дохідність попередньої години;
+- $\phi_0$ - середній зсув;
+- $\phi_1$ - сила зв'язку з попередньою годиною;
+- $\varepsilon_t$ - частина руху, яку модель не пояснила.
+
+Число 1 у назві означає, що використовується лише один попередній
+період [@tsay2010, розд. 2.4, с. 37-57]. У цьому проєкті один період
+дорівнює одній годині.
+
+Сенс $\phi_1$:
+
+- близько до 0: попередня година майже не допомагає;
+- більше 0: рух частіше продовжується;
+- менше 0: рух частіше частково повертається назад.
+
+Прогноз на наступну годину:
+
+$$
+\widehat r_t=\widehat\phi_0+\widehat\phi_1r_{t-1}.
+$$
+
+## Як модель перевіряється
+
+Використовується **walk-forward validation**, або послідовна
+перевірка в часі:
+
+1. модель оцінюється лише на минулих годинах;
+2. робиться прогноз на одну наступну годину;
+3. прогноз порівнюється з фактом;
+4. навчальне вікно поступово розширюється;
+5. коефіцієнти переоцінюються щомісяця;
+6. фінальний тестовий рік залишається закритим.
+
+Такий порядок не дозволяє моделі використати майбутні дані
+[@lopezDePrado2018, розд. 7.2-7.4, с. 103-105].
+
+У validation отримано
+`r format(experiment$validation$hours, big.mark = " ")` годинних
+прогнозів і `r nrow(refits)` переоцінювань моделі.
+
+## Чи стабільний коефіцієнт попередньої години
+
+```{r}
+#| label: fig-ar1-phi-stability
+#| fig-cap: "Оцінка коефіцієнта phi1 та 95% довірчі інтервали"
+
+plot_ar1_phi_stability(ar1_chart_data$refits)
+```
+
+Вертикальна лінія біля кожної точки є **95% довірчим інтервалом**.
+Він показує діапазон значень, сумісних із даними та припущеннями
+лінійної моделі.
+
+Якщо інтервал перетинає нуль, дані не дають переконливо відокремити
+ефект від нульового зв'язку. Нуль не перетинають
+`r phi_significant_refits` із `r nrow(refits)` інтервалів.
+
+Це важливіше за окреме красиве значення коефіцієнта. Стабільна
+закономірність мала б повторюватися в різних переоцінюваннях.
+
+## Чи прогноз пов'язаний із фактичним рухом
+
+```{r}
+#| label: fig-ar1-forecast-density
+#| fig-cap: "Двовимірна гістограма прогнозованої та фактичної годинної дохідності"
+
+plot_ar1_forecast_density(ar1_chart_data$forecast_density)
+```
+
+Звичайна діаграма розсіювання тут була б майже суцільною вертикальною
+смугою, бо тисячі точок накладаються одна на одну. Тому використано
+**двовимірну гістограму** (*2D histogram*):
+
+- кожна клітинка містить групу близьких прогнозів і фактів;
+- світліша клітинка означає більше годин;
+- зелена діагональ показує ідеальний прогноз $y=x$;
+- масштабування і наведення залишаються інтерактивними.
+
+Кореляція між прогнозом і фактом дорівнює
+`r format_number(forecast_correlation, 4)`. Значення, близьке до нуля,
+означає слабкий лінійний зв'язок.
+
+## Чи AR(1) краща за наївний прогноз
+
+```{r}
+#| label: fig-ar1-metric-improvement
+#| fig-cap: "Відносна зміна похибок AR(1) порівняно з наївним прогнозом"
+
+plot_ar1_metric_improvement(ar1_chart_data$metric_improvement)
+```
+
+Графік поділено за типом похибки:
+
+- ліворуч показано **MAE**;
+- праворуч показано **RMSE**;
+- зелена смуга стосується прогнозу дохідності;
+- синя смуга стосується прогнозу ціни.
+
+Так MAE порівнюється з MAE, а RMSE з RMSE. Значення вище нуля означає,
+що AR(1) має меншу похибку за наївний прогноз. Значення нижче нуля
+означає перевагу наївного прогнозу. Значення біля нуля показує, що
+практична різниця дуже мала.
+
+**MAE** означає середню абсолютну похибку. **RMSE** означає корінь із
+середньої квадратичної похибки і сильніше реагує на великі промахи.
+
+```{r}
+#| label: tbl-ar1-exact-metrics
+
+metric_table <- forecast_metrics |>
+  dplyr::transmute(
+    `Метод` = method,
+    `MAE лог-дохідності, в.п.` = 100 * return_mae,
+    `RMSE лог-дохідності, в.п.` = 100 * return_rmse,
+    `MAE ціни, USDT` = price_mae,
+    `RMSE ціни, USDT` = price_rmse,
+    `Точність напрямку` = directional_accuracy
+  )
+
+knitr::kable(
+  metric_table,
+  digits = 4,
+  align = c("l", "r", "r", "r", "r", "r"),
+  caption = "Точні значення прогнозних метрик"
+)
+```
+
+Таблиця залишена лише для точних чисел. Основний висновок має бути
+видимим на графіках.
+
+## Чи перевага стабільна в часі
+
+```{r}
+#| label: fig-ar1-rolling-rmse-difference
+#| fig-cap: "Ковзна різниця RMSE між AR(1) і наївним прогнозом"
+
+plot_ar1_rolling_rmse_difference(
+  ar1_chart_data$rolling_rmse,
+  rolling_window = ar1_chart_data$rolling_window
+)
+```
+
+Кожна точка використовує останні 168 годин, тобто сім діб.
+Показано одну різницю, а не дві майже накладені лінії:
+
+$$
+\mathrm{RMSE}_{AR(1)}-\mathrm{RMSE}_{naive}.
+$$
+
+- нижче нуля: AR(1) краща;
+- вище нуля: наївний прогноз кращий;
+- часті переходи через нуль: перевага нестабільна.
+
+## Чи перевага накопичується
+
+```{r}
+#| label: fig-ar1-loss-advantage
+#| fig-cap: "Накопичена різниця квадратичних похибок"
+
+plot_ar1_loss_advantage(ar1_chart_data$loss_advantage)
+```
+
+Цей графік підсумовує різницю між квадратами похибок двох методів.
+Додатне значення означає перевагу AR(1), від'ємне - перевагу
+benchmark.
+
+Кінцеве середнє значення дорівнює
+`r format_number(final_loss_advantage, 6)` квадратних відсоткових
+пунктів. Важлива не лише кінцева точка, а форма лінії. Стабільне
+зростання було б сильнішим доказом, ніж один короткий вдалий період.
+
+## Чи в похибках залишилася структура
+
+```{r}
+#| label: fig-ar1-error-acf
+#| fig-cap: "Автокореляційна функція позавибіркових похибок AR(1)"
+
+plot_ar1_forecast_error_acf(ar1_chart_data$forecast_error_acf)
+```
+
+**ACF**, або автокореляційна функція, перевіряє, чи пов'язані похибки
+з їхніми попередніми значеннями. Якщо модель використала всю просту
+лінійну залежність, великі стовпчики не повинні систематично виходити
+за жовті межі.
+
+За межі виходять `r acf_significant_lags` із 48 лагів. Один окремий
+вихід ще може бути випадковим. Багато послідовних виходів означали б,
+що AR(1) залишила помітну часову структуру.
+
+## Від прогнозу до торгового правила
+
+Торгове правило зафіксовано до фінального тесту:
+
+- якщо прогнозована годинна дохідність більша за нуль, тримати BTC;
+- інакше тримати USDT;
+- сигнал формується після завершення свічки;
+- виконання відбувається за відкриттям наступної годинної свічки;
+- враховуються комісія та припущення про прослизання.
+
+Це окрема перевірка. Навіть невелике прогнозне покращення може бути
+знищене частими перемиканнями і витратами.
+
+```{r}
+#| label: fig-ar1-strategy-paths
+#| fig-cap: "Криві капіталу AR(1), купи й тримай та USDT"
+
+plot_strategy_paths(ar1_chart_data$strategy_paths)
+```
+
+Лінії можна вимикати натисканням на назви в легенді. Це допомагає
+роздивитися майже накладені траєкторії без втрати інтерактивності.
+
+```{r}
+#| label: fig-ar1-drawdowns
+#| fig-cap: "Просідання торгових орієнтирів"
+
+plot_strategy_drawdowns(ar1_chart_data$strategy_paths)
+```
+
+**Drawdown**, або просідання, показує падіння від попереднього
+максимуму капіталу. Значення -20% означає, що капітал тимчасово був на
+20% нижчим за свій попередній максимум.
+
+```{r}
+#| label: fig-ar1-position
+#| fig-cap: "Годинна позиція правила AR(1): BTC або USDT"
+
+plot_ar1_position(ar1_chart_data$position_segments)
+```
+
+Цей графік показує, як часто правило перемикається. Для годинної
+моделі це особливо важливо: велика кількість перемикань збільшує
+витрати навіть тоді, коли статистична похибка трохи менша.
+
+```{r}
+#| label: tbl-ar1-strategy-summary
+
+strategy_table <- strategy_summary |>
+  dplyr::transmute(
+    `Стратегія` = strategy,
+    `Фінальний капітал, USDT` = final_capital,
+    `Чиста дохідність, %` = 100 * net_return,
+    `Максимальне просідання, %` = 100 * maximum_drawdown,
+    `Час у BTC, %` = 100 * time_in_market,
+    `Ордери` = orders,
+    `Витрати, USDT` = paid_costs
+  )
+
+knitr::kable(
+  strategy_table,
+  digits = 2,
+  align = c("l", "r", "r", "r", "r", "r", "r"),
+  caption = "Точні значення торгового порівняння"
+)
+```
+
+## Висновок validation
+
+AR(1) повинна вважатися кориснішою за наївний прогноз лише тоді, коли
+одночасно виконуються три умови:
+
+1. похибка помітно менша на тих самих годинних спостереженнях;
+2. перевага повторюється в часі, а не виникає в одному короткому
+   періоді;
+3. торгове правило зберігає перевагу після витрат і ризику.
+
+Фінальний test-період від
+`r format_utc(experiment$sealed_test$start)` до
+`r format_utc(experiment$sealed_test$end_exclusive)` UTC залишається
+закритим. Його не слід відкривати, доки модель, правило і критерії
+успіху не зафіксовані остаточно.

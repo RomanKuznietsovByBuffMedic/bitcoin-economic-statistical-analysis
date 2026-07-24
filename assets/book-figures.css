@@ -1,42 +1,22 @@
-:root {
-  --book-interactive-chart-height: 720px;
-}
+/* Plotly widgets only. Ordinary tables and static figures keep Quarto styles. */
 
-.cell-output-display .plotly.html-widget {
+.plotly.html-widget {
+  display: block;
   width: 100% !important;
-  height: var(--book-interactive-chart-height) !important;
-  min-height: var(--book-interactive-chart-height) !important;
+  max-width: 100% !important;
+  min-height: 640px;
+  aspect-ratio: 1 / 1.08;
+  margin: 0 !important;
+  border: 0 !important;
 }
 
-.cell-output-display .plotly .hoverlayer .hovertext path,
-.cell-output-display .plotly .hoverlayer .hovertext rect,
-.cell-output-display .plotly .hoverlayer .axistext path,
-.cell-output-display .plotly .hoverlayer .axistext rect {
-  fill: var(--bs-body-bg) !important;
-  stroke: var(--bs-border-color, #6c757d) !important;
-}
-
-.cell-output-display .plotly .hoverlayer text {
-  fill: var(--bs-body-color) !important;
-}
-
-.cell-output-display .plotly g.updatemenu-button {
-  cursor: pointer;
-}
-
-.cell-output-display .plotly g.updatemenu-button text,
-.cell-output-display .plotly g.updatemenu-button tspan {
-  opacity: 1 !important;
-}
-
-.cell-output-display
-  .plotly
-  g.updatemenu-button[data-book-toggle-state="on"] {
-  filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.55));
-}
-
-@media (max-width: 575.98px) {
-  :root {
-    --book-interactive-chart-height: 600px;
-  }
+.quarto-figure:has(.plotly.html-widget),
+figure:has(.plotly.html-widget),
+.cell-output-display:has(.plotly.html-widget) {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 1rem 0;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
 }
