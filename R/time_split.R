@@ -173,3 +173,101 @@ split_time_series <- function(
     summary = summary
   )
 }
+
+build_one_step_forecast_index <- function(
+  data,
+  exploration_start,
+  validation_start,
+  test_start,
+  test_end_exclusive,
+  interval_seconds = 60 * 60,
+  time_column = "open_time"
+) {
+  data_split <- split_time_series(
+    data = data,
+    exploration_start = exploration_start,
+    validation_start = validation_start,
+    test_start = test_start,
+    test_end_exclusive = test_end_exclusive,
+    interval_seconds = interval_seconds,
+    time_column = time_column
+  )
+
+  times <- data_split$data[[time_column]]
+  if (length(times) < 2L) {
+    stop("Для прогнозного індексу потрібно щонайменше дві години.")
+  }
+  forecast_origin <- times[-length(times)]
+  target_time <- times[-1L]
+  if (
+    any(
+      as.numeric(target_time) -
+        as.numeric(forecast_origin) != interval_seconds
+    )
+  ) {
+    stop(
+      paste(
+        "Прогнозний індекс потребує послідовних пар",
+        "forecast_origin і target_time."
+      )
+    )
+  }
+
+  sample_role <- ifelse(
+    target_time < validation_start,
+    "exploration",
+    ifelse(target_time < test_start, "validation", "test")
+  )
+  index <- data.frame(
+    forecast_origin = forecast_origin,
+    target_time = target_time,
+    sample_role = sample_role,
+    stringsAsFactors = FALSE
+  )
+
+  roles <- c("exploration", "validation", "test")
+  counts <- as.integer(table(factor(
+    index$sample_role,
+    levels = roles
+  )))
+  expected_counts <- c(
+    nrow(data_split$exploration) - 1L,
+    nrow(data_split$validation),
+    nrow(data_split$test)
+  )
+  if (!identical(counts, expected_counts)) {
+    stop(
+      paste(
+        "Кількість однокрокових прогнозних випадків",
+        "не відповідає часовим межам."
+      )
+    )
+  }
+
+  summary <- tibble::tibble(
+    `Частина` = c(
+      "Дослідницька",
+      "Внутрішня перевірка",
+      "Фінальний тест"
+    ),
+    `Цільові години, UTC` = c(
+      format_utc_period(
+        exploration_start + interval_seconds,
+        validation_start
+      ),
+      format_utc_period(validation_start, test_start),
+      format_utc_period(test_start, test_end_exclusive)
+    ),
+    `Прогнозних випадків` = counts,
+    `Використання` = c(
+      "Розробка ознак, правила прогнозу й початкове навчання",
+      "Вибір і налаштування зафіксованого кандидата",
+      "Одноразова підсумкова оцінка"
+    )
+  )
+
+  list(
+    index = index,
+    summary = summary
+  )
+}

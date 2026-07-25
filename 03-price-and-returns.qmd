@@ -30,6 +30,7 @@ load_book_environment(
     "R/data_provenance.R",
     "R/hourly_ohlc_quality.R",
     "R/price_returns.R",
+    "R/time_split.R",
     "R/book_charts.R",
     "R/price_returns_charts.R"
   ),
@@ -94,54 +95,39 @@ knitr::kable(
 )
 ```
 
-## Часові межі
+## Повний шлях даних {#sec-data-lineage}
+
+Дані різних бірж не об'єднуються в один ряд. Binance залишається
+початковим аудитом, Bitstamp - незалежним контролем, а до підготовки
+і майбутньої моделі переходить лише повний ряд Bybit.
+
+```{mermaid}
+flowchart TD
+  A["Binance API"] --> B["Кеш Binance"] --> C["Лише аудит"]
+  D["Bybit API"] --> E["Кеш Bybit"] --> F["Перевірка якості"]
+  G["Bitstamp API"] --> H["Кеш Bitstamp"] --> I["Лише контроль"]
+  F --> J["Ціна й дохідності"]
+  J --> K["Часовий поділ"]
+  K --> L["Прогнозні випадки"]
+  L --> M["Модель або еталон"]
+  M --> N["Прогнози й метрики"]
+```
 
 ```{r}
-#| label: tbl-data-time-bounds
-
-time_bounds <- tibble::tibble(
-  `Період` = c(
-    "Повний кеш: лише структурна перевірка",
-    "Початкове навчання: значення доступні",
-    "Внутрішня перевірка",
-    "Закритий тест"
-  ),
-  `Час, UTC` = c(
-    format_utc_period(
-      data_config$data_start,
-      data_config$data_end
-    ),
-    format_utc_period(
-      data_config$data_start,
-      config$evaluation$validation_start
-    ),
-    format_utc_period(
-      config$evaluation$validation_start,
-      config$evaluation$validation_end_exclusive
-    ),
-    format_utc_period(
-      config$evaluation$test_start,
-      config$evaluation$test_end_exclusive
-    )
-  )
-)
+#| label: tbl-data-lineage
 
 knitr::kable(
-  time_bounds,
-  align = c("l", "l"),
-  caption = "Часові межі; права межа кожного періоду не включається"
+  data_lineage_table(config),
+  align = c("l", "l", "l", "l"),
+  caption = "Наскрізний шлях від офіційних джерел до прогнозного випадку"
 )
 ```
 
-Повний кеш тут перевіряється лише на наявність, межі й структуру.
-**Навчальний період** містить значення, які вже можна досліджувати.
-**Період внутрішньої перевірки** буде використано для вибору й
-налаштування кандидата. **Закритий тестовий період** відкривається
-лише для фінальної оцінки вже зафіксованого підходу.
-
-Ціни та дохідності після початку внутрішньої перевірки в цьому
-розділі не показуються й не узагальнюються, щоб тестовий період
-залишався справді закритим.
+Повний підготовлений файл є джерелом для обчислень, але не
+«таблицею, яку цілком передають моделі». Конкретна модель отримує
+лише явно названі ознаки, відомі на момент прогнозу. Її ціль,
+горизонт, навчальне вікно й правило оновлення мають бути окремо
+зафіксовані до оцінювання.
 
 ## Чи готові дані до обчислень
 
@@ -188,10 +174,21 @@ if (
 }
 
 btc_1h <- data_check$data
-analysis_btc_1h <- btc_1h |>
-  dplyr::filter(
-    open_time < config$evaluation$validation_start
-  )
+data_split <- split_time_series(
+  data = btc_1h,
+  exploration_start = config$study$data_start,
+  validation_start = config$evaluation$validation_start,
+  test_start = config$evaluation$test_start,
+  test_end_exclusive = config$evaluation$test_end_exclusive
+)
+forecast_index <- build_one_step_forecast_index(
+  data = btc_1h["open_time"],
+  exploration_start = config$study$data_start,
+  validation_start = config$evaluation$validation_start,
+  test_start = config$evaluation$test_start,
+  test_end_exclusive = config$evaluation$test_end_exclusive
+)
+analysis_btc_1h <- data_split$exploration
 if (
   nrow(analysis_btc_1h) == 0L ||
     max(analysis_btc_1h$open_time) >=
@@ -216,11 +213,73 @@ knitr::kable(
 )
 ```
 
-Повний кеш містить `r nrow(btc_1h)` погодинних свічок і
+Повний підготовлений набір містить `r nrow(btc_1h)` погодинних свічок і
 `r nrow(data_check$gaps)` внутрішніх розривів. Для опису фактичних
 значень нижче доступні лише `r nrow(analysis_btc_1h)` початкових
 навчальних годин. Якщо розрив з'явиться, дохідність через нього не
 обчислюватиметься.
+
+## Як дані поділено {#sec-data-split}
+
+Спочатку часовий ряд ділиться на три неперетинні послідовні блоки.
+Рядки не перемішуються.
+
+```{r}
+#| label: tbl-candle-time-split
+
+knitr::kable(
+  data_split$summary,
+  align = c("l", "l", "l", "l", "r", "r"),
+  caption = paste(
+    "Поділ погодинних свічок;",
+    "права межа кожного періоду не включається"
+  )
+)
+```
+
+Для моделі одиницею є не сама свічка, а **прогнозний випадок**:
+
+$$
+\text{інформація до кінця }t
+\longrightarrow
+\text{ціль для }t+1.
+$$
+
+Його частина визначається за `target_time`, а не за
+`forecast_origin`. Тому перша ціль validation може використовувати
+останню відому годину exploration, але жодного значення з майбутньої
+цільової години. Так само перша ціль тесту використовує лише
+інформацію, доступну до початку тестової години.
+
+```{r}
+#| label: tbl-one-step-forecast-split
+
+knitr::kable(
+  forecast_index$summary,
+  align = c("l", "l", "r", "l"),
+  caption = "Поділ однокрокових прогнозних випадків за цільовою годиною"
+)
+```
+
+У першій таблиці дослідницька частина має на один рядок більше:
+найперша свічка всього періоду не має попередньої години всередині
+набору, тому ще не утворює однокрокового прогнозного випадку.
+Для моделі з довшими лагами кількість доступних початкових випадків
+може зменшитися ще більше; це число має бути показане в розділі
+саме цієї моделі.
+
+Період validation використовується для вибору й налаштування
+кандидата. Закритий test відкривається лише для одноразової оцінки
+вже зафіксованого підходу. Такий поділ не замінює спеціальної
+часової перевірки всередині навчального періоду: випадкове
+перемішування часових спостережень не застосовується, а параметри
+перетворень мають оцінюватися лише на доступній навчальній частині
+[@boehmkeGreenwell2020, розд. 2.2, с. 15; розд. 2.4.3, с. 27-28;
+розд. 3.8.2, с. 68; @lopezDePrado2018, розд. 7, с. 103-108].
+
+Ціни та дохідності validation і test у цьому розділі не
+показуються й не узагальнюються. Для побудови другої таблиці
+використовується лише `open_time`, а не значення цілі.
 
 ## Що таке ціна BTC у цьому дослідженні
 

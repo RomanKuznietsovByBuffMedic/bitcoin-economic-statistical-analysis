@@ -484,3 +484,69 @@ validate_data_manifest <- function(
 
   result
 }
+
+data_lineage_table <- function(config) {
+  source_description <- function(exchange) {
+    paste(
+      exchange$market_label,
+      config$study$interval,
+      config$study$timezone
+    )
+  }
+
+  tibble::tibble(
+    `Етап` = c(
+      "1. Початковий аудит",
+      "2. Основне джерело",
+      "3. Незалежний контроль",
+      "4. Підготовка",
+      "5. Часовий поділ",
+      "6. Прогнозний випадок"
+    ),
+    `Звідки` = c(
+      source_description(config$candidate),
+      source_description(config$primary),
+      source_description(config$reference),
+      config$paths$cache[[config$primary$id]],
+      config$paths$prepared,
+      "Ознаки, відомі на кінець години t"
+    ),
+    `Що відбувається` = c(
+      "Завантаження й перевірка OHLCV та часової сітки",
+      "Завантаження й повна перевірка OHLCV та часової сітки",
+      "Окрема перевірка загального руху ціни",
+      paste(
+        "Обчислення turnover, simple_return_1h",
+        "і log_return_1h; перевірка SHA-256"
+      ),
+      paste(
+        "Послідовний поділ без перемішування;",
+        "межі беруться з config.yml"
+      ),
+      paste(
+        "Прогноз цілі для t+1;",
+        "роль вибірки визначає target_time"
+      )
+    ),
+    `Результат і роль` = c(
+      paste(
+        config$paths$cache[[config$candidate$id]],
+        "- лише аудит, не вхід моделі"
+      ),
+      paste(
+        config$paths$cache[[config$primary$id]],
+        "- єдиний ряд, що йде далі"
+      ),
+      paste(
+        config$paths$cache[[config$reference$id]],
+        "- лише контроль, не вхід моделі"
+      ),
+      paste(
+        config$paths$prepared,
+        "- єдиний підготовлений набір"
+      ),
+      "exploration / validation / test",
+      "target_time + прогноз; оцінка лише на однакових ключах"
+    )
+  )
+}

@@ -43,5 +43,19 @@ cat(
   nrow(result$data_split$test),
   "\n"
 )
+forecast_counts <- stats::setNames(
+  result$forecast_index$summary$`Прогнозних випадків`,
+  result$forecast_index$summary$`Частина`
+)
+cat(
+  "Однокрокових прогнозних випадків:",
+  paste(
+    names(forecast_counts),
+    forecast_counts,
+    sep = "=",
+    collapse = "; "
+  ),
+  "\n"
+)
 cat("SHA-256 основного набору:", result$prepared_sha256, "\n")
 cat("Маніфест оновлено:", result$manifest_path, "\n")

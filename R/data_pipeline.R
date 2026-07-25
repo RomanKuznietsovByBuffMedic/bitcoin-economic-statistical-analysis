@@ -274,11 +274,19 @@ prepare_price_return_files <- function(
         test_start = config$evaluation$test_start,
         test_end_exclusive = config$evaluation$test_end_exclusive
       )
+      forecast_index <- build_one_step_forecast_index(
+        data = prepared_data,
+        exploration_start = config$study$data_start,
+        validation_start = config$evaluation$validation_start,
+        test_start = config$evaluation$test_start,
+        test_end_exclusive = config$evaluation$test_end_exclusive
+      )
 
       list(
         data = prepared_data,
         quality = primary_quality,
         data_split = data_split,
+        forecast_index = forecast_index,
         prepared_file = config$paths$prepared,
         prepared_sha256 = sha256_file(config$paths$prepared),
         manifest_path = manifest_path
@@ -399,11 +407,20 @@ collect_project_data_checks <- function(config) {
     test_start = config$evaluation$test_start,
     test_end_exclusive = config$evaluation$test_end_exclusive
   )
+  forecast_index <- build_one_step_forecast_index(
+    data = prepared_quality$data,
+    exploration_start = config$study$data_start,
+    validation_start = config$evaluation$validation_start,
+    test_start = config$evaluation$test_start,
+    test_end_exclusive = config$evaluation$test_end_exclusive
+  )
 
   list(
     parameters = project_parameter_table(config),
+    data_lineage = data_lineage_table(config),
     provenance = provenance_check,
     manifest = manifest_check,
-    time_split = data_split$summary
+    time_split = data_split$summary,
+    forecast_split = forecast_index$summary
   )
 }

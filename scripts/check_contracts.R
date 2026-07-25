@@ -55,8 +55,44 @@ stopifnot(
   nrow(split$validation) == 2L,
   nrow(split$test) == 2L,
   identical(
-    as.integer(table(split$data$sample_role)),
-    c(2L, 2L, 2L)
+    split$data$sample_role,
+    rep(c("exploration", "validation", "test"), each = 2L)
+  )
+)
+
+# Forecast roles are assigned by target_time, not forecast_origin.
+forecast_index <- build_one_step_forecast_index(
+  data = split_data,
+  exploration_start = split_times[[1L]],
+  validation_start = split_times[[3L]],
+  test_start = split_times[[5L]],
+  test_end_exclusive = split_times[[6L]] + 60 * 60
+)
+stopifnot(
+  nrow(forecast_index$index) == 5L,
+  identical(
+    as.numeric(forecast_index$index$forecast_origin),
+    as.numeric(split_times[1:5])
+  ),
+  identical(
+    as.numeric(forecast_index$index$target_time),
+    as.numeric(split_times[2:6])
+  ),
+  identical(
+    forecast_index$index$sample_role,
+    c(
+      "exploration",
+      "validation",
+      "validation",
+      "test",
+      "test"
+    )
+  ),
+  identical(
+    as.integer(
+      forecast_index$summary$`Прогнозних випадків`
+    ),
+    c(1L, 2L, 2L)
   )
 )
 

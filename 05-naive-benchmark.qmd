@@ -38,6 +38,7 @@ load_book_environment(
     "R/project_io.R",
     "R/data_provenance.R",
     "R/hourly_ohlc_quality.R",
+    "R/time_split.R",
     "R/book_charts.R",
     "R/naive_benchmark.R",
     "R/naive_benchmark_charts.R"
@@ -66,6 +67,13 @@ btc_1h <- require_complete_hourly_ohlc(
   end_time = config$study$data_end_exclusive,
   source_label = "Підготовлений набір"
 )$data
+full_forecast_index <- build_one_step_forecast_index(
+  data = btc_1h["open_time"],
+  exploration_start = config$study$data_start,
+  validation_start = config$evaluation$validation_start,
+  test_start = config$evaluation$test_start,
+  test_end_exclusive = config$evaluation$test_end_exclusive
+)
 
 illustration_start <- config$study$data_start + 24 * 60 * 60
 illustration_end_exclusive <-
@@ -152,14 +160,29 @@ $$
 Модель не має параметрів і використовує лише ціну, відому в момент
 створення прогнозу.
 
+::: {.callout-note title="Що зараз справді подається моделі"}
+Модель-кандидат ще не обрана й не навчається. Поточний код запускає
+лише наївний еталон. Із усього підготовленого набору він читає лише
+`open_time` і `close`; інші OHLCV-поля та дохідності автоматично
+в нього не потрапляють.
+:::
+
 ```{r}
 #| label: tbl-naive-benchmark-contract
 
 benchmark_contract <- tibble::tribble(
   ~`Поле`, ~`Зафіксоване значення`,
-  "Ціль", "ціна закриття наступної години або її логарифмічна дохідність",
+  "Походження", paste(
+    config$primary$market_label,
+    "через",
+    config$paths$prepared
+  ),
+  "Одиниця", "один прогнозний випадок forecast_origin=t -> target_time=t+1",
+  "Вхід", "close у момент forecast_origin=t",
+  "Ціль", "фактична log(close[t+1] / close[t])",
   "Горизонт", "1 година",
-  "Інформація", "остання відома ціна закриття",
+  "Параметри для навчання", "відсутні",
+  "Роль вибірки", "визначається лише за target_time",
   "Прогноз ціни", "поточна ціна",
   "Прогноз логарифмічної дохідності", "0",
   "Показники похибки", "MAE та RMSE у базисних пунктах",
@@ -170,6 +193,67 @@ knitr::kable(
   benchmark_contract,
   align = c("l", "l"),
   caption = "Контракт наївного еталона до порівняння моделей"
+)
+```
+
+Повний шлях до підготовленого файла та точні межі трьох частин
+показано в @sec-data-lineage і @sec-data-split. Для наївного
+правила ці частини містять
+`r paste(full_forecast_index$summary[["Прогнозних випадків"]], collapse = " / ")`
+прогнозних випадків у порядку
+exploration / validation / test.
+
+### Один конкретний прогнозний випадок
+
+Таблиця показує, коли значення стає доступним. Фактична ціль не є
+входом: її можна використати лише після завершення цільової години
+для обчислення похибки.
+
+```{r}
+#| label: tbl-naive-one-case
+
+example_case <- naive_illustration[1L, , drop = FALSE]
+one_case <- tibble::tibble(
+  `Поле` = c(
+    "Момент створення прогнозу",
+    "Вхід, відомий у цей момент",
+    "Цільова година",
+    "Прогноз еталона",
+    "Факт, відкритий після цільової години"
+  ),
+  `Конкретне значення` = c(
+    paste0(format_utc(example_case$forecast_origin), " UTC"),
+    paste0(
+      "close[t] = ",
+      formatC(
+        example_case$origin_close,
+        format = "f",
+        digits = 2,
+        big.mark = " ",
+        decimal.mark = ","
+      ),
+      " ",
+      config$primary$quote_currency
+    ),
+    paste0(format_utc(example_case$target_time), " UTC"),
+    "log-return[t+1] = 0",
+    paste0(
+      "log-return[t+1] = ",
+      formatC(
+        10000 * example_case$actual_log_return,
+        format = "f",
+        digits = 2,
+        decimal.mark = ","
+      ),
+      " б.п."
+    )
+  )
+)
+
+knitr::kable(
+  one_case,
+  align = c("l", "l"),
+  caption = "Вхід, прогноз і ціль для одного відомого прикладу"
 )
 ```
 
@@ -300,6 +384,28 @@ $$
 Функція `compare_return_forecast_to_naive()` вже реалізує цей
 контракт, але в поточному розділі не запускається, бо прогнозу
 кандидата ще немає.
+
+### Обов'язковий паспорт майбутньої моделі
+
+До першого запуску кандидата в його розділі потрібно явно показати:
+
+1. точні назви вхідних полів і лагів, з яких утворено $X_t$;
+2. формулу цілі $y_{t+1}$ і горизонт прогнозу;
+3. які перетворення навчаються на даних і на якій саме частині;
+4. початкове навчальне вікно: розширюване чи фіксоване;
+5. частоту повторного оцінювання параметрів;
+6. критерій вибору на validation;
+7. зафіксовану версію моделі перед одноразовим test;
+8. кількість реально використаних прогнозних випадків і точні
+   `target_time`.
+
+Параметри стандартизації, відбору ознак або іншої підготовки не
+можна оцінювати на validation чи test наперед. Для фінансових
+часових рядів також недостатньо випадково перемішати рядки:
+потрібно зберігати часовий порядок і перевіряти перекриття
+інформаційних інтервалів
+[@boehmkeGreenwell2020, розд. 3.8.2, с. 68;
+@lopezDePrado2018, розд. 7, с. 103-108].
 
 ::: {.callout-note appearance="simple"}
 ## Якщо прогнозна ціль зміниться
