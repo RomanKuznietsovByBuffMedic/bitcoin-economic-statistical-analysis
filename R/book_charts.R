@@ -149,68 +149,9 @@ book_figure_review <- function(
   )
 }
 
-book_model_decision <- function(
-  model,
-  approved,
-  reason,
-  next_step
-) {
-  model <- require_figure_text(model, "модель")
-  if (
-    length(approved) != 1L ||
-      is.na(approved) ||
-      !is.logical(approved)
-  ) {
-    stop("approved має бути одним логічним значенням.")
-  }
-
-  book_figure_callout(
-    type = if (approved) "important" else "warning",
-    title = paste(
-      "Рішення щодо",
-      model
-    ),
-    fields = list(
-      list(
-        label = "Статус",
-        value = if (approved) {
-          "Передумови виконано."
-        } else {
-          "Передумови не виконано."
-        }
-      ),
-      list(label = "Підстава", value = reason),
-      list(label = "Наступна дія", value = next_step)
-    ),
-    css_class = "model-decision"
-  )
-}
-
-book_format_number <- function(value, digits = 2L) {
-  formatC(
-    value,
-    format = "f",
-    digits = as.integer(digits),
-    big.mark = " "
-  )
-}
-
-book_format_probability <- function(
-  value,
-  digits = 4L,
-  lower_display_limit = 0.0001
-) {
-  if (value < lower_display_limit) {
-    paste0("< ", book_format_number(lower_display_limit, digits))
-  } else {
-    book_format_number(value, digits)
-  }
-}
-
 book_plot_palettes <- function() {
   list(
     dark = c(
-      ar1 = "#60A5FA",
       naive = "#FBBF24",
       buy_hold = "#14B8A6",
       cash = "#C084FC",
@@ -226,7 +167,6 @@ book_plot_palettes <- function() {
       text = "#F3F4F6"
     ),
     light = c(
-      ar1 = "#2563EB",
       naive = "#B45309",
       buy_hold = "#0F766E",
       cash = "#7C3AED",
@@ -251,23 +191,6 @@ book_plot_palette <- function(theme = c("dark", "light")) {
 
 book_trace_meta <- function(role) {
   list(book_role = as.character(role))
-}
-
-book_forecast_colours <- function(theme = "dark") {
-  palette <- book_plot_palette(theme)
-  c(
-    "AR(1)" = palette[["ar1"]],
-    "Наївний прогноз" = palette[["naive"]]
-  )
-}
-
-book_strategy_colours <- function(theme = "dark") {
-  palette <- book_plot_palette(theme)
-  c(
-    "AR(1): BTC або USDT" = palette[["ar1"]],
-    "Купи й тримай" = palette[["buy_hold"]],
-    "USDT без торгівлі" = palette[["cash"]]
-  )
 }
 
 book_chart_sizes <- function() {

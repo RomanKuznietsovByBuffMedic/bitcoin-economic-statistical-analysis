@@ -18,5 +18,7 @@
 *.[Cc][Ss][Vv]
 *.[Pp][Aa][Rr][Qq][Uu][Ee][Tt]
 *.[Zz][Ii][Pp]
+/*.tar.gz
+/*.tgz
 
 /research/sources-analysis.md

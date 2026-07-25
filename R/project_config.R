@@ -367,8 +367,6 @@ read_project_config <- function(path = "config.yml") {
         "study",
         "evaluation",
         "analysis",
-        "model",
-        "trading",
         "exchanges",
         "runtime"
       ) %in%
@@ -379,8 +377,7 @@ read_project_config <- function(path = "config.yml") {
       paste(
         "config.yml повинен містити розділи",
         paste(
-          "study, evaluation, analysis, model, trading,",
-          "exchanges і runtime."
+          "study, evaluation, analysis, exchanges і runtime."
         )
       )
     )
@@ -497,7 +494,6 @@ read_project_config <- function(path = "config.yml") {
     "runtime.auto_download_data"
   )
 
-
   test_years <- require_integer(
     raw_config$evaluation$test_years,
     "evaluation.test_years",
@@ -508,46 +504,6 @@ read_project_config <- function(path = "config.yml") {
     "evaluation.validation_years",
     minimum = 1
   )
-  forecast_horizon_periods <- require_integer(
-    raw_config$evaluation$forecast_horizon_periods,
-    "evaluation.forecast_horizon_periods",
-    minimum = 1
-  )
-  execution_lag_periods <- require_integer(
-    raw_config$evaluation$execution_lag_periods,
-    "evaluation.execution_lag_periods",
-    minimum = 1
-  )
-  execution_price <- tolower(require_config_value(
-    raw_config$evaluation$execution_price,
-    "evaluation.execution_price"
-  ))
-  if (!identical(execution_price, "next_open")) {
-    stop(
-      paste(
-        "Поточний план оцінювання підтримує лише",
-        "evaluation.execution_price = next_open."
-      )
-    )
-  }
-  refit_every_months <- require_integer(
-    raw_config$evaluation$refit_every_months,
-    "evaluation.refit_every_months",
-    minimum = 1
-  )
-  training_window <- tolower(require_config_value(
-    raw_config$evaluation$training_window,
-    "evaluation.training_window"
-  ))
-  if (!identical(training_window, "expanding")) {
-    stop(
-      paste(
-        "Поточний план оцінювання підтримує лише",
-        "evaluation.training_window = expanding."
-      )
-    )
-  }
-
   test_start <- calendar_years_before(
     value = data_end_exclusive,
     years = test_years,
@@ -577,45 +533,6 @@ read_project_config <- function(path = "config.yml") {
     )
   }
 
-  model_family <- tolower(require_config_value(
-    raw_config$model$family,
-    "model.family"
-  ))
-  if (!identical(model_family, "ar")) {
-    stop("Поточний пілот підтримує лише model.family = ar.")
-  }
-  model_order <- require_integer(
-    raw_config$model$order,
-    "model.order",
-    minimum = 1,
-    maximum = 1
-  )
-  target_interval <- tolower(require_config_value(
-    raw_config$model$target_interval,
-    "model.target_interval"
-  ))
-  if (!identical(target_interval, "1h")) {
-    stop(
-      "Поточний пілот підтримує лише model.target_interval = 1h."
-    )
-  }
-  if (!identical(target_interval, interval)) {
-    stop("Інтервал моделі має збігатися з базовим інтервалом даних.")
-  }
-  analysis_alpha <- require_finite_number(
-    raw_config$analysis$alpha,
-    "analysis.alpha",
-    minimum = 0.01,
-    maximum = 0.1
-  )
-  if (!identical(analysis_alpha, 0.05)) {
-    stop(
-      paste(
-        "Поточні критичні значення діагностики зафіксовано для",
-        "analysis.alpha = 0.05."
-      )
-    )
-  }
   mean_max_lag <- require_integer(
     raw_config$analysis$mean_max_lag,
     "analysis.mean_max_lag",
@@ -628,26 +545,6 @@ read_project_config <- function(path = "config.yml") {
     minimum = mean_max_lag,
     maximum = 720
   )
-  arma_max_ar <- require_integer(
-    raw_config$analysis$arma_max_ar,
-    "analysis.arma_max_ar",
-    minimum = 0,
-    maximum = 10
-  )
-  arma_max_ma <- require_integer(
-    raw_config$analysis$arma_max_ma,
-    "analysis.arma_max_ma",
-    minimum = 0,
-    maximum = 10
-  )
-  if (arma_max_ar == 0L && arma_max_ma == 0L) {
-    stop(
-      paste(
-        "Сітка ARMA повинна містити хоча б одну модель",
-        "складнішу за ARMA(0,0)."
-      )
-    )
-  }
   rolling_window_hours <- require_integer(
     raw_config$analysis$rolling_window_hours,
     "analysis.rolling_window_hours",
@@ -659,39 +556,11 @@ read_project_config <- function(path = "config.yml") {
     minimum = 24,
     maximum = rolling_window_hours
   )
-  arch_lag <- require_integer(
-    raw_config$analysis$arch_lag,
-    "analysis.arch_lag",
-    minimum = 1,
-    maximum = dependence_max_lag
-  )
   normal_qq_points <- require_integer(
     raw_config$analysis$normal_qq_points,
     "analysis.normal_qq_points",
     minimum = 101,
     maximum = 2001
-  )
-
-  starting_capital_quote <- require_finite_number(
-    raw_config$trading$starting_capital_quote,
-    "trading.starting_capital_quote",
-    minimum = 0.01
-  )
-  signal_threshold_log_return <- require_finite_number(
-    raw_config$trading$signal_threshold_log_return,
-    "trading.signal_threshold_log_return"
-  )
-  fee_rate <- require_finite_number(
-    raw_config$trading$fee_rate,
-    "trading.fee_rate",
-    minimum = 0,
-    maximum = 0.1
-  )
-  slippage_rate <- require_finite_number(
-    raw_config$trading$slippage_rate,
-    "trading.slippage_rate",
-    minimum = 0,
-    maximum = 0.1
   )
 
   config <- list(
@@ -713,35 +582,14 @@ read_project_config <- function(path = "config.yml") {
       validation_end_exclusive = test_start,
       test_years = test_years,
       test_start = test_start,
-      test_end_exclusive = data_end_exclusive,
-      forecast_horizon_periods = forecast_horizon_periods,
-      execution_lag_periods = execution_lag_periods,
-      execution_price = execution_price,
-      refit_every_months = refit_every_months,
-      training_window = training_window
+      test_end_exclusive = data_end_exclusive
     ),
     analysis = list(
-      alpha = analysis_alpha,
       mean_max_lag = mean_max_lag,
       dependence_max_lag = dependence_max_lag,
-      arma_max_ar = arma_max_ar,
-      arma_max_ma = arma_max_ma,
       rolling_window_hours = rolling_window_hours,
       rolling_step_hours = rolling_step_hours,
-      arch_lag = arch_lag,
       normal_qq_points = normal_qq_points
-    ),
-    model = list(
-      family = model_family,
-      order = model_order,
-      target_interval = target_interval
-    ),
-    trading = list(
-      starting_capital_quote = starting_capital_quote,
-      signal_threshold_log_return = signal_threshold_log_return,
-      fee_rate = fee_rate,
-      slippage_rate = slippage_rate,
-      total_cost_rate = fee_rate + slippage_rate
     ),
     exchanges = exchanges,
     candidate = exchanges[[candidate_id]],

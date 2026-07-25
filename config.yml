@@ -18,46 +18,19 @@ study:
   data_start: "2021-07-06 00:00:00"
   data_years: 5
 
-# Останній рік навчальної частини використовується для розробки.
+# Останній рік перед тестом призначено для внутрішньої перевірки.
 # Фінальний тест охоплює наступний, повністю відкладений рік.
 evaluation:
   validation_years: 1
   test_years: 1
-  forecast_horizon_periods: 1
-  execution_lag_periods: 1
-  execution_price: "next_open"
-  refit_every_months: 1
-  training_window: "expanding"
 
-# Поточний розділ використовує лише параметри описових графіків:
-# mean_max_lag, dependence_max_lag, rolling_* і normal_qq_points.
-# Решта параметрів нижче збережена для старого модельного checkpoint,
-# який зараз не входить до книги й не запускається під час рендеру.
+# Параметри описового аналізу, який передує вибору моделі.
 analysis:
-  alpha: 0.05
   mean_max_lag: 48
   dependence_max_lag: 168
-  arma_max_ar: 3
-  arma_max_ma: 3
   rolling_window_hours: 720
   rolling_step_hours: 168
-  arch_lag: 24
   normal_qq_points: 501
-
-# Неактивний checkpoint попереднього експерименту.
-# Поточний дослідницький рендер цей розділ не читає.
-model:
-  family: "ar"
-  order: 1
-  target_interval: "1h"
-
-# Неактивний checkpoint торгового експерименту.
-# Комісії, сигнали й капітал у поточному аналізі не обчислюються.
-trading:
-  starting_capital_quote: 100
-  signal_threshold_log_return: 0
-  fee_rate: 0.001
-  slippage_rate: 0.0005
 
 
 exchanges:

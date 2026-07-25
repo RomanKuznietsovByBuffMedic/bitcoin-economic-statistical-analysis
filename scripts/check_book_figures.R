@@ -147,15 +147,21 @@ if (length(labels) == 0L || anyDuplicated(labels)) {
   stop("Мітки дослідницького розділу порожні або повторюються.")
 }
 
-quarto_text <- read_book_text("_quarto.yml")
-if (
-  grepl("04-naive-baseline\\.qmd", quarto_text) ||
-    grepl("05-ar1\\.qmd", quarto_text)
-) {
+quarto_config <- yaml::read_yaml("_quarto.yml")
+expected_chapters <- c(
+  "index.qmd",
+  "01-how-it-works.qmd",
+  "02-data-acquisition.qmd",
+  "03-price-and-returns.qmd",
+  "04-before-model.qmd",
+  "05-naive-benchmark.qmd",
+  "references.qmd"
+)
+if (!identical(quarto_config$book$chapters, expected_chapters)) {
   stop(
     paste(
-      "Модельні чернетки не повинні входити до поточного",
-      "дослідницького рендеру."
+      "Склад розділів у _quarto.yml не відповідає",
+      "поточній структурі книги."
     )
   )
 }
