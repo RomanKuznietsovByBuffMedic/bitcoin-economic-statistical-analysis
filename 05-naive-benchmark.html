@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="uk" xml:lang="uk"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Наївний еталон для майбутнього порівняння – Bitcoin і BTC: економічний та статистичний аналіз</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./04-before-model.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d8c1101ea83dcb6de11c9f41d4ed3b4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-8899dd5acfb679e9e5bf7ca3e968165b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<meta name="darkreader-lock">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="assets/book-figures.css">
+</head>
+
+<body class="nav-sidebar floating quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-naive-benchmark.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Наївний еталон для майбутнього порівняння</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bitcoin і BTC: економічний та статистичний аналіз</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Про проєкт</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-how-it-works.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Що таке біткоїн?</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data-acquisition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Отримання реальних ринкових даних</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-price-and-returns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна і дохідність BTC</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-before-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Дослідницький аналіз годинних даних</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-naive-benchmark.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Наївний еталон для майбутнього порівняння</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Джерела</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Зміст</h2>
+   
+  <ul>
+  <li><a href="#навіщо-потрібен-простий-еталон" id="toc-навіщо-потрібен-простий-еталон" class="nav-link active" data-scroll-target="#навіщо-потрібен-простий-еталон"><span class="header-section-number">5.1</span> Навіщо потрібен простий еталон</a></li>
+  <li><a href="#яке-правило-зафіксовано" id="toc-яке-правило-зафіксовано" class="nav-link" data-scroll-target="#яке-правило-зафіксовано"><span class="header-section-number">5.2</span> Яке правило зафіксовано</a>
+  <ul>
+  <li><a href="#як-вимірюватиметься-похибка" id="toc-як-вимірюватиметься-похибка" class="nav-link" data-scroll-target="#як-вимірюватиметься-похибка"><span class="header-section-number">5.2.1</span> Як вимірюватиметься похибка</a></li>
+  </ul></li>
+  <li><a href="#як-виглядає-цей-прогноз" id="toc-як-виглядає-цей-прогноз" class="nav-link" data-scroll-target="#як-виглядає-цей-прогноз"><span class="header-section-number">5.3</span> Як виглядає цей прогноз</a></li>
+  <li><a href="#як-відбудеться-майбутнє-порівняння" id="toc-як-відбудеться-майбутнє-порівняння" class="nav-link" data-scroll-target="#як-відбудеться-майбутнє-порівняння"><span class="header-section-number">5.4</span> Як відбудеться майбутнє порівняння</a></li>
+  <li><a href="#що-зафіксовано-зараз" id="toc-що-зафіксовано-зараз" class="nav-link" data-scroll-target="#що-зафіксовано-зараз"><span class="header-section-number">5.5</span> Що зафіксовано зараз</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/05-naive-benchmark.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Наївний еталон для майбутнього порівняння</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Код</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Головне питання
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Який найпростіший прогноз повинна перевершити складніша модель, якщо вона прогнозує наступну ціну або середню дохідність?</strong></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Межа цього розділу
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Тут фіксується <strong>наївний еталон для порівняння</strong> (англійською <code>benchmark</code>), але не обирається наступна модель і не визначається переможець. Код показує механізм на відомій частині даних. Майбутнє порівняння має запустити еталон і кандидата одночасно на тих самих годинах.</p>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Показати / приховати код</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sys.source</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="st">"R/book_setup.R"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="at">envir =</span> knitr<span class="sc">::</span><span class="fu">knit_global</span>()</span>
+<span id="cb1-4"><a href="#cb1-4"></a>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">load_book_environment</span>(</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="at">packages =</span> <span class="fu">c</span>(</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="st">"dplyr"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="st">"knitr"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="st">"plotly"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="st">"tibble"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="st">"yaml"</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>  ),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>  <span class="at">modules =</span> <span class="fu">c</span>(</span>
+<span id="cb1-15"><a href="#cb1-15"></a>    <span class="st">"R/project_config.R"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="st">"R/project_io.R"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="st">"R/data_provenance.R"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="st">"R/hourly_ohlc_quality.R"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19"></a>    <span class="st">"R/book_charts.R"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20"></a>    <span class="st">"R/naive_benchmark.R"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21"></a>    <span class="st">"R/naive_benchmark_charts.R"</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>  ),</span>
+<span id="cb1-23"><a href="#cb1-23"></a>  <span class="at">envir =</span> knitr<span class="sc">::</span><span class="fu">knit_global</span>()</span>
+<span id="cb1-24"><a href="#cb1-24"></a>)</span>
+<span id="cb1-25"><a href="#cb1-25"></a></span>
+<span id="cb1-26"><a href="#cb1-26"></a>config <span class="ot">&lt;-</span> <span class="fu">read_project_config</span>()</span>
+<span id="cb1-27"><a href="#cb1-27"></a>manifest_check <span class="ot">&lt;-</span> <span class="fu">validate_data_manifest</span>(config)</span>
+<span id="cb1-28"><a href="#cb1-28"></a></span>
+<span id="cb1-29"><a href="#cb1-29"></a>btc_1h <span class="ot">&lt;-</span> <span class="fu">read_rds_required</span>(</span>
+<span id="cb1-30"><a href="#cb1-30"></a>  config<span class="sc">$</span>paths<span class="sc">$</span>prepared,</span>
+<span id="cb1-31"><a href="#cb1-31"></a>  <span class="st">"підготовлений набір ціни й дохідностей"</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a>)</span>
+<span id="cb1-33"><a href="#cb1-33"></a>primary_raw_sha256 <span class="ot">&lt;-</span> <span class="fu">sha256_file</span>(</span>
+<span id="cb1-34"><a href="#cb1-34"></a>  config<span class="sc">$</span>paths<span class="sc">$</span>cache[[config<span class="sc">$</span>primary<span class="sc">$</span>id]]</span>
+<span id="cb1-35"><a href="#cb1-35"></a>)</span>
+<span id="cb1-36"><a href="#cb1-36"></a><span class="fu">require_prepared_metadata</span>(</span>
+<span id="cb1-37"><a href="#cb1-37"></a>  <span class="at">data =</span> btc_1h,</span>
+<span id="cb1-38"><a href="#cb1-38"></a>  <span class="at">config =</span> config,</span>
+<span id="cb1-39"><a href="#cb1-39"></a>  <span class="at">raw_sha256 =</span> primary_raw_sha256</span>
+<span id="cb1-40"><a href="#cb1-40"></a>)</span>
+<span id="cb1-41"><a href="#cb1-41"></a>btc_1h <span class="ot">&lt;-</span> <span class="fu">require_complete_hourly_ohlc</span>(</span>
+<span id="cb1-42"><a href="#cb1-42"></a>  <span class="at">data =</span> btc_1h,</span>
+<span id="cb1-43"><a href="#cb1-43"></a>  <span class="at">start_time =</span> config<span class="sc">$</span>study<span class="sc">$</span>data_start,</span>
+<span id="cb1-44"><a href="#cb1-44"></a>  <span class="at">end_time =</span> config<span class="sc">$</span>study<span class="sc">$</span>data_end_exclusive,</span>
+<span id="cb1-45"><a href="#cb1-45"></a>  <span class="at">source_label =</span> <span class="st">"Підготовлений набір"</span></span>
+<span id="cb1-46"><a href="#cb1-46"></a>)<span class="sc">$</span>data</span>
+<span id="cb1-47"><a href="#cb1-47"></a></span>
+<span id="cb1-48"><a href="#cb1-48"></a>illustration_start <span class="ot">&lt;-</span> config<span class="sc">$</span>study<span class="sc">$</span>data_start <span class="sc">+</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">60</span> <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb1-49"><a href="#cb1-49"></a>illustration_end_exclusive <span class="ot">&lt;-</span></span>
+<span id="cb1-50"><a href="#cb1-50"></a>  illustration_start <span class="sc">+</span> <span class="dv">14</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">60</span> <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb1-51"><a href="#cb1-51"></a></span>
+<span id="cb1-52"><a href="#cb1-52"></a><span class="cf">if</span> (</span>
+<span id="cb1-53"><a href="#cb1-53"></a>  illustration_end_exclusive <span class="sc">&gt;=</span></span>
+<span id="cb1-54"><a href="#cb1-54"></a>    config<span class="sc">$</span>evaluation<span class="sc">$</span>validation_start</span>
+<span id="cb1-55"><a href="#cb1-55"></a>) {</span>
+<span id="cb1-56"><a href="#cb1-56"></a>  <span class="fu">stop</span>(</span>
+<span id="cb1-57"><a href="#cb1-57"></a>    <span class="fu">paste</span>(</span>
+<span id="cb1-58"><a href="#cb1-58"></a>      <span class="st">"Ілюстрація наївного еталона випадково досягла"</span>,</span>
+<span id="cb1-59"><a href="#cb1-59"></a>      <span class="st">"періоду внутрішньої перевірки."</span></span>
+<span id="cb1-60"><a href="#cb1-60"></a>    )</span>
+<span id="cb1-61"><a href="#cb1-61"></a>  )</span>
+<span id="cb1-62"><a href="#cb1-62"></a>}</span>
+<span id="cb1-63"><a href="#cb1-63"></a></span>
+<span id="cb1-64"><a href="#cb1-64"></a>naive_illustration <span class="ot">&lt;-</span> <span class="fu">build_naive_point_benchmark</span>(</span>
+<span id="cb1-65"><a href="#cb1-65"></a>  <span class="at">hourly_data =</span> btc_1h,</span>
+<span id="cb1-66"><a href="#cb1-66"></a>  <span class="at">start_time =</span> illustration_start,</span>
+<span id="cb1-67"><a href="#cb1-67"></a>  <span class="at">end_exclusive =</span> illustration_end_exclusive</span>
+<span id="cb1-68"><a href="#cb1-68"></a>)</span>
+<span id="cb1-69"><a href="#cb1-69"></a></span>
+<span id="cb1-70"><a href="#cb1-70"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>, <span class="at">digits =</span> <span class="dv">7</span>)</span></code></pre></div>
+</details>
+</div>
+<section id="навіщо-потрібен-простий-еталон" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="навіщо-потрібен-простий-еталон"><span class="header-section-number">5.1</span> Навіщо потрібен простий еталон</h2>
+<p>Складніша формула сама по собі не означає кращий прогноз. Спочатку треба зафіксувати просте правило, а потім перевірити, чи дає кандидат меншу похибку на тому самому прогнозному періоді.</p>
+<p>Tsay описує випадкове блукання логарифмованої ціни</p>
+<p><span class="math display">\[
+p_{t+1}=p_t+a_{t+1},
+\]</span></p>
+<p>де <span class="math inline">\(a_{t+1}\)</span> є новою непередбачуваною зміною з нульовим середнім. Точковий прогноз такої моделі дорівнює останньому відомому значенню <span class="citation" data-cites="tsay2010"><a href="references.html#ref-tsay2010" role="doc-biblioref">[1, Розд. 2.7.1]</a>, с. 72</span>. Tsay також наголошує, що моделі треба оцінювати на окремій прогнозній підвибірці й за однаково визначеною похибкою <span class="citation" data-cites="tsay2010"><a href="references.html#ref-tsay2010" role="doc-biblioref">[1, Розд. 4.4.2]</a>, с. 215-218</span>.</p>
+<p>Отже, еталон потрібен не для підтвердження випадкового блукання, а як мінімальний рівень, із яким має бути чесно зіставлений майбутній прогноз.</p>
+</section>
+<section id="яке-правило-зафіксовано" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="яке-правило-зафіксовано"><span class="header-section-number">5.2</span> Яке правило зафіксовано</h2>
+<p>Нехай <span class="math inline">\(P_t\)</span> - ціна закриття години, а <span class="math inline">\(p_t=\ln(P_t)\)</span> - її натуральний логарифм. Логарифмічна дохідність наступної години дорівнює</p>
+<p><span class="math display">\[
+r_{t+1}=p_{t+1}-p_t.
+\]</span></p>
+<p>Наївний прогноз на одну годину:</p>
+<p><span class="math display">\[
+\widehat p_{t+1\mid t}=p_t.
+\]</span></p>
+<p>«Шапка» над величиною означає прогноз. Запис <span class="math inline">\(t+1\mid t\)</span> читається як «значення для наступної години за інформацією, відомою до кінця поточної години».</p>
+<p>Після повернення до звичайної ціни:</p>
+<p><span class="math display">\[
+\widehat P_{t+1\mid t}=P_t.
+\]</span></p>
+<p>Для логарифмічної дохідності це те саме правило:</p>
+<p><span class="math display">\[
+\widehat r_{t+1\mid t}
+=
+\widehat p_{t+1\mid t}-p_t
+=0.
+\]</span></p>
+<p>Модель не має параметрів і використовує лише ціну, відому в момент створення прогнозу.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Показати / приховати код</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>benchmark_contract <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="sc">~</span><span class="st">`</span><span class="at">Поле</span><span class="st">`</span>, <span class="sc">~</span><span class="st">`</span><span class="at">Зафіксоване значення</span><span class="st">`</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="st">"Ціль"</span>, <span class="st">"ціна закриття наступної години або її логарифмічна дохідність"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="st">"Горизонт"</span>, <span class="st">"1 година"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="st">"Інформація"</span>, <span class="st">"остання відома ціна закриття"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="st">"Прогноз ціни"</span>, <span class="st">"поточна ціна"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="st">"Прогноз логарифмічної дохідності"</span>, <span class="st">"0"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8"></a>  <span class="st">"Показники похибки"</span>, <span class="st">"MAE та RMSE у базисних пунктах"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="st">"Умова порівняння"</span>, <span class="st">"однакові цільові години для еталона і кандидата"</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb2-13"><a href="#cb2-13"></a>  benchmark_contract,</span>
+<span id="cb2-14"><a href="#cb2-14"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"l"</span>),</span>
+<span id="cb2-15"><a href="#cb2-15"></a>  <span class="at">caption =</span> <span class="st">"Контракт наївного еталона до порівняння моделей"</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>)</span></code></pre></div>
+</details>
+<div id="tbl-naive-benchmark-contract" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-naive-benchmark-contract-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: Контракт наївного еталона до порівняння моделей
+</figcaption>
+<div aria-describedby="tbl-naive-benchmark-contract-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 65%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Поле</th>
+<th style="text-align: left;">Зафіксоване значення</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Ціль</td>
+<td style="text-align: left;">ціна закриття наступної години або її логарифмічна дохідність</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Горизонт</td>
+<td style="text-align: left;">1 година</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Інформація</td>
+<td style="text-align: left;">остання відома ціна закриття</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Прогноз ціни</td>
+<td style="text-align: left;">поточна ціна</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Прогноз логарифмічної дохідності</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Показники похибки</td>
+<td style="text-align: left;">MAE та RMSE у базисних пунктах</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Умова порівняння</td>
+<td style="text-align: left;">однакові цільові години для еталона і кандидата</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<section id="як-вимірюватиметься-похибка" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="як-вимірюватиметься-похибка"><span class="header-section-number">5.2.1</span> Як вимірюватиметься похибка</h3>
+<p>Для кожної з <span class="math inline">\(m\)</span> цільових годин похибка визначається як</p>
+<p><span class="math display">\[
+e_i=r_i-\widehat r_i,
+\]</span></p>
+<p>тобто фактична логарифмічна дохідність мінус прогноз. Далі обчислюються</p>
+<p><span class="math display">\[
+\operatorname{MAE}
+=
+\frac{1}{m}
+\sum_{i=1}^{m}|e_i|,
+\qquad
+\operatorname{RMSE}
+=
+\sqrt{
+\frac{1}{m}
+\sum_{i=1}^{m}e_i^2
+}.
+\]</span></p>
+<p>MAE (середня абсолютна похибка) є середнім модулем похибки. RMSE (корінь із середньої квадратичної похибки) сильніше реагує на кілька великих промахів, бо перед усередненням похибки підносяться до квадрата. Це дві міри величини похибки, а не два різні прогнози. Tsay подає відповідні середню абсолютну похибку (MAD) і середню квадратичну похибку (MSE); тут MAE збігається з MAD, а RMSE дорівнює квадратному кореню з MSE <span class="citation" data-cites="tsay2010"><a href="references.html#ref-tsay2010" role="doc-biblioref">[1, Розд. 4.4.2]</a>, с. 217</span>.</p>
+<p>Оскільки <span class="math inline">\(r_i\)</span> у коді зберігається як частка, результат множиться на 10 000 і подається в базисних пунктах. Один базисний пункт дорівнює 0,01 відсоткового пункта.</p>
+</section>
+</section>
+<section id="як-виглядає-цей-прогноз" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="як-виглядає-цей-прогноз"><span class="header-section-number">5.3</span> Як виглядає цей прогноз</h2>
+<p>Графік нижче будується локально на двотижневому фрагменті, який повністю належить відомій частині даних. Це лише пояснення механізму, а не оцінка майбутньої якості.</p>
+<div class="figure-reading-guide callout callout-style-simple callout-tip callout-titled" title="Перед графіком">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Перед графіком
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Питання:</strong> Як прогноз, що повторює останню ціну, поводиться під час фактичного руху BTC?</p>
+<p><strong>Що показано:</strong> Верхня панель показує фактичну ціну закриття. Нижня панель показує факт мінус наївний прогноз логарифмічної дохідності у базисних пунктах.</p>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Нуль унизу означає, що ціна за годину не змінилася.</li>
+<li>Додатна похибка відповідає зростанню, від'ємна - падінню.</li>
+<li>Повзунком унизу звузьте потрібний часовий проміжок.</li>
+<li>Зіставте найбільші промахи з рухом ціни на верхній панелі.</li>
+</ul>
+<p><strong>Важливе обмеження:</strong> Для прогнозу нульової логарифмічної дохідності похибка дорівнює фактичній логарифмічній дохідності. Це не прогноз іншої моделі.</p>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Показати / приховати код</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">plot_naive_point_benchmark</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  naive_illustration</span>
+<span id="cb3-3"><a href="#cb3-3"></a>)</span></code></pre></div>
+</details>
+<div id="fig-naive-point-benchmark" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-naive-point-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div id="htmlwidget-0403a07f81a6de45503c" style="width:100%;height:415px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0403a07f81a6de45503c">{"x":{"data":[{"x":["2021-07-07 00:00:00.000000","2021-07-07 01:00:00.000000","2021-07-07 02:00:00.000000","2021-07-07 03:00:00.000000","2021-07-07 04:00:00.000000","2021-07-07 05:00:00.000000","2021-07-07 06:00:00.000000","2021-07-07 07:00:00.000000","2021-07-07 08:00:00.000000","2021-07-07 09:00:00.000000","2021-07-07 10:00:00.000000","2021-07-07 11:00:00.000000","2021-07-07 12:00:00.000000","2021-07-07 13:00:00.000000","2021-07-07 14:00:00.000000","2021-07-07 15:00:00.000000","2021-07-07 16:00:00.000000","2021-07-07 17:00:00.000000","2021-07-07 18:00:00.000000","2021-07-07 19:00:00.000000","2021-07-07 20:00:00.000000","2021-07-07 21:00:00.000000","2021-07-07 22:00:00.000000","2021-07-07 23:00:00.000000","2021-07-08 00:00:00.000000","2021-07-08 01:00:00.000000","2021-07-08 02:00:00.000000","2021-07-08 03:00:00.000000","2021-07-08 04:00:00.000000","2021-07-08 05:00:00.000000","2021-07-08 06:00:00.000000","2021-07-08 07:00:00.000000","2021-07-08 08:00:00.000000","2021-07-08 09:00:00.000000","2021-07-08 10:00:00.000000","2021-07-08 11:00:00.000000","2021-07-08 12:00:00.000000","2021-07-08 13:00:00.000000","2021-07-08 14:00:00.000000","2021-07-08 15:00:00.000000","2021-07-08 16:00:00.000000","2021-07-08 17:00:00.000000","2021-07-08 18:00:00.000000","2021-07-08 19:00:00.000000","2021-07-08 20:00:00.000000","2021-07-08 21:00:00.000000","2021-07-08 22:00:00.000000","2021-07-08 23:00:00.000000","2021-07-09 00:00:00.000000","2021-07-09 01:00:00.000000","2021-07-09 02:00:00.000000","2021-07-09 03:00:00.000000","2021-07-09 04:00:00.000000","2021-07-09 05:00:00.000000","2021-07-09 06:00:00.000000","2021-07-09 07:00:00.000000","2021-07-09 08:00:00.000000","2021-07-09 09:00:00.000000","2021-07-09 10:00:00.000000","2021-07-09 11:00:00.000000","2021-07-09 12:00:00.000000","2021-07-09 13:00:00.000000","2021-07-09 14:00:00.000000","2021-07-09 15:00:00.000000","2021-07-09 16:00:00.000000","2021-07-09 17:00:00.000000","2021-07-09 18:00:00.000000","2021-07-09 19:00:00.000000","2021-07-09 20:00:00.000000","2021-07-09 21:00:00.000000","2021-07-09 22:00:00.000000","2021-07-09 23:00:00.000000","2021-07-10 00:00:00.000000","2021-07-10 01:00:00.000000","2021-07-10 02:00:00.000000","2021-07-10 03:00:00.000000","2021-07-10 04:00:00.000000","2021-07-10 05:00:00.000000","2021-07-10 06:00:00.000000","2021-07-10 07:00:00.000000","2021-07-10 08:00:00.000000","2021-07-10 09:00:00.000000","2021-07-10 10:00:00.000000","2021-07-10 11:00:00.000000","2021-07-10 12:00:00.000000","2021-07-10 13:00:00.000000","2021-07-10 14:00:00.000000","2021-07-10 15:00:00.000000","2021-07-10 16:00:00.000000","2021-07-10 17:00:00.000000","2021-07-10 18:00:00.000000","2021-07-10 19:00:00.000000","2021-07-10 20:00:00.000000","2021-07-10 21:00:00.000000","2021-07-10 22:00:00.000000","2021-07-10 23:00:00.000000","2021-07-11 00:00:00.000000","2021-07-11 01:00:00.000000","2021-07-11 02:00:00.000000","2021-07-11 03:00:00.000000","2021-07-11 04:00:00.000000","2021-07-11 05:00:00.000000","2021-07-11 06:00:00.000000","2021-07-11 07:00:00.000000","2021-07-11 08:00:00.000000","2021-07-11 09:00:00.000000","2021-07-11 10:00:00.000000","2021-07-11 11:00:00.000000","2021-07-11 12:00:00.000000","2021-07-11 13:00:00.000000","2021-07-11 14:00:00.000000","2021-07-11 15:00:00.000000","2021-07-11 16:00:00.000000","2021-07-11 17:00:00.000000","2021-07-11 18:00:00.000000","2021-07-11 19:00:00.000000","2021-07-11 20:00:00.000000","2021-07-11 21:00:00.000000","2021-07-11 22:00:00.000000","2021-07-11 23:00:00.000000","2021-07-12 00:00:00.000000","2021-07-12 01:00:00.000000","2021-07-12 02:00:00.000000","2021-07-12 03:00:00.000000","2021-07-12 04:00:00.000000","2021-07-12 05:00:00.000000","2021-07-12 06:00:00.000000","2021-07-12 07:00:00.000000","2021-07-12 08:00:00.000000","2021-07-12 09:00:00.000000","2021-07-12 10:00:00.000000","2021-07-12 11:00:00.000000","2021-07-12 12:00:00.000000","2021-07-12 13:00:00.000000","2021-07-12 14:00:00.000000","2021-07-12 15:00:00.000000","2021-07-12 16:00:00.000000","2021-07-12 17:00:00.000000","2021-07-12 18:00:00.000000","2021-07-12 19:00:00.000000","2021-07-12 20:00:00.000000","2021-07-12 21:00:00.000000","2021-07-12 22:00:00.000000","2021-07-12 23:00:00.000000","2021-07-13 00:00:00.000000","2021-07-13 01:00:00.000000","2021-07-13 02:00:00.000000","2021-07-13 03:00:00.000000","2021-07-13 04:00:00.000000","2021-07-13 05:00:00.000000","2021-07-13 06:00:00.000000","2021-07-13 07:00:00.000000","2021-07-13 08:00:00.000000","2021-07-13 09:00:00.000000","2021-07-13 10:00:00.000000","2021-07-13 11:00:00.000000","2021-07-13 12:00:00.000000","2021-07-13 13:00:00.000000","2021-07-13 14:00:00.000000","2021-07-13 15:00:00.000000","2021-07-13 16:00:00.000000","2021-07-13 17:00:00.000000","2021-07-13 18:00:00.000000","2021-07-13 19:00:00.000000","2021-07-13 20:00:00.000000","2021-07-13 21:00:00.000000","2021-07-13 22:00:00.000000","2021-07-13 23:00:00.000000","2021-07-14 00:00:00.000000","2021-07-14 01:00:00.000000","2021-07-14 02:00:00.000000","2021-07-14 03:00:00.000000","2021-07-14 04:00:00.000000","2021-07-14 05:00:00.000000","2021-07-14 06:00:00.000000","2021-07-14 07:00:00.000000","2021-07-14 08:00:00.000000","2021-07-14 09:00:00.000000","2021-07-14 10:00:00.000000","2021-07-14 11:00:00.000000","2021-07-14 12:00:00.000000","2021-07-14 13:00:00.000000","2021-07-14 14:00:00.000000","2021-07-14 15:00:00.000000","2021-07-14 16:00:00.000000","2021-07-14 17:00:00.000000","2021-07-14 18:00:00.000000","2021-07-14 19:00:00.000000","2021-07-14 20:00:00.000000","2021-07-14 21:00:00.000000","2021-07-14 22:00:00.000000","2021-07-14 23:00:00.000000","2021-07-15 00:00:00.000000","2021-07-15 01:00:00.000000","2021-07-15 02:00:00.000000","2021-07-15 03:00:00.000000","2021-07-15 04:00:00.000000","2021-07-15 05:00:00.000000","2021-07-15 06:00:00.000000","2021-07-15 07:00:00.000000","2021-07-15 08:00:00.000000","2021-07-15 09:00:00.000000","2021-07-15 10:00:00.000000","2021-07-15 11:00:00.000000","2021-07-15 12:00:00.000000","2021-07-15 13:00:00.000000","2021-07-15 14:00:00.000000","2021-07-15 15:00:00.000000","2021-07-15 16:00:00.000000","2021-07-15 17:00:00.000000","2021-07-15 18:00:00.000000","2021-07-15 19:00:00.000000","2021-07-15 20:00:00.000000","2021-07-15 21:00:00.000000","2021-07-15 22:00:00.000000","2021-07-15 23:00:00.000000","2021-07-16 00:00:00.000000","2021-07-16 01:00:00.000000","2021-07-16 02:00:00.000000","2021-07-16 03:00:00.000000","2021-07-16 04:00:00.000000","2021-07-16 05:00:00.000000","2021-07-16 06:00:00.000000","2021-07-16 07:00:00.000000","2021-07-16 08:00:00.000000","2021-07-16 09:00:00.000000","2021-07-16 10:00:00.000000","2021-07-16 11:00:00.000000","2021-07-16 12:00:00.000000","2021-07-16 13:00:00.000000","2021-07-16 14:00:00.000000","2021-07-16 15:00:00.000000","2021-07-16 16:00:00.000000","2021-07-16 17:00:00.000000","2021-07-16 18:00:00.000000","2021-07-16 19:00:00.000000","2021-07-16 20:00:00.000000","2021-07-16 21:00:00.000000","2021-07-16 22:00:00.000000","2021-07-16 23:00:00.000000","2021-07-17 00:00:00.000000","2021-07-17 01:00:00.000000","2021-07-17 02:00:00.000000","2021-07-17 03:00:00.000000","2021-07-17 04:00:00.000000","2021-07-17 05:00:00.000000","2021-07-17 06:00:00.000000","2021-07-17 07:00:00.000000","2021-07-17 08:00:00.000000","2021-07-17 09:00:00.000000","2021-07-17 10:00:00.000000","2021-07-17 11:00:00.000000","2021-07-17 12:00:00.000000","2021-07-17 13:00:00.000000","2021-07-17 14:00:00.000000","2021-07-17 15:00:00.000000","2021-07-17 16:00:00.000000","2021-07-17 17:00:00.000000","2021-07-17 18:00:00.000000","2021-07-17 19:00:00.000000","2021-07-17 20:00:00.000000","2021-07-17 21:00:00.000000","2021-07-17 22:00:00.000000","2021-07-17 23:00:00.000000","2021-07-18 00:00:00.000000","2021-07-18 01:00:00.000000","2021-07-18 02:00:00.000000","2021-07-18 03:00:00.000000","2021-07-18 04:00:00.000000","2021-07-18 05:00:00.000000","2021-07-18 06:00:00.000000","2021-07-18 07:00:00.000000","2021-07-18 08:00:00.000000","2021-07-18 09:00:00.000000","2021-07-18 10:00:00.000000","2021-07-18 11:00:00.000000","2021-07-18 12:00:00.000000","2021-07-18 13:00:00.000000","2021-07-18 14:00:00.000000","2021-07-18 15:00:00.000000","2021-07-18 16:00:00.000000","2021-07-18 17:00:00.000000","2021-07-18 18:00:00.000000","2021-07-18 19:00:00.000000","2021-07-18 20:00:00.000000","2021-07-18 21:00:00.000000","2021-07-18 22:00:00.000000","2021-07-18 23:00:00.000000","2021-07-19 00:00:00.000000","2021-07-19 01:00:00.000000","2021-07-19 02:00:00.000000","2021-07-19 03:00:00.000000","2021-07-19 04:00:00.000000","2021-07-19 05:00:00.000000","2021-07-19 06:00:00.000000","2021-07-19 07:00:00.000000","2021-07-19 08:00:00.000000","2021-07-19 09:00:00.000000","2021-07-19 10:00:00.000000","2021-07-19 11:00:00.000000","2021-07-19 12:00:00.000000","2021-07-19 13:00:00.000000","2021-07-19 14:00:00.000000","2021-07-19 15:00:00.000000","2021-07-19 16:00:00.000000","2021-07-19 17:00:00.000000","2021-07-19 18:00:00.000000","2021-07-19 19:00:00.000000","2021-07-19 20:00:00.000000","2021-07-19 21:00:00.000000","2021-07-19 22:00:00.000000","2021-07-19 23:00:00.000000","2021-07-20 00:00:00.000000","2021-07-20 01:00:00.000000","2021-07-20 02:00:00.000000","2021-07-20 03:00:00.000000","2021-07-20 04:00:00.000000","2021-07-20 05:00:00.000000","2021-07-20 06:00:00.000000","2021-07-20 07:00:00.000000","2021-07-20 08:00:00.000000","2021-07-20 09:00:00.000000","2021-07-20 10:00:00.000000","2021-07-20 11:00:00.000000","2021-07-20 12:00:00.000000","2021-07-20 13:00:00.000000","2021-07-20 14:00:00.000000","2021-07-20 15:00:00.000000","2021-07-20 16:00:00.000000","2021-07-20 17:00:00.000000","2021-07-20 18:00:00.000000","2021-07-20 19:00:00.000000","2021-07-20 20:00:00.000000","2021-07-20 21:00:00.000000","2021-07-20 22:00:00.000000","2021-07-20 23:00:00.000000"],"y":[34159.330000000002,34240.82,34269.720000000001,34439.980000000003,34714.970000000001,34809.720000000001,34721.629999999997,34708.190000000002,34805.370000000003,34698.949999999997,34615.940000000002,34832.059999999998,34852.5,34813.220000000001,34632.690000000002,34533.690000000002,34574.559999999998,34637.199999999997,34680.07,34628.800000000003,34567.349999999999,34240.010000000002,34156.099999999999,33865.300000000003,33251.459999999999,33351.620000000003,33368.699999999997,33320.019999999997,33300.760000000002,33154.830000000002,33116.360000000001,32486.779999999999,32578.549999999999,32571.740000000002,32483.490000000002,32695.91,32610.490000000002,32492.139999999999,32762.98,32910.019999999997,32915.480000000003,32892.019999999997,32840.910000000003,33013.839999999997,32797.379999999997,32687.650000000001,32557.439999999999,32892.169999999998,32386.630000000001,32672.889999999999,32957.980000000003,32940.489999999998,33028.970000000001,32995.980000000003,32871.25,32879.370000000003,32822.860000000001,32911.93,32906.260000000002,32773.07,32968.650000000001,33429.580000000002,33544.360000000001,33556.019999999997,33522.43,33481.809999999998,33384.379999999997,33446.970000000001,33515.82,33872.190000000002,33992.870000000003,33815.879999999997,34044.18,33800.889999999999,33723.879999999997,33786.139999999999,33660.849999999999,33668.410000000003,33806.25,33767.18,33769.519999999997,33736.379999999997,33639.209999999999,33797.489999999998,33852,33700.980000000003,33824.949999999997,33883.110000000001,34020,33410.980000000003,33464.449999999997,33411.449999999997,33318.660000000003,33427.080000000002,33643.32,33509.32,33720.790000000001,33627.129999999997,33522.910000000003,33452.239999999998,33466.080000000002,33597.239999999998,33474.260000000002,33507.300000000003,33694.589999999997,33696.419999999998,33750.779999999999,33818.900000000001,33740.510000000002,33908.330000000002,33927.769999999997,33949.489999999998,34015.370000000003,33900.849999999999,33958.989999999998,33894.559999999998,33842.519999999997,34473.050000000003,34390.989999999998,34246.510000000002,34184.5,34126.68,34270.010000000002,34454.970000000001,34294.160000000003,34331.989999999998,34380.870000000003,34281.800000000003,34275.360000000001,34066.169999999998,33775.150000000001,33533.080000000002,33562.989999999998,33564.989999999998,33405.540000000001,33346.639999999999,33149.400000000001,33115,33010,32834.220000000001,32846.870000000003,32885.709999999999,33062.099999999999,33109.629999999997,33067.410000000003,33157.129999999997,33067.559999999998,33076.540000000001,33117.970000000001,32814.519999999997,32972.720000000001,33175.860000000001,33223.879999999997,33277.349999999999,33099.879999999997,33043.360000000001,32352.610000000001,32574.630000000001,32569,32789.080000000002,32808.709999999999,32792.129999999997,32495.950000000001,32268.860000000001,32541.509999999998,32582.119999999999,32574.700000000001,32715.610000000001,32430.349999999999,32376.299999999999,32536.139999999999,31841.279999999999,31943.130000000001,31820.400000000001,31821.099999999999,31914.130000000001,31741.34,32316.619999999999,32427.580000000002,32440.07,32322.91,32801.139999999999,32860.900000000001,32786.010000000002,32840.389999999999,32855.559999999998,32751.189999999999,32728.360000000001,32799,32852.230000000003,32966.540000000001,32823.900000000001,32960.029999999999,32781.010000000002,32768.889999999999,32658.540000000001,32657.029999999999,32581.59,32486.279999999999,32471.240000000002,32377.48,32504.990000000002,31865,31883.509999999998,31725.439999999999,31839.580000000002,31778.439999999999,31694.540000000001,31569.720000000001,31272.09,31478.720000000001,31541.32,31735.41,31689.990000000002,31770.080000000002,31861.82,31638.939999999999,31808.939999999999,31923.77,31920.240000000002,31922.16,31806.040000000001,31627.740000000002,31754.150000000001,31476.119999999999,31400,31320.119999999999,31086.41,31696.759999999998,31786.709999999999,31869.689999999999,32126.07,32072.279999999999,32061.029999999999,31967.09,31902.34,31827.139999999999,31726.84,31586.099999999999,31390.98,31619.799999999999,31389.720000000001,31352.02,31313.779999999999,31387.779999999999,31483.470000000001,31592.619999999999,31519.970000000001,31686.200000000001,31607.970000000001,31291.509999999998,31396.130000000001,31516.34,31633.959999999999,31644.150000000001,31762.459999999999,31681.560000000001,31733.889999999999,31745.25,31835.369999999999,31726.669999999998,31721.18,31638.669999999998,31512.990000000002,31978.34,32194.700000000001,32203.439999999999,32155.009999999998,32080.709999999999,32051.84,31852.299999999999,31700,31765.59,31738.209999999999,31700.860000000001,31796.880000000001,31745.099999999999,31711.240000000002,31304.209999999999,31384.279999999999,31462.41,31604.689999999999,31612.360000000001,31643.849999999999,31633.07,31824.939999999999,31561.400000000001,31778.75,31606.200000000001,31600,31529.25,31540.310000000001,31749.5,31798.900000000001,31799.43,31605.75,31483.82,31387.209999999999,31213.32,31276.599999999999,30695.740000000002,30619.220000000001,30819.34,30666.09,30708.060000000001,30729.700000000001,30650.009999999998,30729.369999999999,30776.200000000001,30724.439999999999,30853.57,30819.860000000001,30808.529999999999,30629,30176.880000000001,29602.189999999999,29660.029999999999,29725.77,29710,29823,29633.389999999999,29422.040000000001,29681.66,29699.990000000002,29708.939999999999,29521.09,29735.029999999999,29883.950000000001,29658.950000000001,29659.41,29780.98,29778.630000000001,29849.25,29689.299999999999,29556.720000000001,29782.799999999999],"type":"scatter","mode":"lines","name":"Фактична ціна","line":{"color":"#22C55E","width":3},"meta":{"book_role":"actual"},"hovertemplate":["%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>"],"showlegend":false,"marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2021-07-07 00:00:00.000000","2021-07-07 01:00:00.000000","2021-07-07 02:00:00.000000","2021-07-07 03:00:00.000000","2021-07-07 04:00:00.000000","2021-07-07 05:00:00.000000","2021-07-07 06:00:00.000000","2021-07-07 07:00:00.000000","2021-07-07 08:00:00.000000","2021-07-07 09:00:00.000000","2021-07-07 10:00:00.000000","2021-07-07 11:00:00.000000","2021-07-07 12:00:00.000000","2021-07-07 13:00:00.000000","2021-07-07 14:00:00.000000","2021-07-07 15:00:00.000000","2021-07-07 16:00:00.000000","2021-07-07 17:00:00.000000","2021-07-07 18:00:00.000000","2021-07-07 19:00:00.000000","2021-07-07 20:00:00.000000","2021-07-07 21:00:00.000000","2021-07-07 22:00:00.000000","2021-07-07 23:00:00.000000","2021-07-08 00:00:00.000000","2021-07-08 01:00:00.000000","2021-07-08 02:00:00.000000","2021-07-08 03:00:00.000000","2021-07-08 04:00:00.000000","2021-07-08 05:00:00.000000","2021-07-08 06:00:00.000000","2021-07-08 07:00:00.000000","2021-07-08 08:00:00.000000","2021-07-08 09:00:00.000000","2021-07-08 10:00:00.000000","2021-07-08 11:00:00.000000","2021-07-08 12:00:00.000000","2021-07-08 13:00:00.000000","2021-07-08 14:00:00.000000","2021-07-08 15:00:00.000000","2021-07-08 16:00:00.000000","2021-07-08 17:00:00.000000","2021-07-08 18:00:00.000000","2021-07-08 19:00:00.000000","2021-07-08 20:00:00.000000","2021-07-08 21:00:00.000000","2021-07-08 22:00:00.000000","2021-07-08 23:00:00.000000","2021-07-09 00:00:00.000000","2021-07-09 01:00:00.000000","2021-07-09 02:00:00.000000","2021-07-09 03:00:00.000000","2021-07-09 04:00:00.000000","2021-07-09 05:00:00.000000","2021-07-09 06:00:00.000000","2021-07-09 07:00:00.000000","2021-07-09 08:00:00.000000","2021-07-09 09:00:00.000000","2021-07-09 10:00:00.000000","2021-07-09 11:00:00.000000","2021-07-09 12:00:00.000000","2021-07-09 13:00:00.000000","2021-07-09 14:00:00.000000","2021-07-09 15:00:00.000000","2021-07-09 16:00:00.000000","2021-07-09 17:00:00.000000","2021-07-09 18:00:00.000000","2021-07-09 19:00:00.000000","2021-07-09 20:00:00.000000","2021-07-09 21:00:00.000000","2021-07-09 22:00:00.000000","2021-07-09 23:00:00.000000","2021-07-10 00:00:00.000000","2021-07-10 01:00:00.000000","2021-07-10 02:00:00.000000","2021-07-10 03:00:00.000000","2021-07-10 04:00:00.000000","2021-07-10 05:00:00.000000","2021-07-10 06:00:00.000000","2021-07-10 07:00:00.000000","2021-07-10 08:00:00.000000","2021-07-10 09:00:00.000000","2021-07-10 10:00:00.000000","2021-07-10 11:00:00.000000","2021-07-10 12:00:00.000000","2021-07-10 13:00:00.000000","2021-07-10 14:00:00.000000","2021-07-10 15:00:00.000000","2021-07-10 16:00:00.000000","2021-07-10 17:00:00.000000","2021-07-10 18:00:00.000000","2021-07-10 19:00:00.000000","2021-07-10 20:00:00.000000","2021-07-10 21:00:00.000000","2021-07-10 22:00:00.000000","2021-07-10 23:00:00.000000","2021-07-11 00:00:00.000000","2021-07-11 01:00:00.000000","2021-07-11 02:00:00.000000","2021-07-11 03:00:00.000000","2021-07-11 04:00:00.000000","2021-07-11 05:00:00.000000","2021-07-11 06:00:00.000000","2021-07-11 07:00:00.000000","2021-07-11 08:00:00.000000","2021-07-11 09:00:00.000000","2021-07-11 10:00:00.000000","2021-07-11 11:00:00.000000","2021-07-11 12:00:00.000000","2021-07-11 13:00:00.000000","2021-07-11 14:00:00.000000","2021-07-11 15:00:00.000000","2021-07-11 16:00:00.000000","2021-07-11 17:00:00.000000","2021-07-11 18:00:00.000000","2021-07-11 19:00:00.000000","2021-07-11 20:00:00.000000","2021-07-11 21:00:00.000000","2021-07-11 22:00:00.000000","2021-07-11 23:00:00.000000","2021-07-12 00:00:00.000000","2021-07-12 01:00:00.000000","2021-07-12 02:00:00.000000","2021-07-12 03:00:00.000000","2021-07-12 04:00:00.000000","2021-07-12 05:00:00.000000","2021-07-12 06:00:00.000000","2021-07-12 07:00:00.000000","2021-07-12 08:00:00.000000","2021-07-12 09:00:00.000000","2021-07-12 10:00:00.000000","2021-07-12 11:00:00.000000","2021-07-12 12:00:00.000000","2021-07-12 13:00:00.000000","2021-07-12 14:00:00.000000","2021-07-12 15:00:00.000000","2021-07-12 16:00:00.000000","2021-07-12 17:00:00.000000","2021-07-12 18:00:00.000000","2021-07-12 19:00:00.000000","2021-07-12 20:00:00.000000","2021-07-12 21:00:00.000000","2021-07-12 22:00:00.000000","2021-07-12 23:00:00.000000","2021-07-13 00:00:00.000000","2021-07-13 01:00:00.000000","2021-07-13 02:00:00.000000","2021-07-13 03:00:00.000000","2021-07-13 04:00:00.000000","2021-07-13 05:00:00.000000","2021-07-13 06:00:00.000000","2021-07-13 07:00:00.000000","2021-07-13 08:00:00.000000","2021-07-13 09:00:00.000000","2021-07-13 10:00:00.000000","2021-07-13 11:00:00.000000","2021-07-13 12:00:00.000000","2021-07-13 13:00:00.000000","2021-07-13 14:00:00.000000","2021-07-13 15:00:00.000000","2021-07-13 16:00:00.000000","2021-07-13 17:00:00.000000","2021-07-13 18:00:00.000000","2021-07-13 19:00:00.000000","2021-07-13 20:00:00.000000","2021-07-13 21:00:00.000000","2021-07-13 22:00:00.000000","2021-07-13 23:00:00.000000","2021-07-14 00:00:00.000000","2021-07-14 01:00:00.000000","2021-07-14 02:00:00.000000","2021-07-14 03:00:00.000000","2021-07-14 04:00:00.000000","2021-07-14 05:00:00.000000","2021-07-14 06:00:00.000000","2021-07-14 07:00:00.000000","2021-07-14 08:00:00.000000","2021-07-14 09:00:00.000000","2021-07-14 10:00:00.000000","2021-07-14 11:00:00.000000","2021-07-14 12:00:00.000000","2021-07-14 13:00:00.000000","2021-07-14 14:00:00.000000","2021-07-14 15:00:00.000000","2021-07-14 16:00:00.000000","2021-07-14 17:00:00.000000","2021-07-14 18:00:00.000000","2021-07-14 19:00:00.000000","2021-07-14 20:00:00.000000","2021-07-14 21:00:00.000000","2021-07-14 22:00:00.000000","2021-07-14 23:00:00.000000","2021-07-15 00:00:00.000000","2021-07-15 01:00:00.000000","2021-07-15 02:00:00.000000","2021-07-15 03:00:00.000000","2021-07-15 04:00:00.000000","2021-07-15 05:00:00.000000","2021-07-15 06:00:00.000000","2021-07-15 07:00:00.000000","2021-07-15 08:00:00.000000","2021-07-15 09:00:00.000000","2021-07-15 10:00:00.000000","2021-07-15 11:00:00.000000","2021-07-15 12:00:00.000000","2021-07-15 13:00:00.000000","2021-07-15 14:00:00.000000","2021-07-15 15:00:00.000000","2021-07-15 16:00:00.000000","2021-07-15 17:00:00.000000","2021-07-15 18:00:00.000000","2021-07-15 19:00:00.000000","2021-07-15 20:00:00.000000","2021-07-15 21:00:00.000000","2021-07-15 22:00:00.000000","2021-07-15 23:00:00.000000","2021-07-16 00:00:00.000000","2021-07-16 01:00:00.000000","2021-07-16 02:00:00.000000","2021-07-16 03:00:00.000000","2021-07-16 04:00:00.000000","2021-07-16 05:00:00.000000","2021-07-16 06:00:00.000000","2021-07-16 07:00:00.000000","2021-07-16 08:00:00.000000","2021-07-16 09:00:00.000000","2021-07-16 10:00:00.000000","2021-07-16 11:00:00.000000","2021-07-16 12:00:00.000000","2021-07-16 13:00:00.000000","2021-07-16 14:00:00.000000","2021-07-16 15:00:00.000000","2021-07-16 16:00:00.000000","2021-07-16 17:00:00.000000","2021-07-16 18:00:00.000000","2021-07-16 19:00:00.000000","2021-07-16 20:00:00.000000","2021-07-16 21:00:00.000000","2021-07-16 22:00:00.000000","2021-07-16 23:00:00.000000","2021-07-17 00:00:00.000000","2021-07-17 01:00:00.000000","2021-07-17 02:00:00.000000","2021-07-17 03:00:00.000000","2021-07-17 04:00:00.000000","2021-07-17 05:00:00.000000","2021-07-17 06:00:00.000000","2021-07-17 07:00:00.000000","2021-07-17 08:00:00.000000","2021-07-17 09:00:00.000000","2021-07-17 10:00:00.000000","2021-07-17 11:00:00.000000","2021-07-17 12:00:00.000000","2021-07-17 13:00:00.000000","2021-07-17 14:00:00.000000","2021-07-17 15:00:00.000000","2021-07-17 16:00:00.000000","2021-07-17 17:00:00.000000","2021-07-17 18:00:00.000000","2021-07-17 19:00:00.000000","2021-07-17 20:00:00.000000","2021-07-17 21:00:00.000000","2021-07-17 22:00:00.000000","2021-07-17 23:00:00.000000","2021-07-18 00:00:00.000000","2021-07-18 01:00:00.000000","2021-07-18 02:00:00.000000","2021-07-18 03:00:00.000000","2021-07-18 04:00:00.000000","2021-07-18 05:00:00.000000","2021-07-18 06:00:00.000000","2021-07-18 07:00:00.000000","2021-07-18 08:00:00.000000","2021-07-18 09:00:00.000000","2021-07-18 10:00:00.000000","2021-07-18 11:00:00.000000","2021-07-18 12:00:00.000000","2021-07-18 13:00:00.000000","2021-07-18 14:00:00.000000","2021-07-18 15:00:00.000000","2021-07-18 16:00:00.000000","2021-07-18 17:00:00.000000","2021-07-18 18:00:00.000000","2021-07-18 19:00:00.000000","2021-07-18 20:00:00.000000","2021-07-18 21:00:00.000000","2021-07-18 22:00:00.000000","2021-07-18 23:00:00.000000","2021-07-19 00:00:00.000000","2021-07-19 01:00:00.000000","2021-07-19 02:00:00.000000","2021-07-19 03:00:00.000000","2021-07-19 04:00:00.000000","2021-07-19 05:00:00.000000","2021-07-19 06:00:00.000000","2021-07-19 07:00:00.000000","2021-07-19 08:00:00.000000","2021-07-19 09:00:00.000000","2021-07-19 10:00:00.000000","2021-07-19 11:00:00.000000","2021-07-19 12:00:00.000000","2021-07-19 13:00:00.000000","2021-07-19 14:00:00.000000","2021-07-19 15:00:00.000000","2021-07-19 16:00:00.000000","2021-07-19 17:00:00.000000","2021-07-19 18:00:00.000000","2021-07-19 19:00:00.000000","2021-07-19 20:00:00.000000","2021-07-19 21:00:00.000000","2021-07-19 22:00:00.000000","2021-07-19 23:00:00.000000","2021-07-20 00:00:00.000000","2021-07-20 01:00:00.000000","2021-07-20 02:00:00.000000","2021-07-20 03:00:00.000000","2021-07-20 04:00:00.000000","2021-07-20 05:00:00.000000","2021-07-20 06:00:00.000000","2021-07-20 07:00:00.000000","2021-07-20 08:00:00.000000","2021-07-20 09:00:00.000000","2021-07-20 10:00:00.000000","2021-07-20 11:00:00.000000","2021-07-20 12:00:00.000000","2021-07-20 13:00:00.000000","2021-07-20 14:00:00.000000","2021-07-20 15:00:00.000000","2021-07-20 16:00:00.000000","2021-07-20 17:00:00.000000","2021-07-20 18:00:00.000000","2021-07-20 19:00:00.000000","2021-07-20 20:00:00.000000","2021-07-20 21:00:00.000000","2021-07-20 22:00:00.000000","2021-07-20 23:00:00.000000"],"y":[-19.045457763263109,23.827444400270327,8.4366585679182364,49.559333975676054,79.529071858453193,27.256521002699316,-25.338224306022944,-3.8715353627213807,27.960030621304192,-30.622580916443372,-23.951575104328814,62.239574261188224,5.866436004246645,-11.276709452656695,-51.991659887127909,-28.626644218617418,11.827822225179993,18.100975066400391,12.369213463207316,-14.794645866166645,-17.761108429885162,-95.147516055659338,-24.536495452042242,-85.503024530639379,-182.92215419012115,30.076709817217175,5.1198796328011227,-14.599173187373498,-5.7819798977338177,-43.918121728586456,-11.609872803285009,-191.94182743719941,28.208589998092215,-2.0905509476010926,-27.130809969499463,65.180333679202462,-26.159778739349015,-36.35801821613105,83.010055064572853,44.779512342769387,1.6589315728787624,-7.1298867131670338,-15.550808491218927,52.518731748854748,-65.782333339211633,-33.513034261497388,-39.914167600659766,102.28721560625571,-154.88952213234299,87.999987497077043,86.877346936360382,-5.3081658529186289,26.824549740226139,-9.9931927992133964,-37.873203136601802,2.4699386990663479,-17.201855685752122,27.099821726320261,-1.7229279668815385,-40.557716582459783,59.499683608907617,138.84026856940721,34.276051961154238,3.4753901892537944,-10.015139827364427,-12.124607331165704,-29.141803638456114,18.730735889446049,20.563666556259971,105.7675756229676,35.564730128205717,-52.202821003028447,67.285782338751943,-71.719593727722383,-22.809417459192304,18.444674627862756,-37.152182510498442,2.2456804164413016,40.856876268830611,-11.563717974264742,0.69295657055498006,-9.8184018470313301,-28.84429431212283,46.941884951930838,16.115424313528393,-44.71164753667464,36.717788049668592,17.17964280898337,40.319268276583308,-180.63998494071734,15.990928624756823,-15.850257296281326,-27.810552029724697,32.487495189578475,64.481723458257107,-39.909131749931532,62.909519984112912,-27.813794510665112,-31.040959523934482,-21.103357357917812,4.1363860292169434,39.115321827154467,-36.671354545029189,9.8654025614550385,55.739648069560928,0.54309914644551127,16.11927901242721,20.16289645830911,-23.206252150359536,49.615143220002146,5.7314617238197192,6.3997871279206073,19.386494913227981,-33.723934735082217,17.13532310888273,-18.990905962662445,-15.36529482479521,184.59859302502247,-23.83247884987528,-42.099497619523859,-18.123367453727937,-16.928418981479894,41.911446243233371,53.826264209945066,-46.781768229404911,11.024952975460787,14.227324621654539,-28.857039421474852,-1.8787242700670059,-61.219189366388775,-85.794847477549325,-71.929106940765919,8.9155749304607994,0.59587671209248216,-47.618049697713182,-17.647368306474501,-59.324007402994681,-10.382649836186925,-31.75806071841065,-53.392816436564246,3.8519458664332453,11.817581029124986,53.493943356555114,14.365653784192133,-12.759714163161298,27.095712523486146,-27.050350742873775,2.7152837683704756,12.517656044219478,-92.04935006331597,48.094525607512196,61.419500946640241,14.463914579086156,16.080909036597994,-53.473283799296773,-17.090186013477538,-211.25940643181937,68.390667884456306,-1.7284882693883588,67.346174126101843,5.9849579035964231,-5.0548134301426515,-90.730813898003746,-70.127876751107522,84.138266287387665,12.47166512794743,-2.2775820035640773,43.164205769634926,-87.576212918735379,-16.680390834022749,49.247978679671661,-215.87910348486903,31.93573055335284,-38.495406876285067,0.21998224429789967,29.192666620239134,-54.289261987975053,179.61716747655703,34.27646295323504,3.8509180321319221,-36.181203462152851,146.87004155171391,18.202302730748574,-22.81601144301451,16.572602625246351,4.6182451946038858,-31.816874954468446,-6.9731697682988427,21.560467982959011,16.215998288047253,34.734807389990301,-43.36199104320827,41.387066510911225,-54.462309236025412,-3.6979461869873105,-33.732061502323603,-0.4623706109500188,-23.127415517358571,-29.295585721498444,-4.6307187431894778,-28.91655080701706,39.304966089106209,-198.85387245149684,5.8071947156681221,-49.700655452119271,35.912872417948066,-19.22097507066961,-26.436461267079963,-39.459929496640122,-94.724268905493318,65.85755525137759,19.86670290575702,61.346598883680507,-14.322340186784931,25.241082312681964,28.834613947780479,-70.19787329949682,53.587419094675987,36.034910254723513,-1.1058202652362652,0.60148114750627302,-36.442306078042442,-56.21625246446402,39.888418476508107,-87.942623644986455,-24.212701797789475,-25.471903813206755,-74.8995634214684,194.43721266987703,28.33810445306392,26.071234629005257,80.124486877662818,-16.757443949072293,-3.508317320715558,-29.34337831708579,-20.275747625300934,-23.599764160048775,-31.563745739151813,-44.458599401101573,-61.965599021290259,72.629161503083921,-73.030558747832046,-12.017519608866081,-12.204425618592389,23.603889395154603,30.440009984900126,34.609028222418772,-23.022358007754278,52.599416562259677,-24.719508869658384,-100.62489235969774,33.378221649891685,38.215045854821824,37.250855818726265,3.2207030482071199,37.317919157448593,-25.502811406763573,16.503868340581413,3.5791285519219236,28.348279822444766,-34.202837406556363,-1.730555097989674,-26.044899614284006,-39.802648393984214,146.58956838106431,67.430441131986726,2.7143641271806334,-15.050085619330142,-23.133556574257636,-9.0032290779402508,-62.449991034949463,-47.929120284530313,20.669475648624616,-8.6231065531828452,-11.775079399984595,30.243619123879618,-16.297890453385097,-10.671905506551456,-129.18598875693576,25.545373175352822,24.863692980546617,45.120273924938381,2.4265605679605193,9.9563355443822932,-3.4072455183622687,60.471667704393234,-83.154041882993624,68.629724781253088,-54.445235419157925,-1.9618328644610259,-22.414341884569552,3.5072387102034481,66.105669077734404,15.547208096704088,0.16667104309526018,-61.092990320814089,-38.653029909246612,-30.73277980030279,-55.555583075144853,20.252873305036772,-187.46331367334909,-24.959663914209674,65.144986384910993,-49.849311405705052,13.676769956802691,7.0445279563932877,-25.966250011790521,25.858861468485983,15.227892059030985,-16.832349133563802,41.940358021415882,-10.931775111926914,-3.6768768834126857,-58.443271076918656,-148.71204306771244,-192.27723194345168,19.52003092888523,22.139981899251278,-5.3065688793353347,37.962184236015318,-63.781417872295265,-71.577127569076325,87.852933003169596,6.1736245396305964,3.0130150695215066,-63.430874453782621,72.208889002700303,49.957349059243683,-75.576121066363982,0.15509531956215758,40.904903049989166,-0.78912538252651154,23.686917267213484,-53.73002359029072,-44.755823701674096,76.199165044901108],"type":"scatter","mode":"lines","name":"Факт мінус прогноз","line":{"color":"#FBBF24","width":1.8},"meta":{"book_role":"naive"},"hovertemplate":["%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>"],"showlegend":false,"marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,1],"automargin":true,"title":{"text":"Дата і час, UTC","font":{"color":"#F3F4F6","size":15}},"color":"#F3F4F6","tickfont":{"color":"#F3F4F6","size":13},"gridcolor":"#465266","zerolinecolor":"#94A3B8","linecolor":"#94A3B8","fixedrange":false,"type":"date","showspikes":false,"showticklabels":false,"anchor":"y2","rangeslider":{"visible":true,"thickness":0.089999999999999997,"bgcolor":"rgba(148,163,184,0.10)","bordercolor":"rgba(148,163,184,0.45)","borderwidth":1}},"yaxis2":{"domain":[0,0.29999999999999999],"automargin":true,"title":{"text":"Похибка, б.п.","font":{"color":"#F3F4F6","size":15}},"color":"#F3F4F6","tickfont":{"color":"#F3F4F6","size":13},"gridcolor":"#465266","zerolinecolor":"#94A3B8","linecolor":"#94A3B8","fixedrange":false,"zeroline":true,"zerolinewidth":1.3,"anchor":"x"},"yaxis":{"domain":[0.46000000000000002,1],"automargin":true,"title":{"text":"Фактична ціна, USDT","font":{"color":"#F3F4F6","size":15}},"color":"#F3F4F6","tickfont":{"color":"#F3F4F6","size":13},"gridcolor":"#465266","zerolinecolor":"#94A3B8","linecolor":"#94A3B8","fixedrange":false,"anchor":"x"},"annotations":[],"shapes":[],"images":[],"margin":{"b":90,"l":82,"t":116,"r":18},"hovermode":"x unified","showlegend":false,"autosize":true,"legend":{"orientation":"h","x":0,"y":1.0800000000000001,"xanchor":"left","yanchor":"bottom","bgcolor":"rgba(0,0,0,0)","font":{"size":13}},"paper_bgcolor":"rgba(0,0,0,0)","plot_bgcolor":"rgba(0,0,0,0)","font":{"color":"#F3F4F6","family":"system-ui, sans-serif","size":15},"hoverlabel":{"bgcolor":"rgba(11,18,32,0.98)","bordercolor":"#94A3B8","font":{"color":"#F3F4F6"}},"meta":{"book_chart":true,"auto_y_on_x":false,"palettes":{"dark":{"ar1":"#60A5FA","naive":"#FBBF24","buy_hold":"#14B8A6","cash":"#C084FC","actual":"#22C55E","price":"#F59E0B","positive":"#4ADE80","negative":"#FB7185","accent":"#38BDF8","neutral":"#94A3B8","grid":"#465266","background":"rgba(0,0,0,0)","panel":"rgba(0,0,0,0)","text":"#F3F4F6"},"light":{"ar1":"#2563EB","naive":"#B45309","buy_hold":"#0F766E","cash":"#7C3AED","actual":"#15803D","price":"#B45309","positive":"#16A34A","negative":"#BE123C","accent":"#0369A1","neutral":"#64748B","grid":"#D1D5DB","background":"rgba(0,0,0,0)","panel":"rgba(0,0,0,0)","text":"#111827"}},"aspect_ratio":1.1200000000000001,"min_height":760,"max_height":1080,"mobile_min_height":760,"mobile_max_height":1040,"mobile_aspect_ratio":1.55},"dragmode":"zoom"},"attrs":{"1a3b65777ea6d":{"x":{},"y":{},"type":"scatter","mode":"lines","name":"Фактична ціна","line":{"color":"#22C55E","width":3},"meta":{"book_role":"actual"},"hovertemplate":"%{x|%Y-%m-%d %H:%M} UTC<br>Фактична ціна: %{y:,.2f} USDT<extra><\/extra>","showlegend":false,"inherit":false},"1a3b664adddb1":{"x":{},"y":{},"type":"scatter","mode":"lines","name":"Факт мінус прогноз","line":{"color":"#FBBF24","width":1.8},"meta":{"book_role":"naive"},"hovertemplate":"%{x|%Y-%m-%d %H:%M} UTC<br>Факт мінус прогноз: %{y:.2f} б.п.<extra><\/extra>","showlegend":false,"inherit":false}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displaylogo":false,"responsive":true,"scrollZoom":false,"doubleClick":"reset","modeBarButtonsToRemove":["lasso2d","select2d","autoScale2d","toggleSpikelines"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naive-point-benchmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Фактична ціна та похибка наївного прогнозу на відомому двотижневому фрагменті
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="figure-reader-review callout callout-style-simple callout-note callout-titled" title="Після локального перегляду">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Після локального перегляду
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Що потрібно зафіксувати:</strong></p>
+<ul>
+<li>У які години модуль похибки був найбільшим?</li>
+<li>Чи групуються великі промахи в окремі часові ділянки?</li>
+<li>Чому масштаб рівня ціни не показує масштаб годинної похибки?</li>
+</ul>
+<p><strong>Наступний етап:</strong> Формулу наївного еталона вже зафіксовано. Після вибору прогнозної цілі кандидат і еталон будуть оцінені одним кодом на тих самих годинах.</p>
+</div>
+</div>
+</section>
+<section id="як-відбудеться-майбутнє-порівняння" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="як-відбудеться-майбутнє-порівняння"><span class="header-section-number">5.4</span> Як відбудеться майбутнє порівняння</h2>
+<p>Для кандидата з прогнозом логарифмічної дохідності код обчислить дві строки: наївний прогноз і кандидат. Для обох використовуватимуться ті самі фактичні значення та однакова кількість годин.</p>
+<p>Відношення</p>
+<p><span class="math display">\[
+Q_{\mathrm{MAE}}
+=
+\frac{\operatorname{MAE}_{\mathrm{candidate}}}
+     {\operatorname{MAE}_{\mathrm{naive}}}
+\]</span></p>
+<p>та аналогічне відношення для RMSE лише показують числовий масштаб відносно наївного еталона. Значення менше 1 означає меншу похибку кандидата, а значення більше 1 - більшу. Саме відношення не показує, чи є різниця стійкою, статистично переконливою або практично корисною. Код не перетворює його на автоматичний статус.</p>
+<p>Функція <code>compare_return_forecast_to_naive()</code> вже реалізує цей контракт, але в поточному розділі не запускається, бо прогнозу кандидата ще немає.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Якщо прогнозна ціль зміниться
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Цей еталон придатний для наступної ціни або середньої логарифмічної дохідності. Він не є мірилом для прогнозу волатильності.</p>
+<p>Якщо після аналізу графіків і теорії обирається умовна дисперсія або масштаб наступного руху, перед порівнянням треба окремо зафіксувати простий еталон волатильності. Лише після цього його можна чесно зіставляти, наприклад, із GARCH-моделлю умовної дисперсії, експоненційно зваженим рухомим середнім або моделлю на основі внутрішньогодинного діапазону.</p>
+</div>
+</div>
+</section>
+<section id="що-зафіксовано-зараз" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="що-зафіксовано-зараз"><span class="header-section-number">5.5</span> Що зафіксовано зараз</h2>
+<ul>
+<li>наївний прогноз ціни та логарифмічної дохідності;</li>
+<li>горизонт в одну годину;</li>
+<li>однакові години й однакові втрати для майбутнього порівняння;</li>
+<li>відсутність автоматичного вибору моделі;</li>
+<li>заборона порівнювати моделі з різними прогнозними цілями.</li>
+</ul>
+<p>Період внутрішньої перевірки та закритий тестовий період у цьому розділі не оцінюються. Їхні метрики мають бути обчислені одночасно для наївного еталона і вже визначеного кандидата.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-tsay2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">R. S. Tsay, <em>Analysis of Financial Time Series</em>, 3ий вид. Wiley, 2010 [Online]. Доступний у: <a href="https://www.wiley.com/en-us/Analysis%2Bof%2BFinancial%2BTime%2BSeries%2C%2B3rd%2BEdition-p-9780470414354">https://www.wiley.com/en-us/Analysis%2Bof%2BFinancial%2BTime%2BSeries%2C%2B3rd%2BEdition-p-9780470414354</a>. [Дата звернення: 20-Лип-2026]</div>
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script>
+(function () {
+  "use strict";
+
+  function isDarkTheme() {
+    return document.body.classList.contains("quarto-dark") ||
+      document.documentElement.getAttribute("data-bs-theme") === "dark";
+  }
+
+  function chartMeta(plot) {
+    return (plot && plot.layout && plot.layout.meta) || {};
+  }
+
+  function fallbackPalette(dark) {
+    return dark
+      ? {
+          ar1: "#60A5FA",
+          naive: "#FBBF24",
+          buy_hold: "#14B8A6",
+          cash: "#C084FC",
+          actual: "#22C55E",
+          price: "#F59E0B",
+          positive: "#4ADE80",
+          negative: "#FB7185",
+          accent: "#38BDF8",
+          neutral: "#94A3B8",
+          grid: "#465266",
+          text: "#F3F4F6"
+        }
+      : {
+          ar1: "#2563EB",
+          naive: "#B45309",
+          buy_hold: "#0F766E",
+          cash: "#7C3AED",
+          actual: "#15803D",
+          price: "#B45309",
+          positive: "#16A34A",
+          negative: "#BE123C",
+          accent: "#0369A1",
+          neutral: "#64748B",
+          grid: "#D1D5DB",
+          text: "#111827"
+        };
+  }
+
+  function rolePalette(plot) {
+    const dark = isDarkTheme();
+    const palettes = chartMeta(plot).palettes || {};
+    return palettes[dark ? "dark" : "light"] || fallbackPalette(dark);
+  }
+
+  function themeColours(plot) {
+    const dark = isDarkTheme();
+    const bodyStyle = window.getComputedStyle(document.body);
+    const palette = rolePalette(plot);
+    const pageBackground = bodyStyle.backgroundColor ||
+      (dark ? "#212121" : "#FFFFFF");
+    const pageText = bodyStyle.color || palette.text;
+
+    return dark
+      ? {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: palette.grid || "#465266",
+          axis: palette.neutral || "#CBD5E1",
+          slider: "rgba(148,163,184,0.14)",
+          sliderBorder: "rgba(203,213,225,0.45)",
+          button: "rgba(248,250,252,0.97)",
+          buttonText: "#0F172A",
+          buttonActive: "rgba(253,224,71,0.97)",
+          hover: "rgba(17,24,39,0.98)"
+        }
+      : {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: palette.grid || "#D1D5DB",
+          axis: palette.neutral || "#4B5563",
+          slider: "rgba(107,114,128,0.10)",
+          sliderBorder: "rgba(75,85,99,0.35)",
+          button: "rgba(255,255,255,0.98)",
+          buttonText: "#0F172A",
+          buttonActive: "rgba(253,224,71,0.97)",
+          hover: "rgba(255,255,255,0.98)"
+        };
+  }
+
+  function roleOf(trace) {
+    if (!trace || !trace.meta) return null;
+    return trace.meta.book_role || null;
+  }
+
+  function alphaColour(hex, alpha) {
+    if (typeof hex !== "string" || !/^#[0-9a-f]{6}$/i.test(hex)) return hex;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    return "rgba(" + red + "," + green + "," + blue + "," + alpha + ")";
+  }
+
+  function restyleTrace(plot, trace, index, palette, colours) {
+    const role = roleOf(trace);
+    const update = {
+      "hoverlabel.bgcolor": colours.hover,
+      "hoverlabel.font.color": colours.text,
+      "hoverlabel.bordercolor": colours.axis
+    };
+
+    if (role && palette[role]) {
+      if (trace.line) update["line.color"] = palette[role];
+      if (trace.marker) update["marker.color"] = palette[role];
+      if (trace.fill && trace.fill !== "none") {
+        const alpha = trace.meta.book_fill_alpha || 0.14;
+        update.fillcolor = alphaColour(palette[role], alpha);
+      }
+    }
+
+    if ((trace.mode || "").indexOf("text") >= 0 || trace.textfont) {
+      update["textfont.color"] = colours.text;
+    }
+
+    if (trace.type === "histogram2d" || role === "density") {
+      update.colorscale = isDarkTheme()
+        ? [[0, "#13213A"], [0.25, "#1D4ED8"], [0.6, "#38BDF8"], [1, "#FBBF24"]]
+        : [[0, "#F8FAFC"], [0.25, "#BFDBFE"], [0.6, "#0284C7"], [1, "#7C2D12"]];
+      update["colorbar.tickfont.color"] = colours.text;
+      update["colorbar.title.font.color"] = colours.text;
+    }
+
+    Plotly.restyle(plot, update, [index]);
+  }
+
+  function mappedThemeColour(value, plot) {
+    if (typeof value !== "string") return value;
+    const palettes = chartMeta(plot).palettes || {};
+    const darkPalette = palettes.dark || fallbackPalette(true);
+    const activePalette = rolePalette(plot);
+    const roles = Object.keys(darkPalette);
+    for (let i = 0; i < roles.length; i += 1) {
+      const role = roles[i];
+      if (darkPalette[role] === value && activePalette[role]) {
+        return activePalette[role];
+      }
+    }
+    return value;
+  }
+
+  function themeUpdate(plot) {
+    const colours = themeColours(plot);
+    const palette = rolePalette(plot);
+    const compact = Math.max(320, plot.clientWidth || 720) < 600;
+    const update = {
+      paper_bgcolor: colours.page,
+      plot_bgcolor: colours.plot,
+      "font.color": colours.text,
+      "title.font.color": colours.text,
+      "title.font.size": compact ? 16 : 19,
+      "legend.font.color": colours.text,
+      "legend.font.size": compact ? 11 : 13,
+      "hoverlabel.bgcolor": colours.hover,
+      "hoverlabel.font.color": colours.text,
+      "hoverlabel.bordercolor": colours.axis
+    };
+
+    Object.keys(plot.layout || {}).forEach(function (key) {
+      if (!/^xaxis\d*$/.test(key) && !/^yaxis\d*$/.test(key)) return;
+      update[key + ".color"] = colours.text;
+      update[key + ".tickfont.color"] = colours.text;
+      update[key + ".tickfont.size"] = compact ? 11 : 13;
+      update[key + ".title.font.color"] = colours.text;
+      update[key + ".title.font.size"] = compact ? 12 : 15;
+      update[key + ".gridcolor"] = colours.grid;
+      update[key + ".linecolor"] = colours.axis;
+      update[key + ".zerolinecolor"] = colours.axis;
+
+      if (/^xaxis\d*$/.test(key) && plot.layout[key].rangeslider) {
+        update[key + ".rangeslider.bgcolor"] = colours.slider;
+        update[key + ".rangeslider.bordercolor"] = colours.sliderBorder;
+      }
+
+      if (/^xaxis\d*$/.test(key) && plot.layout[key].rangeselector) {
+        update[key + ".rangeselector.bgcolor"] = colours.button;
+        update[key + ".rangeselector.activecolor"] = colours.buttonActive;
+        update[key + ".rangeselector.bordercolor"] = colours.axis;
+        update[key + ".rangeselector.font.color"] = colours.buttonText;
+        update[key + ".rangeselector.font.size"] = compact ? 11 : 12;
+      }
+    });
+
+    const currentMargin = plot.layout.margin || {};
+    const currentLeft = Number(currentMargin.l) || 72;
+    const currentRight = Number(currentMargin.r) || 18;
+    update["margin.l"] = compact
+      ? Math.min(82, Math.max(54, currentLeft))
+      : Math.max(60, currentLeft);
+    update["margin.r"] = compact
+      ? Math.min(24, Math.max(12, currentRight))
+      : Math.min(36, Math.max(14, currentRight));
+
+    (plot.layout.annotations || []).forEach(function (_, index) {
+      update["annotations[" + index + "].font.color"] = colours.text;
+    });
+
+    (plot.layout.shapes || []).forEach(function (shape, index) {
+      if (!shape || !shape.line) return;
+      const mapped = mappedThemeColour(shape.line.color, plot);
+      if (mapped) update["shapes[" + index + "].line.color"] = mapped;
+    });
+
+    Plotly.relayout(plot, update);
+
+    (plot.data || []).forEach(function (trace, index) {
+      restyleTrace(plot, trace, index, palette, colours);
+    });
+  }
+
+  function visibleNumericYRange(plot, xMin, xMax) {
+    let yMin = Infinity;
+    let yMax = -Infinity;
+
+    (plot.data || []).forEach(function (trace) {
+      if (!trace || trace.visible === "legendonly") return;
+      if (!trace.x || !trace.y) return;
+      const traceType = trace.type || "scatter";
+      if (traceType.indexOf("scatter") !== 0) return;
+
+      const n = Math.min(trace.x.length || 0, trace.y.length || 0);
+      for (let i = 0; i < n; i += 1) {
+        const xVal = new Date(trace.x[i]).getTime();
+        const yVal = Number(trace.y[i]);
+        if (!Number.isFinite(xVal) || !Number.isFinite(yVal)) continue;
+        if (xVal >= xMin && xVal <= xMax) {
+          if (yVal < yMin) yMin = yVal;
+          if (yVal > yMax) yMax = yVal;
+        }
+      }
+    });
+
+    if (!Number.isFinite(yMin) || !Number.isFinite(yMax)) return null;
+
+    if (yMin === yMax) {
+      const pad = Math.abs(yMin) > 0 ? Math.abs(yMin) * 0.08 : 1;
+      return [yMin - pad, yMax + pad];
+    }
+
+    const pad = (yMax - yMin) * 0.10;
+    return [yMin - pad, yMax + pad];
+  }
+
+  function resizePlot(plot) {
+    if (!window.Plotly || !plot) return;
+    const container = plot.parentElement || plot;
+    const width = Math.max(320, container.clientWidth || plot.clientWidth || 720);
+    const meta = chartMeta(plot);
+    const compact = width < 600;
+    const ratio = Number(compact ? meta.mobile_aspect_ratio : meta.aspect_ratio) ||
+      (compact ? 1.18 : 0.92);
+    const minHeight = Number(compact ? meta.mobile_min_height : meta.min_height) ||
+      (compact ? 560 : 620);
+    const maxHeight = Number(compact ? meta.mobile_max_height : meta.max_height) ||
+      (compact ? 900 : 980);
+    const height = Math.min(maxHeight, Math.max(minHeight, Math.round(width * ratio)));
+
+    plot.style.height = height + "px";
+    Plotly.relayout(plot, { height: height, autosize: true });
+  }
+
+  function bindAutoY(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    if (plot.__bookAutoYBound) return;
+    if (!(chartMeta(plot).auto_y_on_x === true)) return;
+
+    plot.__bookAutoYBound = true;
+    let updating = false;
+
+    plot.on("plotly_relayout", function (eventData) {
+      if (updating) return;
+      const keys = Object.keys(eventData || {});
+      const xChanged = keys.some(function (key) {
+        return key.indexOf("xaxis.range") === 0 || key === "xaxis.autorange";
+      });
+      if (!xChanged) return;
+
+      if (eventData["xaxis.autorange"] === true) {
+        updating = true;
+        Plotly.relayout(plot, { "yaxis.autorange": true })
+          .finally(function () { updating = false; });
+        return;
+      }
+
+      const xRange = plot.layout.xaxis && plot.layout.xaxis.range;
+      if (!Array.isArray(xRange) || xRange.length !== 2) return;
+
+      const xMin = new Date(xRange[0]).getTime();
+      const xMax = new Date(xRange[1]).getTime();
+      if (!Number.isFinite(xMin) || !Number.isFinite(xMax)) return;
+
+      const yRange = visibleNumericYRange(plot, xMin, xMax);
+      if (!yRange) return;
+
+      updating = true;
+      Plotly.relayout(plot, { "yaxis.range": yRange })
+        .finally(function () { updating = false; });
+    });
+  }
+
+  function preparePlot(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    themeUpdate(plot);
+    resizePlot(plot);
+    bindAutoY(plot);
+  }
+
+  function prepareAllPlots() {
+    document.querySelectorAll(".js-plotly-plot").forEach(preparePlot);
+  }
+
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      document.querySelectorAll(".js-plotly-plot").forEach(function (plot) {
+        resizePlot(plot);
+        themeUpdate(plot);
+      });
+    }, 160);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    [80, 300, 900].forEach(function (delay) {
+      window.setTimeout(prepareAllPlots, delay);
+    });
+  });
+
+  document.addEventListener("quarto:themeChanged", function () {
+    window.setTimeout(prepareAllPlots, 40);
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".quarto-color-scheme-toggle")) return;
+    window.setTimeout(prepareAllPlots, 120);
+  });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./04-before-model.html" class="pagination-link" aria-label="Дослідницький аналіз годинних даних">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Дослідницький аналіз годинних даних</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="Джерела">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Джерела</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/05-naive-benchmark.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

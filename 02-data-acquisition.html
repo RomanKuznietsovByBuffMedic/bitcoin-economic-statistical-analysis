@@ -131,7 +131,6 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 <meta name="darkreader-lock">
-<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <script src="site_libs/plotly-binding-4.12.0/plotly.js"></script>
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
@@ -393,13 +392,25 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03-price-and-returns.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна та підготовка дохідностей BTC</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна і дохідність BTC</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-before-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Дослідницький аналіз годинних даних</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-naive-benchmark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Наївний еталон для майбутнього порівняння</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Джерела</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Джерела</span></span></a>
   </div>
 </li>
     </ul>
@@ -412,22 +423,18 @@ window.Quarto = {
     <h2 id="toc-title">Зміст</h2>
    
   <ul>
-  <li><a href="#binance-як-початкове-джерело" id="toc-binance-як-початкове-джерело" class="nav-link active" data-scroll-target="#binance-як-початкове-джерело"><span class="header-section-number">2.1</span> Binance як початкове джерело</a>
+  <li><a href="#що-містить-один-рядок-даних" id="toc-що-містить-один-рядок-даних" class="nav-link active" data-scroll-target="#що-містить-один-рядок-даних"><span class="header-section-number">2.1</span> Що містить один рядок даних</a>
   <ul>
-  <li><a href="#період-і-формат-дати" id="toc-період-і-формат-дати" class="nav-link" data-scroll-target="#період-і-формат-дати"><span class="header-section-number">2.1.1</span> Період і формат дати</a></li>
-  <li><a href="#перевірка-повноти-binance" id="toc-перевірка-повноти-binance" class="nav-link" data-scroll-target="#перевірка-повноти-binance"><span class="header-section-number">2.1.2</span> Перевірка повноти Binance</a></li>
-  <li><a href="#де-саме-є-розриви-binance" id="toc-де-саме-є-розриви-binance" class="nav-link" data-scroll-target="#де-саме-є-розриви-binance"><span class="header-section-number">2.1.3</span> Де саме є розриви Binance</a></li>
+  <li><a href="#період-спостережень" id="toc-період-спостережень" class="nav-link" data-scroll-target="#період-спостережень"><span class="header-section-number">2.1.1</span> Період спостережень</a></li>
   </ul></li>
-  <li><a href="#bybit-як-альтернатива-на-тому-самому-проміжку" id="toc-bybit-як-альтернатива-на-тому-самому-проміжку" class="nav-link" data-scroll-target="#bybit-як-альтернатива-на-тому-самому-проміжку"><span class="header-section-number">2.2</span> Bybit як альтернатива на тому самому проміжку</a></li>
-  <li><a href="#вибір-основного-джерела" id="toc-вибір-основного-джерела" class="nav-link" data-scroll-target="#вибір-основного-джерела"><span class="header-section-number">2.3</span> Вибір основного джерела</a></li>
-  <li><a href="#навіщо-потрібна-контрольна-біржа" id="toc-навіщо-потрібна-контрольна-біржа" class="nav-link" data-scroll-target="#навіщо-потрібна-контрольна-біржа"><span class="header-section-number">2.4</span> Навіщо потрібна контрольна біржа</a></li>
-  <li><a href="#bitstamp-як-контрольна-біржа" id="toc-bitstamp-як-контрольна-біржа" class="nav-link" data-scroll-target="#bitstamp-як-контрольна-біржа"><span class="header-section-number">2.5</span> Bitstamp як контрольна біржа</a>
+  <li><a href="#чи-повний-ряд-binance" id="toc-чи-повний-ряд-binance" class="nav-link" data-scroll-target="#чи-повний-ряд-binance"><span class="header-section-number">2.2</span> Чи повний ряд Binance</a>
   <ul>
-  <li><a href="#поточна-технічна-перевірка-даних" id="toc-поточна-технічна-перевірка-даних" class="nav-link" data-scroll-target="#поточна-технічна-перевірка-даних"><span class="header-section-number">2.5.1</span> Поточна технічна перевірка даних</a></li>
+  <li><a href="#де-саме-є-розриви" id="toc-де-саме-є-розриви" class="nav-link" data-scroll-target="#де-саме-є-розриви"><span class="header-section-number">2.2.1</span> Де саме є розриви</a></li>
   </ul></li>
-  <li><a href="#як-джерела-та-кеші-контролюються" id="toc-як-джерела-та-кеші-контролюються" class="nav-link" data-scroll-target="#як-джерела-та-кеші-контролюються"><span class="header-section-number">2.6</span> Як джерела та кеші контролюються</a></li>
-  <li><a href="#які-дані-використовуються-далі" id="toc-які-дані-використовуються-далі" class="nav-link" data-scroll-target="#які-дані-використовуються-далі"><span class="header-section-number">2.7</span> Які дані використовуються далі</a></li>
-  <li><a href="#висновок" id="toc-висновок" class="nav-link" data-scroll-target="#висновок"><span class="header-section-number">2.8</span> Висновок</a></li>
+  <li><a href="#чи-повніший-ряд-bybit" id="toc-чи-повніший-ряд-bybit" class="nav-link" data-scroll-target="#чи-повніший-ряд-bybit"><span class="header-section-number">2.3</span> Чи повніший ряд Bybit</a></li>
+  <li><a href="#чи-узгоджується-bybit-з-незалежним-джерелом" id="toc-чи-узгоджується-bybit-з-незалежним-джерелом" class="nav-link" data-scroll-target="#чи-узгоджується-bybit-з-незалежним-джерелом"><span class="header-section-number">2.4</span> Чи узгоджується Bybit з незалежним джерелом</a></li>
+  <li><a href="#як-перевіряється-походження-даних" id="toc-як-перевіряється-походження-даних" class="nav-link" data-scroll-target="#як-перевіряється-походження-даних"><span class="header-section-number">2.5</span> Як перевіряється походження даних</a></li>
+  <li><a href="#висновок" id="toc-висновок" class="nav-link" data-scroll-target="#висновок"><span class="header-section-number">2.6</span> Висновок</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/RomanKuznietsovByBuffMedic/bitcoin-economic-statistical-analysis/blob/main/02-data-acquisition.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
     </div>
@@ -466,85 +473,83 @@ window.Quarto = {
 <span id="cb1-7"><a href="#cb1-7"></a>  <span class="at">packages =</span> <span class="fu">c</span>(</span>
 <span id="cb1-8"><a href="#cb1-8"></a>    <span class="st">"dplyr"</span>,</span>
 <span id="cb1-9"><a href="#cb1-9"></a>    <span class="st">"ggplot2"</span>,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="st">"htmlwidgets"</span>,</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    <span class="st">"knitr"</span>,</span>
-<span id="cb1-12"><a href="#cb1-12"></a>    <span class="st">"plotly"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13"></a>    <span class="st">"scales"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14"></a>    <span class="st">"tibble"</span>,</span>
-<span id="cb1-15"><a href="#cb1-15"></a>    <span class="st">"yaml"</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>  ),</span>
-<span id="cb1-17"><a href="#cb1-17"></a>  <span class="at">modules =</span> <span class="fu">c</span>(</span>
-<span id="cb1-18"><a href="#cb1-18"></a>    <span class="st">"R/project_config.R"</span>,</span>
-<span id="cb1-19"><a href="#cb1-19"></a>    <span class="st">"R/project_io.R"</span>,</span>
-<span id="cb1-20"><a href="#cb1-20"></a>    <span class="st">"R/data_provenance.R"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21"></a>    <span class="st">"R/hourly_ohlc_quality.R"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22"></a>    <span class="st">"R/exchange_comparison.R"</span>,</span>
-<span id="cb1-23"><a href="#cb1-23"></a>    <span class="st">"R/book_charts.R"</span></span>
-<span id="cb1-24"><a href="#cb1-24"></a>  ),</span>
-<span id="cb1-25"><a href="#cb1-25"></a>  <span class="at">envir =</span> knitr<span class="sc">::</span><span class="fu">knit_global</span>()</span>
-<span id="cb1-26"><a href="#cb1-26"></a>)</span>
-<span id="cb1-27"><a href="#cb1-27"></a></span>
-<span id="cb1-28"><a href="#cb1-28"></a>config <span class="ot">&lt;-</span> <span class="fu">read_project_config</span>()</span>
-<span id="cb1-29"><a href="#cb1-29"></a>data_start <span class="ot">&lt;-</span> config<span class="sc">$</span>study<span class="sc">$</span>data_start</span>
-<span id="cb1-30"><a href="#cb1-30"></a>data_end <span class="ot">&lt;-</span> config<span class="sc">$</span>study<span class="sc">$</span>data_end_exclusive</span>
-<span id="cb1-31"><a href="#cb1-31"></a></span>
-<span id="cb1-32"><a href="#cb1-32"></a>raw_data_by_exchange <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb1-33"><a href="#cb1-33"></a>  config<span class="sc">$</span>paths<span class="sc">$</span>cache,</span>
-<span id="cb1-34"><a href="#cb1-34"></a>  read_rds_required,</span>
-<span id="cb1-35"><a href="#cb1-35"></a>  <span class="at">description =</span> <span class="st">"кеш ринкових даних"</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a>)</span>
-<span id="cb1-37"><a href="#cb1-37"></a></span>
-<span id="cb1-38"><a href="#cb1-38"></a>candidate_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>candidate<span class="sc">$</span>id]]</span>
-<span id="cb1-39"><a href="#cb1-39"></a>primary_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>primary<span class="sc">$</span>id]]</span>
-<span id="cb1-40"><a href="#cb1-40"></a>reference_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>reference<span class="sc">$</span>id]]</span>
-<span id="cb1-41"><a href="#cb1-41"></a></span>
-<span id="cb1-42"><a href="#cb1-42"></a>source_provenance <span class="ot">&lt;-</span> <span class="fu">source_metadata_summary</span>(</span>
-<span id="cb1-43"><a href="#cb1-43"></a>  <span class="at">config =</span> config,</span>
-<span id="cb1-44"><a href="#cb1-44"></a>  <span class="at">data_by_exchange =</span> raw_data_by_exchange</span>
-<span id="cb1-45"><a href="#cb1-45"></a>)</span>
-<span id="cb1-46"><a href="#cb1-46"></a>manifest_check <span class="ot">&lt;-</span> <span class="fu">validate_data_manifest</span>(config)</span>
-<span id="cb1-47"><a href="#cb1-47"></a></span>
-<span id="cb1-48"><a href="#cb1-48"></a>candidate_quality <span class="ot">&lt;-</span> <span class="fu">require_bounded_hourly_ohlc</span>(</span>
-<span id="cb1-49"><a href="#cb1-49"></a>  <span class="at">data =</span> candidate_raw,</span>
-<span id="cb1-50"><a href="#cb1-50"></a>  <span class="at">start_time =</span> data_start,</span>
-<span id="cb1-51"><a href="#cb1-51"></a>  <span class="at">end_time =</span> data_end,</span>
-<span id="cb1-52"><a href="#cb1-52"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>candidate<span class="sc">$</span>market_label,</span>
-<span id="cb1-53"><a href="#cb1-53"></a>  <span class="at">allow_internal_gaps =</span> <span class="cn">TRUE</span></span>
-<span id="cb1-54"><a href="#cb1-54"></a>)</span>
-<span id="cb1-55"><a href="#cb1-55"></a>primary_quality <span class="ot">&lt;-</span> <span class="fu">require_complete_hourly_ohlc</span>(</span>
-<span id="cb1-56"><a href="#cb1-56"></a>  <span class="at">data =</span> primary_raw,</span>
-<span id="cb1-57"><a href="#cb1-57"></a>  <span class="at">start_time =</span> data_start,</span>
-<span id="cb1-58"><a href="#cb1-58"></a>  <span class="at">end_time =</span> data_end,</span>
-<span id="cb1-59"><a href="#cb1-59"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>primary<span class="sc">$</span>market_label</span>
-<span id="cb1-60"><a href="#cb1-60"></a>)</span>
-<span id="cb1-61"><a href="#cb1-61"></a>reference_quality <span class="ot">&lt;-</span> <span class="fu">require_complete_hourly_ohlc</span>(</span>
-<span id="cb1-62"><a href="#cb1-62"></a>  <span class="at">data =</span> reference_raw,</span>
-<span id="cb1-63"><a href="#cb1-63"></a>  <span class="at">start_time =</span> data_start,</span>
-<span id="cb1-64"><a href="#cb1-64"></a>  <span class="at">end_time =</span> data_end,</span>
-<span id="cb1-65"><a href="#cb1-65"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>reference<span class="sc">$</span>market_label</span>
-<span id="cb1-66"><a href="#cb1-66"></a>)</span>
-<span id="cb1-67"><a href="#cb1-67"></a></span>
-<span id="cb1-68"><a href="#cb1-68"></a>quality_value <span class="ot">&lt;-</span> <span class="cf">function</span>(quality, check_name) {</span>
-<span id="cb1-69"><a href="#cb1-69"></a>  quality<span class="sc">$</span>summary<span class="sc">$</span>Значення[</span>
-<span id="cb1-70"><a href="#cb1-70"></a>    quality<span class="sc">$</span>summary<span class="sc">$</span>Перевірка <span class="sc">==</span> check_name</span>
-<span id="cb1-71"><a href="#cb1-71"></a>  ]</span>
-<span id="cb1-72"><a href="#cb1-72"></a>}</span>
-<span id="cb1-73"><a href="#cb1-73"></a>format_count <span class="ot">&lt;-</span> <span class="cf">function</span>(value) {</span>
-<span id="cb1-74"><a href="#cb1-74"></a>  <span class="fu">format</span>(</span>
-<span id="cb1-75"><a href="#cb1-75"></a>    value,</span>
-<span id="cb1-76"><a href="#cb1-76"></a>    <span class="at">big.mark =</span> <span class="st">" "</span>,</span>
-<span id="cb1-77"><a href="#cb1-77"></a>    <span class="at">scientific =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-78"><a href="#cb1-78"></a>    <span class="at">trim =</span> <span class="cn">TRUE</span></span>
-<span id="cb1-79"><a href="#cb1-79"></a>  )</span>
-<span id="cb1-80"><a href="#cb1-80"></a>}</span>
-<span id="cb1-81"><a href="#cb1-81"></a>format_decimal <span class="ot">&lt;-</span> <span class="cf">function</span>(value, digits) {</span>
-<span id="cb1-82"><a href="#cb1-82"></a>  <span class="fu">formatC</span>(</span>
-<span id="cb1-83"><a href="#cb1-83"></a>    value,</span>
-<span id="cb1-84"><a href="#cb1-84"></a>    <span class="at">format =</span> <span class="st">"f"</span>,</span>
-<span id="cb1-85"><a href="#cb1-85"></a>    <span class="at">digits =</span> digits,</span>
-<span id="cb1-86"><a href="#cb1-86"></a>    <span class="at">decimal.mark =</span> <span class="st">","</span></span>
-<span id="cb1-87"><a href="#cb1-87"></a>  )</span>
-<span id="cb1-88"><a href="#cb1-88"></a>}</span></code></pre></div>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="st">"knitr"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="st">"scales"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="st">"tibble"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="st">"yaml"</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>  ),</span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="at">modules =</span> <span class="fu">c</span>(</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="st">"R/project_config.R"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="st">"R/project_io.R"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="st">"R/data_provenance.R"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19"></a>    <span class="st">"R/hourly_ohlc_quality.R"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20"></a>    <span class="st">"R/exchange_comparison.R"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21"></a>    <span class="st">"R/book_charts.R"</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>  ),</span>
+<span id="cb1-23"><a href="#cb1-23"></a>  <span class="at">envir =</span> knitr<span class="sc">::</span><span class="fu">knit_global</span>()</span>
+<span id="cb1-24"><a href="#cb1-24"></a>)</span>
+<span id="cb1-25"><a href="#cb1-25"></a></span>
+<span id="cb1-26"><a href="#cb1-26"></a>config <span class="ot">&lt;-</span> <span class="fu">read_project_config</span>()</span>
+<span id="cb1-27"><a href="#cb1-27"></a>data_start <span class="ot">&lt;-</span> config<span class="sc">$</span>study<span class="sc">$</span>data_start</span>
+<span id="cb1-28"><a href="#cb1-28"></a>data_end <span class="ot">&lt;-</span> config<span class="sc">$</span>study<span class="sc">$</span>data_end_exclusive</span>
+<span id="cb1-29"><a href="#cb1-29"></a></span>
+<span id="cb1-30"><a href="#cb1-30"></a>raw_data_by_exchange <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
+<span id="cb1-31"><a href="#cb1-31"></a>  config<span class="sc">$</span>paths<span class="sc">$</span>cache,</span>
+<span id="cb1-32"><a href="#cb1-32"></a>  read_rds_required,</span>
+<span id="cb1-33"><a href="#cb1-33"></a>  <span class="at">description =</span> <span class="st">"кеш ринкових даних"</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a>)</span>
+<span id="cb1-35"><a href="#cb1-35"></a></span>
+<span id="cb1-36"><a href="#cb1-36"></a>candidate_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>candidate<span class="sc">$</span>id]]</span>
+<span id="cb1-37"><a href="#cb1-37"></a>primary_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>primary<span class="sc">$</span>id]]</span>
+<span id="cb1-38"><a href="#cb1-38"></a>reference_raw <span class="ot">&lt;-</span> raw_data_by_exchange[[config<span class="sc">$</span>reference<span class="sc">$</span>id]]</span>
+<span id="cb1-39"><a href="#cb1-39"></a></span>
+<span id="cb1-40"><a href="#cb1-40"></a>source_provenance <span class="ot">&lt;-</span> <span class="fu">source_metadata_summary</span>(</span>
+<span id="cb1-41"><a href="#cb1-41"></a>  <span class="at">config =</span> config,</span>
+<span id="cb1-42"><a href="#cb1-42"></a>  <span class="at">data_by_exchange =</span> raw_data_by_exchange</span>
+<span id="cb1-43"><a href="#cb1-43"></a>)</span>
+<span id="cb1-44"><a href="#cb1-44"></a>manifest_check <span class="ot">&lt;-</span> <span class="fu">validate_data_manifest</span>(config)</span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a>candidate_quality <span class="ot">&lt;-</span> <span class="fu">require_bounded_hourly_ohlc</span>(</span>
+<span id="cb1-47"><a href="#cb1-47"></a>  <span class="at">data =</span> candidate_raw,</span>
+<span id="cb1-48"><a href="#cb1-48"></a>  <span class="at">start_time =</span> data_start,</span>
+<span id="cb1-49"><a href="#cb1-49"></a>  <span class="at">end_time =</span> data_end,</span>
+<span id="cb1-50"><a href="#cb1-50"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>candidate<span class="sc">$</span>market_label,</span>
+<span id="cb1-51"><a href="#cb1-51"></a>  <span class="at">allow_internal_gaps =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-52"><a href="#cb1-52"></a>)</span>
+<span id="cb1-53"><a href="#cb1-53"></a>primary_quality <span class="ot">&lt;-</span> <span class="fu">require_complete_hourly_ohlc</span>(</span>
+<span id="cb1-54"><a href="#cb1-54"></a>  <span class="at">data =</span> primary_raw,</span>
+<span id="cb1-55"><a href="#cb1-55"></a>  <span class="at">start_time =</span> data_start,</span>
+<span id="cb1-56"><a href="#cb1-56"></a>  <span class="at">end_time =</span> data_end,</span>
+<span id="cb1-57"><a href="#cb1-57"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>primary<span class="sc">$</span>market_label</span>
+<span id="cb1-58"><a href="#cb1-58"></a>)</span>
+<span id="cb1-59"><a href="#cb1-59"></a>reference_quality <span class="ot">&lt;-</span> <span class="fu">require_complete_hourly_ohlc</span>(</span>
+<span id="cb1-60"><a href="#cb1-60"></a>  <span class="at">data =</span> reference_raw,</span>
+<span id="cb1-61"><a href="#cb1-61"></a>  <span class="at">start_time =</span> data_start,</span>
+<span id="cb1-62"><a href="#cb1-62"></a>  <span class="at">end_time =</span> data_end,</span>
+<span id="cb1-63"><a href="#cb1-63"></a>  <span class="at">source_label =</span> config<span class="sc">$</span>reference<span class="sc">$</span>market_label</span>
+<span id="cb1-64"><a href="#cb1-64"></a>)</span>
+<span id="cb1-65"><a href="#cb1-65"></a></span>
+<span id="cb1-66"><a href="#cb1-66"></a>quality_value <span class="ot">&lt;-</span> <span class="cf">function</span>(quality, check_name) {</span>
+<span id="cb1-67"><a href="#cb1-67"></a>  quality<span class="sc">$</span>summary<span class="sc">$</span>Значення[</span>
+<span id="cb1-68"><a href="#cb1-68"></a>    quality<span class="sc">$</span>summary<span class="sc">$</span>Перевірка <span class="sc">==</span> check_name</span>
+<span id="cb1-69"><a href="#cb1-69"></a>  ]</span>
+<span id="cb1-70"><a href="#cb1-70"></a>}</span>
+<span id="cb1-71"><a href="#cb1-71"></a>format_count <span class="ot">&lt;-</span> <span class="cf">function</span>(value) {</span>
+<span id="cb1-72"><a href="#cb1-72"></a>  <span class="fu">format</span>(</span>
+<span id="cb1-73"><a href="#cb1-73"></a>    value,</span>
+<span id="cb1-74"><a href="#cb1-74"></a>    <span class="at">big.mark =</span> <span class="st">" "</span>,</span>
+<span id="cb1-75"><a href="#cb1-75"></a>    <span class="at">scientific =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-76"><a href="#cb1-76"></a>    <span class="at">trim =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-77"><a href="#cb1-77"></a>  )</span>
+<span id="cb1-78"><a href="#cb1-78"></a>}</span>
+<span id="cb1-79"><a href="#cb1-79"></a>format_decimal <span class="ot">&lt;-</span> <span class="cf">function</span>(value, digits) {</span>
+<span id="cb1-80"><a href="#cb1-80"></a>  <span class="fu">formatC</span>(</span>
+<span id="cb1-81"><a href="#cb1-81"></a>    value,</span>
+<span id="cb1-82"><a href="#cb1-82"></a>    <span class="at">format =</span> <span class="st">"f"</span>,</span>
+<span id="cb1-83"><a href="#cb1-83"></a>    <span class="at">digits =</span> digits,</span>
+<span id="cb1-84"><a href="#cb1-84"></a>    <span class="at">decimal.mark =</span> <span class="st">","</span></span>
+<span id="cb1-85"><a href="#cb1-85"></a>  )</span>
+<span id="cb1-86"><a href="#cb1-86"></a>}</span></code></pre></div>
 </details>
 </div>
 <div class="callout callout-style-simple callout-important callout-titled">
@@ -557,46 +562,24 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Який погодинний ряд BTC достатньо повний, щоб використовувати його для графіків, статистичного аналізу, моделі та торгового правила без прихованого заповнення пропусків?</strong></p>
+<p><strong>Який погодинний ряд BTC достатньо повний, щоб аналіз не залежав від прихованого заповнення пропусків?</strong></p>
 </div>
 </div>
-<section id="binance-як-початкове-джерело" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="binance-як-початкове-джерело"><span class="header-section-number">2.1</span> Binance як початкове джерело</h2>
-<p>Спочатку для проєкту було обрано Binance Spot BTC/USDT. Це спотовий ринок, де ціна показує, скільки USDT коштує один BTC. Дані отримуються з офіційних місячних архівів Binance з перевіркою SHA-256, а неповний останній місяць і знайдені розриви повторно перевіряються через REST API <span class="citation" data-cites="binancePublicData binanceSpotKlines"><a href="references.html#ref-binancePublicData" role="doc-biblioref">[1]</a>, <a href="references.html#ref-binanceSpotKlines" role="doc-biblioref">[2]</a></span>.</p>
-<p>Один рядок даних відповідає одній завершеній годині UTC. Для кожної свічки використовуються:</p>
+<section id="що-містить-один-рядок-даних" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="що-містить-один-рядок-даних"><span class="header-section-number">2.1</span> Що містить один рядок даних</h2>
+<p>Один рядок відповідає одній завершеній годинній свічці UTC. У ньому є:</p>
 <ul>
-<li><code>open</code> - ціна першої угоди;</li>
-<li><code>high</code> - найбільша ціна;</li>
-<li><code>low</code> - найменша ціна;</li>
-<li><code>close</code> - ціна останньої угоди;</li>
-<li><code>volume</code> - обсяг BTC.</li>
+<li><code>open</code>: ціна першої угоди;</li>
+<li><code>high</code>: найбільша ціна;</li>
+<li><code>low</code>: найменша ціна;</li>
+<li><code>close</code>: ціна останньої угоди;</li>
+<li><code>volume</code>: обсяг BTC.</li>
 </ul>
-<p>Ціна <span class="math inline">\(P_t\)</span> у наступному розділі визначається як <code>close</code>. Незавершена поточна година до набору не включається.</p>
-<section id="період-і-формат-дати" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="період-і-формат-дати"><span class="header-section-number">2.1.1</span> Період і формат дати</h3>
-<p>Початок задається у <code>config.yml</code>, а кінець автоматично обчислюється як початок плюс ціла кількість календарних років.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Як читати дату і час">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Як читати дату і час
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Формат <code>YYYY-MM-DD HH:MM:SS</code> означає:</p>
-<ul>
-<li><code>YYYY</code> - рік;</li>
-<li><code>MM</code> - місяць;</li>
-<li><code>DD</code> - день;</li>
-<li><code>HH</code> - година;</li>
-<li><code>MM</code> після пробілу - хвилини;</li>
-<li><code>SS</code> - секунди.</li>
-</ul>
-<p>Наприклад, <code>2021-07-06 00:00:00</code> означає 6 липня 2021 року, початок доби за UTC.</p>
-</div>
-</div>
+<p>Разом ці п'ять полів називають <strong>OHLCV</strong>: <code>open</code>, <code>high</code>, <code>low</code>, <code>close</code>, <code>volume</code>. Слово «свічка» тут означає короткий підсумок усіх угод за одну годину, а не одну окрему угоду.</p>
+<p>Незавершена поточна година не включається. Дані отримуються лише з офіційних джерел бірж <span class="citation" data-cites="binancePublicData binanceSpotKlines bybitKline bitstampOhlc"><a href="references.html#ref-binancePublicData" role="doc-biblioref">[1]</a>–<a href="references.html#ref-bitstampOhlc" role="doc-biblioref">[4]</a></span>.</p>
+<section id="період-спостережень" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="період-спостережень"><span class="header-section-number">2.1.1</span> Період спостережень</h3>
+<p>Початок і тривалість задаються в <code>config.yml</code>. Кінець періоду є правою межею і не включається.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -668,35 +651,24 @@ Table&nbsp;2.1: Повний багаторічний період із config.y
 </figure>
 </div>
 </div>
-<p>Початкова та кінцева межі мають однакові місяць, день і час. Вони відрізняються лише роком. Завдяки цьому період дорівнює рівно 5 календарним рокам, а не приблизній кількості днів.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Чи поширюється зміна config.yml на всю роботу?">
+<div class="callout callout-style-default callout-note callout-titled" title="Як читати дату">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Чи поширюється зміна config.yml на всю роботу?
+<span class="screen-reader-only">Note</span>Як читати дату
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Так. Розділи книги та сценарії даних викликають <code>read_project_config()</code>.</p>
-<p>Якщо змінити <code>study.data_start</code>, <code>study.data_years</code>, біржу, символ, інтервал або інше джерельне значення, старі кеші перестануть відповідати метаданим. Перед рендером вони будуть отримані заново, а підготовлений набір, таблиці, часовий поділ і графіки перебудуються.</p>
-<p>Кінцеву дату не потрібно змінювати окремо: вона завжди обчислюється як <code>study.data_start + study.data_years</code>. Параметри, яких немає в <code>config.yml</code>, наприклад текст пояснень або формули, автоматично не змінюються.</p>
+<p>Запис <code>2021-07-06 00:00</code> означає 6 липня 2021 року, 00:00 за UTC.</p>
 </div>
 </div>
 </section>
-<section id="перевірка-повноти-binance" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="перевірка-повноти-binance"><span class="header-section-number">2.1.2</span> Перевірка повноти Binance</h3>
-<p>Для кожної біржі одна функція перевіряє:</p>
-<ul>
-<li>потрібні поля та часові позначки UTC;</li>
-<li>точний початок і кінець періоду;</li>
-<li>дублікати та пропущені години;</li>
-<li>додатні числові OHLC-ціни;</li>
-<li>співвідношення <code>low ≤ open, close ≤ high</code>;</li>
-<li>невід'ємний обсяг.</li>
-</ul>
-<p>Для Binance внутрішні розриви не приховуються і не зупиняють побудову цього розділу. Вони є результатом аудиту, який потрібно показати.</p>
+</section>
+<section id="чи-повний-ряд-binance" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="чи-повний-ряд-binance"><span class="header-section-number">2.2</span> Чи повний ряд Binance</h2>
+<p>Binance був початковим кандидатом. Для нього перевіряються часові межі, дублікати, пропущені години, додатність цін, узгодженість OHLC та невід'ємний обсяг.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -776,9 +748,30 @@ Table&nbsp;2.2: Перевірка Binance Spot BTC/USDT на повному с�
 </figure>
 </div>
 </div>
-</section>
-<section id="де-саме-є-розриви-binance" class="level3" data-number="2.1.3">
-<h3 data-number="2.1.3" class="anchored" data-anchor-id="де-саме-є-розриви-binance"><span class="header-section-number">2.1.3</span> Де саме є розриви Binance</h3>
+<section id="де-саме-є-розриви" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="де-саме-є-розриви"><span class="header-section-number">2.2.1</span> Де саме є розриви</h3>
+<div class="figure-reading-guide callout callout-style-simple callout-tip callout-titled" title="Перед графіком">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Перед графіком
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Питання:</strong> Коли в ряді Binance бракує годинних свічок і скільки годин втрачено в кожному розриві?</p>
+<p><strong>Що показано:</strong> Кожна точка відповідає одному часовому розриву. Горизонтальна вісь показує момент розриву, вертикальна - кількість відсутніх годин.</p>
+<p><strong>Як читати:</strong></p>
+<ul>
+<li>Рухайтеся зліва направо, щоб побачити час кожного розриву.</li>
+<li>Що вища точка, то більше послідовних годин відсутні.</li>
+<li>Повзунком унизу звузьте потрібний проміжок років.</li>
+<li>Наведіть курсор, щоб побачити точні межі розриву.</li>
+</ul>
+<p><strong>Важливе обмеження:</strong> Точка показує відсутність свічок, а не падіння ціни. Пропуски не заповнюються даними іншої біржі.</p>
+</div>
+</div>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -806,14 +799,14 @@ Table&nbsp;2.2: Перевірка Binance Spot BTC/USDT на повному с�
 <span id="cb4-22"><a href="#cb4-22"></a>    )</span>
 <span id="cb4-23"><a href="#cb4-23"></a>  )</span>
 <span id="cb4-24"><a href="#cb4-24"></a></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="cf">if</span> (<span class="fu">nrow</span>(gap_plot_data) <span class="sc">&gt;</span> <span class="dv">0</span>L) {</span>
-<span id="cb4-26"><a href="#cb4-26"></a>  maximum_gap <span class="ot">&lt;-</span> <span class="fu">max</span>(gap_plot_data<span class="sc">$</span>missing_hours)</span>
-<span id="cb4-27"><a href="#cb4-27"></a>  gap_chart <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(</span>
-<span id="cb4-28"><a href="#cb4-28"></a>    gap_plot_data,</span>
-<span id="cb4-29"><a href="#cb4-29"></a>    ggplot2<span class="sc">::</span><span class="fu">aes</span>(</span>
-<span id="cb4-30"><a href="#cb4-30"></a>      <span class="at">x =</span> gap_time,</span>
-<span id="cb4-31"><a href="#cb4-31"></a>      <span class="at">y =</span> missing_hours,</span>
-<span id="cb4-32"><a href="#cb4-32"></a>      <span class="at">text =</span> hover_text</span>
+<span id="cb4-25"><a href="#cb4-25"></a>has_gaps <span class="ot">&lt;-</span> <span class="fu">nrow</span>(gap_plot_data) <span class="sc">&gt;</span> <span class="dv">0</span>L</span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="cf">if</span> (has_gaps) {</span>
+<span id="cb4-27"><a href="#cb4-27"></a>  maximum_gap <span class="ot">&lt;-</span> <span class="fu">max</span>(gap_plot_data<span class="sc">$</span>missing_hours)</span>
+<span id="cb4-28"><a href="#cb4-28"></a>  gap_chart <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    gap_plot_data,</span>
+<span id="cb4-30"><a href="#cb4-30"></a>    ggplot2<span class="sc">::</span><span class="fu">aes</span>(</span>
+<span id="cb4-31"><a href="#cb4-31"></a>      <span class="at">x =</span> gap_time,</span>
+<span id="cb4-32"><a href="#cb4-32"></a>      <span class="at">y =</span> missing_hours</span>
 <span id="cb4-33"><a href="#cb4-33"></a>    )</span>
 <span id="cb4-34"><a href="#cb4-34"></a>  ) <span class="sc">+</span></span>
 <span id="cb4-35"><a href="#cb4-35"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_hline</span>(</span>
@@ -821,8 +814,8 @@ Table&nbsp;2.2: Перевірка Binance Spot BTC/USDT на повному с�
 <span id="cb4-37"><a href="#cb4-37"></a>      <span class="at">colour =</span> <span class="st">"#9AA5B1"</span></span>
 <span id="cb4-38"><a href="#cb4-38"></a>    ) <span class="sc">+</span></span>
 <span id="cb4-39"><a href="#cb4-39"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(</span>
-<span id="cb4-40"><a href="#cb4-40"></a>      ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">size =</span> missing_hours),</span>
-<span id="cb4-41"><a href="#cb4-41"></a>      <span class="at">colour =</span> <span class="st">"#D7301F"</span>,</span>
+<span id="cb4-40"><a href="#cb4-40"></a>      <span class="at">colour =</span> <span class="st">"#D7301F"</span>,</span>
+<span id="cb4-41"><a href="#cb4-41"></a>      <span class="at">size =</span> <span class="fl">4.5</span>,</span>
 <span id="cb4-42"><a href="#cb4-42"></a>      <span class="at">alpha =</span> <span class="fl">0.9</span></span>
 <span id="cb4-43"><a href="#cb4-43"></a>    ) <span class="sc">+</span></span>
 <span id="cb4-44"><a href="#cb4-44"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_x_datetime</span>(</span>
@@ -834,52 +827,74 @@ Table&nbsp;2.2: Перевірка Binance Spot BTC/USDT на повному с�
 <span id="cb4-50"><a href="#cb4-50"></a>      <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, maximum_gap, <span class="at">by =</span> <span class="dv">1</span>),</span>
 <span id="cb4-51"><a href="#cb4-51"></a>      <span class="at">expand =</span> ggplot2<span class="sc">::</span><span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.25</span>))</span>
 <span id="cb4-52"><a href="#cb4-52"></a>    ) <span class="sc">+</span></span>
-<span id="cb4-53"><a href="#cb4-53"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_size_continuous</span>(</span>
-<span id="cb4-54"><a href="#cb4-54"></a>      <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">11</span>),</span>
-<span id="cb4-55"><a href="#cb4-55"></a>      <span class="at">guide =</span> <span class="st">"none"</span></span>
-<span id="cb4-56"><a href="#cb4-56"></a>    ) <span class="sc">+</span></span>
-<span id="cb4-57"><a href="#cb4-57"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(</span>
-<span id="cb4-58"><a href="#cb4-58"></a>      <span class="at">x =</span> <span class="st">"Час, UTC"</span>,</span>
-<span id="cb4-59"><a href="#cb4-59"></a>      <span class="at">y =</span> <span class="st">"Пропущено годин"</span>,</span>
-<span id="cb4-60"><a href="#cb4-60"></a>      <span class="at">title =</span> <span class="st">"Коли в погодинному ряді Binance бракує свічок"</span></span>
-<span id="cb4-61"><a href="#cb4-61"></a>    ) <span class="sc">+</span></span>
-<span id="cb4-62"><a href="#cb4-62"></a>    <span class="fu">book_ggplot_theme</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span>
-<span id="cb4-63"><a href="#cb4-63"></a></span>
-<span id="cb4-64"><a href="#cb4-64"></a>  gap_widget <span class="ot">&lt;-</span> <span class="fu">render_book_plot</span>(</span>
-<span id="cb4-65"><a href="#cb4-65"></a>    gap_chart,</span>
-<span id="cb4-66"><a href="#cb4-66"></a>    <span class="at">tooltip =</span> <span class="st">"text"</span>,</span>
-<span id="cb4-67"><a href="#cb4-67"></a>    <span class="at">hovermode =</span> <span class="st">"closest"</span>,</span>
-<span id="cb4-68"><a href="#cb4-68"></a>    <span class="at">connect_gaps =</span> <span class="cn">FALSE</span></span>
-<span id="cb4-69"><a href="#cb4-69"></a>  )</span>
-<span id="cb4-70"><a href="#cb4-70"></a>} <span class="cf">else</span> {</span>
-<span id="cb4-71"><a href="#cb4-71"></a>  gap_widget <span class="ot">&lt;-</span> plotly<span class="sc">::</span><span class="fu">plot_ly</span>(</span>
-<span id="cb4-72"><a href="#cb4-72"></a>    <span class="at">type =</span> <span class="st">"scatter"</span>,</span>
-<span id="cb4-73"><a href="#cb4-73"></a>    <span class="at">mode =</span> <span class="st">"markers"</span></span>
-<span id="cb4-74"><a href="#cb4-74"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb4-75"><a href="#cb4-75"></a>    plotly<span class="sc">::</span><span class="fu">layout</span>(</span>
-<span id="cb4-76"><a href="#cb4-76"></a>      <span class="at">title =</span> <span class="st">"Розривів Binance у вибраному періоді немає"</span>,</span>
-<span id="cb4-77"><a href="#cb4-77"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">visible =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb4-78"><a href="#cb4-78"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">visible =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-79"><a href="#cb4-79"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb4-80"><a href="#cb4-80"></a>    <span class="fu">render_book_widget</span>(</span>
-<span id="cb4-81"><a href="#cb4-81"></a>      <span class="at">hovermode =</span> <span class="st">"closest"</span>,</span>
-<span id="cb4-82"><a href="#cb4-82"></a>      <span class="at">showlegend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb4-83"><a href="#cb4-83"></a>      <span class="at">height =</span> <span class="dv">480</span></span>
-<span id="cb4-84"><a href="#cb4-84"></a>    )</span>
-<span id="cb4-85"><a href="#cb4-85"></a>}</span>
-<span id="cb4-86"><a href="#cb4-86"></a></span>
-<span id="cb4-87"><a href="#cb4-87"></a>gap_widget</span></code></pre></div>
+<span id="cb4-53"><a href="#cb4-53"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(</span>
+<span id="cb4-54"><a href="#cb4-54"></a>      <span class="at">x =</span> <span class="st">"Час, UTC"</span>,</span>
+<span id="cb4-55"><a href="#cb4-55"></a>      <span class="at">y =</span> <span class="st">"Пропущено годин"</span>,</span>
+<span id="cb4-56"><a href="#cb4-56"></a>      <span class="at">title =</span> <span class="st">"Розриви погодинного ряду Binance BTC/USDT"</span></span>
+<span id="cb4-57"><a href="#cb4-57"></a>    ) <span class="sc">+</span></span>
+<span id="cb4-58"><a href="#cb4-58"></a>    <span class="fu">book_ggplot_theme</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span>
+<span id="cb4-59"><a href="#cb4-59"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-60"><a href="#cb4-60"></a>  palette <span class="ot">&lt;-</span> <span class="fu">book_plot_palette</span>()</span>
+<span id="cb4-61"><a href="#cb4-61"></a>  gap_chart <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a>    ggplot2<span class="sc">::</span><span class="fu">annotate</span>(</span>
+<span id="cb4-63"><a href="#cb4-63"></a>      <span class="st">"text"</span>,</span>
+<span id="cb4-64"><a href="#cb4-64"></a>      <span class="at">x =</span> <span class="dv">0</span>,</span>
+<span id="cb4-65"><a href="#cb4-65"></a>      <span class="at">y =</span> <span class="dv">0</span>,</span>
+<span id="cb4-66"><a href="#cb4-66"></a>      <span class="at">label =</span> <span class="st">"Розривів Binance у вибраному періоді немає"</span>,</span>
+<span id="cb4-67"><a href="#cb4-67"></a>      <span class="at">colour =</span> palette[[<span class="st">"positive"</span>]],</span>
+<span id="cb4-68"><a href="#cb4-68"></a>      <span class="at">size =</span> <span class="dv">5</span></span>
+<span id="cb4-69"><a href="#cb4-69"></a>    ) <span class="sc">+</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a>    ggplot2<span class="sc">::</span><span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-71"><a href="#cb4-71"></a>    ggplot2<span class="sc">::</span><span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-72"><a href="#cb4-72"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb4-73"><a href="#cb4-73"></a>    ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
+<span id="cb4-74"><a href="#cb4-74"></a>      <span class="at">plot.background =</span> ggplot2<span class="sc">::</span><span class="fu">element_rect</span>(</span>
+<span id="cb4-75"><a href="#cb4-75"></a>        <span class="at">fill =</span> palette[[<span class="st">"background"</span>]],</span>
+<span id="cb4-76"><a href="#cb4-76"></a>        <span class="at">colour =</span> <span class="cn">NA</span></span>
+<span id="cb4-77"><a href="#cb4-77"></a>      )</span>
+<span id="cb4-78"><a href="#cb4-78"></a>    )</span>
+<span id="cb4-79"><a href="#cb4-79"></a>}</span>
+<span id="cb4-80"><a href="#cb4-80"></a></span>
+<span id="cb4-81"><a href="#cb4-81"></a>gap_chart <span class="ot">&lt;-</span> <span class="fu">render_book_plot</span>(</span>
+<span id="cb4-82"><a href="#cb4-82"></a>  gap_chart,</span>
+<span id="cb4-83"><a href="#cb4-83"></a>  <span class="at">size =</span> <span class="st">"standard"</span>,</span>
+<span id="cb4-84"><a href="#cb4-84"></a>  <span class="at">margin =</span> <span class="fu">book_chart_margin</span>(<span class="st">"standard"</span>),</span>
+<span id="cb4-85"><a href="#cb4-85"></a>  <span class="at">role =</span> <span class="cf">if</span> (has_gaps) <span class="st">"negative"</span> <span class="cf">else</span> <span class="st">"positive"</span></span>
+<span id="cb4-86"><a href="#cb4-86"></a>)</span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="cf">if</span> (has_gaps) {</span>
+<span id="cb4-88"><a href="#cb4-88"></a>  gap_chart <span class="ot">&lt;-</span> plotly<span class="sc">::</span><span class="fu">layout</span>(</span>
+<span id="cb4-89"><a href="#cb4-89"></a>    gap_chart,</span>
+<span id="cb4-90"><a href="#cb4-90"></a>    <span class="at">xaxis =</span> <span class="fu">book_time_axis</span>(<span class="st">"Час, UTC"</span>, <span class="at">rangeslider =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-91"><a href="#cb4-91"></a>  )</span>
+<span id="cb4-92"><a href="#cb4-92"></a>}</span>
+<span id="cb4-93"><a href="#cb4-93"></a></span>
+<span id="cb4-94"><a href="#cb4-94"></a>gap_chart</span></code></pre></div>
 </details>
 <div id="fig-binance-gap-timeline" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binance-gap-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-9572a71c6a0731ab2a05" style="width:100%;height:433px;"></div>
-<script type="application/json" data-for="htmlwidget-9572a71c6a0731ab2a05">{"x":{"data":[{"x":[1617641280,1791184320],"y":[0,0],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(154,165,177,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","connectgaps":false,"frame":null},{"x":[1628825400,1632900600,1679662800],"y":[4,2,1],"text":["Після: 2021-08-13 01:00 UTC<br>До: 2021-08-13 06:00 UTC<br>Пропущено годин: 4","Після: 2021-09-29 06:00 UTC<br>До: 2021-09-29 09:00 UTC<br>Пропущено годин: 2","Після: 2023-03-24 12:00 UTC<br>До: 2023-03-24 14:00 UTC<br>Пропущено годин: 1"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(215,48,31,1)","opacity":0.90000000000000002,"size":[41.574803149606304,31.990305317056077,18.897637795275593],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(215,48,31,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":90,"r":30,"b":70,"l":115},"plot_bgcolor":"rgba(0, 0, 0, 0)","paper_bgcolor":"rgba(0, 0, 0, 0)","font":{"color":"rgba(0,0,0,1)","family":"","size":19.925280199252807},"title":{"text":"<b> Коли в погодинному ряді Binance бракує свічок <\/b>","font":{"color":"rgba(0,0,0,1)","family":"","size":23.910336239103366},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1617641280,1791184320],"tickmode":"array","ticktext":["2022","2023","2024","2025","2026"],"tickvals":[1640995200,1672531200,1704067200,1735689600,1767225600],"categoryorder":"array","categoryarray":["2022","2023","2024","2025","2026"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.9813200498132018,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.90569455451149117,"zeroline":false,"anchor":"y","title":{"text":"Час, UTC","font":{"color":"rgba(0,0,0,1)","family":"","size":19.925280199252807}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.20000000000000001,5],"tickmode":"array","ticktext":["0","1","2","3","4"],"tickvals":[0,1,2,3,4],"categoryorder":"array","categoryarray":["0","1","2","3","4"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.9813200498132,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.940224159402243},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.90569455451149117,"zeroline":false,"anchor":"x","title":{"text":"Пропущено годин","font":{"color":"rgba(0,0,0,1)","family":"","size":19.925280199252807}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"transparent","bordercolor":"transparent","borderwidth":2.5769506084466713,"font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":19.925280199252807}},"orientation":"h","x":0,"y":1.0800000000000001},"hovermode":"closest","barmode":"relative","autosize":true},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displaylogo":false,"responsive":true},"source":"A","attrs":{"1b3b9386d90bd":{"yintercept":{},"type":"scatter"},"1b3b94cd3ec28":{"x":{},"y":{},"text":{},"size":{}}},"cur_data":"1b3b9386d90bd","visdat":{"1b3b9386d90bd":["function (y) ","x"],"1b3b94cd3ec28":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  const body = document.body;\n\n  function cssVariable(styles, name, fallback) {\n    const value = styles.getPropertyValue(name).trim();\n    return value || fallback;\n  }\n\n  function colourChannels(value) {\n    const colour = value.trim().toLowerCase();\n    const shortHex = colour.match(/^#([0-9a-f]{3})$/i);\n    const longHex = colour.match(/^#([0-9a-f]{6})$/i);\n\n    if (shortHex) {\n      return shortHex[1].split('').map(function(channel) {\n        return Number.parseInt(channel + channel, 16);\n      });\n    }\n\n    if (longHex) {\n      return [0, 2, 4].map(function(index) {\n        return Number.parseInt(\n          longHex[1].slice(index, index + 2),\n          16\n        );\n      });\n    }\n\n    const rgb = colour.match(\n      /^rgba?\\(\\s*([\\d.]+)[,\\s]+([\\d.]+)[,\\s]+([\\d.]+)/i\n    );\n\n    if (rgb) {\n      return rgb.slice(1, 4).map(Number);\n    }\n\n    return null;\n  }\n\n  function hasDarkBackground(value) {\n    const channels = colourChannels(value);\n\n    if (!channels) {\n      return false;\n    }\n\n    const brightness = (\n      299 * channels[0] +\n      587 * channels[1] +\n      114 * channels[2]\n    ) / 1000;\n\n    return brightness < 140;\n  }\n\n  function requestedChartHeight(styles) {\n    const suppliedHeight = Number.parseFloat(\n      data && data.height\n    );\n\n    if (\n      Number.isFinite(suppliedHeight) &&\n      suppliedHeight > 0\n    ) {\n      return suppliedHeight;\n    }\n\n    return Number.parseFloat(\n      cssVariable(\n        styles,\n        '--book-interactive-chart-height',\n        '720px'\n      )\n    );\n  }\n\n  function styleSeriesToggleMenus(theme) {\n    const menus = (\n      el.layout &&\n      Array.isArray(el.layout.updatemenus)\n    ) ? el.layout.updatemenus : [];\n    const menuGroups = el.querySelectorAll(\n      'g.updatemenu-header-group'\n    );\n\n    menuGroups.forEach(function(menuGroup, menuIndex) {\n      const menu = menus[menuIndex] || {};\n      const menuName = String(menu.name || '');\n      const toggleMatch = menuName.match(\n        /^book-series-toggle-(\\d+)$/\n      );\n\n      if (!toggleMatch) {\n        return;\n      }\n\n      const traceIndex = Number.parseInt(toggleMatch[1], 10);\n      const trace = (el.data || [])[traceIndex] || {};\n      const traceIsVisible =\n        trace.visible !== false &&\n        trace.visible !== 'legendonly';\n      const buttons = menuGroup.querySelectorAll(\n        'g.updatemenu-button'\n      );\n\n      buttons.forEach(function(button, buttonIndex) {\n        const isActive = traceIsVisible && buttonIndex === 0;\n        const buttonSpec = (\n          Array.isArray(menu.buttons)\n            ? menu.buttons[buttonIndex]\n            : null\n        ) || {};\n        const baseLabel = String(buttonSpec.label || '')\n          .replace(/^[●○]\\s*/, '');\n        const textElement = button.querySelector(\n          'text.updatemenu-item-text'\n        );\n\n        if (textElement && baseLabel) {\n          textElement.textContent =\n            (isActive ? '● ' : '○ ') + baseLabel;\n        }\n\n        const rect = button.querySelector(\n          'rect.updatemenu-item-rect'\n        );\n        const textNodes = button.querySelectorAll(\n          'text.updatemenu-item-text, ' +\n          'text.updatemenu-item-text tspan'\n        );\n\n        button.setAttribute('role', 'button');\n        button.setAttribute(\n          'aria-pressed',\n          isActive ? 'true' : 'false'\n        );\n        button.setAttribute(\n          'data-book-toggle-state',\n          isActive ? 'on' : 'off'\n        );\n        button.style.cursor = 'pointer';\n\n        if (rect) {\n          rect.style.setProperty(\n            'fill',\n            isActive\n              ? theme.activeButtonBackground\n              : theme.inactiveButtonBackground,\n            'important'\n          );\n          rect.style.setProperty(\n            'stroke',\n            isActive\n              ? theme.activeButtonBorder\n              : theme.inactiveButtonBorder,\n            'important'\n          );\n          rect.style.setProperty(\n            'stroke-width',\n            '1px',\n            'important'\n          );\n          rect.style.setProperty(\n            'opacity',\n            '1',\n            'important'\n          );\n        }\n\n        textNodes.forEach(function(node) {\n          node.style.setProperty(\n            'fill',\n            isActive\n              ? theme.activeButtonText\n              : theme.inactiveButtonText,\n            'important'\n          );\n          node.style.setProperty(\n            'opacity',\n            '1',\n            'important'\n          );\n          node.style.setProperty(\n            'font-weight',\n            isActive ? '700' : '500',\n            'important'\n          );\n        });\n      });\n    });\n  }\n\n  function applyTheme() {\n    if (\n      !el ||\n      !el.layout ||\n      typeof Plotly === 'undefined'\n    ) {\n      return;\n    }\n\n    const styles = window.getComputedStyle(body);\n    const hasDarkClass =\n      body.classList.contains('quarto-dark') ||\n      document.documentElement.classList.contains('quarto-dark');\n\n    const background = cssVariable(\n      styles,\n      '--bs-body-bg',\n      hasDarkClass ? '#181a1b' : '#ffffff'\n    );\n    const isDark = hasDarkClass || hasDarkBackground(background);\n    const text = cssVariable(\n      styles,\n      '--bs-body-color',\n      isDark ? '#e8e6e3' : '#212529'\n    );\n    const fontFamily = styles.fontFamily || 'system-ui, sans-serif';\n    const link = cssVariable(\n      styles,\n      '--bs-link-color',\n      isDark ? '#75aadb' : '#0d6efd'\n    );\n    const grid = isDark\n      ? 'rgba(232, 230, 227, 0.16)'\n      : 'rgba(33, 37, 41, 0.14)';\n    const axis = isDark\n      ? 'rgba(232, 230, 227, 0.42)'\n      : 'rgba(33, 37, 41, 0.35)';\n    const hover = isDark ? '#24282c' : '#ffffff';\n    const menuBackground = isDark ? '#2b3035' : '#ffffff';\n    const rangeSliderBackground = isDark\n      ? '#202428'\n      : '#f8f9fa';\n    const configuredHeight = requestedChartHeight(styles);\n    const toggleTheme = {\n      activeButtonBackground: isDark ? '#2563eb' : '#0d6efd',\n      activeButtonBorder: isDark ? '#93c5fd' : '#0a58ca',\n      activeButtonText: '#ffffff',\n      inactiveButtonBackground: menuBackground,\n      inactiveButtonBorder: axis,\n      inactiveButtonText: text\n    };\n    el.bookToggleTheme = toggleTheme;\n\n    const layout = {\n      paper_bgcolor: background,\n      plot_bgcolor: background,\n      'font.family': fontFamily,\n      'font.color': text,\n      'title.font.color': text,\n      'legend.font.color': text,\n      'legend.bgcolor': 'rgba(0, 0, 0, 0)',\n      'hoverlabel.bgcolor': hover,\n      'hoverlabel.bordercolor': axis,\n      'hoverlabel.font.family': fontFamily,\n      'hoverlabel.font.color': text,\n      'modebar.bgcolor': 'rgba(0, 0, 0, 0)',\n      'modebar.color': text,\n      'modebar.activecolor': link\n    };\n\n    Object.keys(el.layout)\n      .filter(function(name) {\n        return /^(xaxis|yaxis)\\d*$/.test(name);\n      })\n      .forEach(function(name) {\n        const axisLayout = el.layout[name] || {};\n\n        layout[name + '.color'] = text;\n        layout[name + '.tickfont.color'] = text;\n        layout[name + '.title.font.color'] = text;\n        layout[name + '.gridcolor'] = grid;\n        layout[name + '.linecolor'] = axis;\n        layout[name + '.zerolinecolor'] = axis;\n\n        if (\n          axisLayout.rangeslider &&\n          axisLayout.rangeslider.visible\n        ) {\n          layout[name + '.rangeslider.bgcolor'] =\n            rangeSliderBackground;\n          layout[name + '.rangeslider.bordercolor'] = axis;\n          layout[name + '.rangeslider.borderwidth'] = 1;\n        }\n      });\n\n    const updateMenus = el.layout.updatemenus || [];\n    updateMenus.forEach(function(menu, index) {\n      layout['updatemenus[' + index + '].bgcolor'] =\n        menuBackground;\n      layout['updatemenus[' + index + '].bordercolor'] = axis;\n      layout['updatemenus[' + index + '].font.color'] = text;\n    });\n\n    if (\n      Number.isFinite(configuredHeight) &&\n      configuredHeight > 0\n    ) {\n      el.style.setProperty(\n        'height',\n        configuredHeight + 'px',\n        'important'\n      );\n      el.style.setProperty(\n        'min-height',\n        configuredHeight + 'px',\n        'important'\n      );\n      layout.height = configuredHeight;\n    }\n\n    const annotations = el.layout.annotations || [];\n    annotations.forEach(function(annotation, index) {\n      layout['annotations[' + index + '].font.color'] = text;\n    });\n\n    (el.data || []).forEach(function(trace, index) {\n      const mode = trace.mode || '';\n\n      if (mode.includes('text') || trace.type === 'bar') {\n        Plotly.restyle(\n          el,\n          {\n            'textfont.color': text\n          },\n          [index]\n        );\n      }\n\n      if (trace.name === 'Фактична') {\n        Plotly.restyle(\n          el,\n          {\n            'line.color': isDark ? '#b8c2cc' : '#52606d'\n          },\n          [index]\n        );\n      }\n    });\n\n    Promise.resolve(Plotly.relayout(el, layout)).then(function() {\n      styleSeriesToggleMenus(toggleTheme);\n\n      window.requestAnimationFrame(function() {\n        Plotly.Plots.resize(el);\n      });\n    });\n  }\n\n  applyTheme();\n\n  if (el.quartoThemeObserver) {\n    el.quartoThemeObserver.disconnect();\n  }\n\n  el.quartoThemeObserver = new MutationObserver(function() {\n    window.requestAnimationFrame(applyTheme);\n  });\n\n  el.quartoThemeObserver.observe(body, {\n    attributes: true,\n    attributeFilter: ['class']\n  });\n\n  el.quartoThemeObserver.observe(document.documentElement, {\n    attributes: true,\n    attributeFilter: ['class']\n  });\n\n  if (\n    el.bookToggleButtonHandler &&\n    typeof el.removeListener === 'function'\n  ) {\n    el.removeListener(\n      'plotly_buttonclicked',\n      el.bookToggleButtonHandler\n    );\n    el.removeListener(\n      'plotly_restyle',\n      el.bookToggleButtonHandler\n    );\n  }\n\n  el.bookToggleButtonHandler = function() {\n    const refreshToggleState = function() {\n      if (el.bookToggleTheme) {\n        styleSeriesToggleMenus(el.bookToggleTheme);\n      }\n    };\n\n    window.requestAnimationFrame(refreshToggleState);\n    window.setTimeout(refreshToggleState, 60);\n  };\n\n  if (typeof el.on === 'function') {\n    el.on(\n      'plotly_buttonclicked',\n      el.bookToggleButtonHandler\n    );\n    el.on(\n      'plotly_restyle',\n      el.bookToggleButtonHandler\n    );\n  }\n}","data":{"height":null}}]}}</script>
+<div id="htmlwidget-faf3b000e11a3458dacb" style="width:100%;height:334px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-faf3b000e11a3458dacb">{"x":{"data":[{"x":[1617641280,1791184320],"y":[0,0],"text":"yintercept: 0","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(154,165,177,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","meta":{"book_role":"negative"},"frame":null},{"x":[1628825400,1632900600,1679662800],"y":[4,2,1],"text":["gap_time: 2021-08-13 03:30:00<br />missing_hours: 4","gap_time: 2021-09-29 07:30:00<br />missing_hours: 2","gap_time: 2023-03-24 13:00:00<br />missing_hours: 1"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(215,48,31,1)","opacity":0.90000000000000002,"size":17.007874015748033,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(215,48,31,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","meta":{"book_role":"negative"},"frame":null}],"layout":{"margin":{"t":104,"r":18,"b":86,"l":72},"plot_bgcolor":"rgba(0,0,0,0)","paper_bgcolor":"rgba(0,0,0,0)","font":{"color":"#F3F4F6","family":"system-ui, sans-serif","size":15},"title":{"text":"<b> Розриви погодинного ряду Binance BTC/USDT <\/b>","font":{"color":"rgba(243,244,246,1)","family":"","size":22.914072229140722},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"date","autorange":false,"range":[1617641280,1791184320],"tickmode":"array","ticktext":["2022","2023","2024","2025","2026"],"tickvals":[1640995200,1672531200,1704067200,1735689600,1767225600],"categoryorder":"array","categoryarray":["2022","2023","2024","2025","2026"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.9813200498132,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"#F3F4F6","family":"","size":13},"tickangle":-0,"showline":false,"linecolor":"#94A3B8","linewidth":0,"showgrid":true,"gridcolor":"#465266","gridwidth":0.46492320464923209,"zeroline":false,"anchor":"y","title":{"text":"Час, UTC","font":{"color":"#F3F4F6","family":"","size":15}},"hoverformat":".2f","color":"#F3F4F6","zerolinecolor":"#94A3B8","fixedrange":false,"rangeslider":{"visible":true,"thickness":0.089999999999999997,"bgcolor":"rgba(148,163,184,0.10)","bordercolor":"rgba(148,163,184,0.45)","borderwidth":1},"showspikes":false},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.20000000000000001,5],"tickmode":"array","ticktext":["0","1","2","3","4"],"tickvals":[0,1,2,3,4],"categoryorder":"array","categoryarray":["0","1","2","3","4"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.9813200498132018,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(243,244,246,1)","family":"","size":15.940224159402241},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(70,82,102,1)","gridwidth":0.46492320464923209,"zeroline":false,"anchor":"x","title":{"text":"Пропущено годин","font":{"color":"rgba(243,244,246,1)","family":"","size":19.9252801992528}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(0,0,0,0)","bordercolor":"transparent","borderwidth":2.5769506084466713,"font":{"color":"rgba(243,244,246,1)","family":"","size":13},"orientation":"h","x":0,"y":1.0800000000000001,"xanchor":"left","yanchor":"bottom"},"hovermode":"closest","barmode":"relative","autosize":true,"hoverlabel":{"bgcolor":"rgba(11,18,32,0.98)","bordercolor":"#94A3B8","font":{"color":"#F3F4F6"}},"meta":{"book_chart":true,"auto_y_on_x":false,"palettes":{"dark":{"ar1":"#60A5FA","naive":"#FBBF24","buy_hold":"#14B8A6","cash":"#C084FC","actual":"#22C55E","price":"#F59E0B","positive":"#4ADE80","negative":"#FB7185","accent":"#38BDF8","neutral":"#94A3B8","grid":"#465266","background":"rgba(0,0,0,0)","panel":"rgba(0,0,0,0)","text":"#F3F4F6"},"light":{"ar1":"#2563EB","naive":"#B45309","buy_hold":"#0F766E","cash":"#7C3AED","actual":"#15803D","price":"#B45309","positive":"#16A34A","negative":"#BE123C","accent":"#0369A1","neutral":"#64748B","grid":"#D1D5DB","background":"rgba(0,0,0,0)","panel":"rgba(0,0,0,0)","text":"#111827"}},"aspect_ratio":0.85999999999999999,"min_height":620,"max_height":880,"mobile_min_height":600,"mobile_max_height":840,"mobile_aspect_ratio":1.1799999999999999},"dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displaylogo":false,"responsive":true,"scrollZoom":false,"modeBarButtonsToRemove":["lasso2d","select2d","autoScale2d","toggleSpikelines"]},"source":"A","attrs":{"1a2481461acc8":{"yintercept":{},"type":"scatter"},"1a2485710c027":{"x":{},"y":{}}},"cur_data":"1a2481461acc8","visdat":{"1a2481461acc8":["function (y) ","x"],"1a2485710c027":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-binance-gap-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.1: Розриви Binance на повному спільному проміжку; наведення показує точні межі та кількість пропущених годин
+Figure&nbsp;2.1: Час і тривалість кожного розриву в погодинному ряді Binance BTC/USDT
 </figcaption>
 </figure>
+</div>
+</div>
+<div class="figure-reader-comment callout callout-style-simple callout-note callout-titled" title="Висновок після графіка">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Висновок після графіка
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Що видно:</strong> Виявлено 3 розривів і 7 пропущених годин; найбільший розрив охоплює 4 год.</p>
+<p><strong>Головний висновок:</strong> Ряд Binance не є повним на всьому спільному періоді. Повторна перевірка через офіційний REST API не відновила відсутні свічки.</p>
+<p><strong>Що варто перевірити або змінити:</strong> Не інтерполювати пропуски й не підміняти їх цінами іншої біржі. Для основного аналізу перевірити повніший ряд Bybit.</p>
 </div>
 </div>
 <div class="cell">
@@ -957,20 +972,11 @@ Table&nbsp;2.3: Повний перелік розривів Binance у вибр
 </figure>
 </div>
 </div>
-<p>Повторна адресна перевірка через офіційний REST API не відновила 7 годин. Їх не можна непомітно інтерполювати або замінити цінами іншої біржі.</p>
 </section>
 </section>
-<section id="bybit-як-альтернатива-на-тому-самому-проміжку" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="bybit-як-альтернатива-на-тому-самому-проміжку"><span class="header-section-number">2.2</span> Bybit як альтернатива на тому самому проміжку</h2>
-<p>Наступним кандидатом є Bybit Spot BTC/USDT. Порівняння чесне, тому що Binance і Bybit мають:</p>
-<ul>
-<li>той самий спотовий ринок;</li>
-<li>ту саму пару BTC/USDT;</li>
-<li>той самий погодинний інтервал;</li>
-<li>ті самі початкову й кінцеву межі;</li>
-<li>ту саму очікувану кількість годин.</li>
-</ul>
-<p>Bybit отримується через офіційний Kline API <span class="citation" data-cites="bybitKline"><a href="references.html#ref-bybitKline" role="doc-biblioref">[3]</a></span>.</p>
+<section id="чи-повніший-ряд-bybit" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="чи-повніший-ряд-bybit"><span class="header-section-number">2.3</span> Чи повніший ряд Bybit</h2>
+<p>Binance і Bybit порівнюються на однаковому спотовому ринку BTC/USDT, з однаковим інтервалом <code>1h</code> і тими самими часовими межами.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -1089,68 +1095,33 @@ Table&nbsp;2.4: Binance і Bybit на точно однаковому промі
 </figure>
 </div>
 </div>
-<p>Отже, різниця не пояснюється довшим періодом Binance або коротшим періодом Bybit. На тих самих часових межах Bybit має всі 43 824 очікуваних свічок, а Binance залишається неповним.</p>
-</section>
-<section id="вибір-основного-джерела" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="вибір-основного-джерела"><span class="header-section-number">2.3</span> Вибір основного джерела</h2>
-<div class="callout callout-style-default callout-important callout-titled" title="Рішення після однакового аудиту">
+<div class="callout callout-style-default callout-important callout-titled" title="Вибір основного джерела">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Рішення після однакового аудиту
+<span class="screen-reader-only">Important</span>Вибір основного джерела
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Основним рядом стає Bybit Spot BTC/USDT.</p>
-<p>Binance зберігається в <code>config.yml</code>, локальному кеші, маніфесті та цьому розділі лише для відтворюваного початкового порівняння з Bybit. Воно не використовується для підготовленого набору, графіків ціни й дохідностей, навчання моделі або торгового правила.</p>
+<p>Основним рядом є Bybit Spot BTC/USDT, бо він містить усі очікувані години. Дані Binance зберігаються лише як відтворюваний результат початкового аудиту. Ряди двох бірж не змішуються.</p>
 </div>
 </div>
-<p>Підготовлений файл будується лише з кешу біржі, визначеної в <code>study.primary_exchange</code>. Зараз це Bybit. Пропуски Binance не заповнюються даними Bybit, а дані двох бірж не змішуються.</p>
-<p>Сам вибір повного джерела ще не доводить можливість заробітку. Він лише усуває відому технічну проблему перед статистичним аналізом.</p>
 </section>
-<section id="навіщо-потрібна-контрольна-біржа" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="навіщо-потрібна-контрольна-біржа"><span class="header-section-number">2.4</span> Навіщо потрібна контрольна біржа</h2>
-<p>Після вибору Bybit потрібна ще одна повна й незалежна біржа. Її головна роль з'явиться після побудови моделі та торгового правила.</p>
-<p>На Bybit виконуватимуться:</p>
-<ul>
-<li>побудова ознак;</li>
-<li>вибір моделі;</li>
-<li>налаштування параметрів;</li>
-<li>коригування порогів торгового правила;</li>
-<li>аналіз помилок у навчальній частині.</li>
-</ul>
-<p>Після цього модель і правило фіксуються. На контрольну біржу без змін переносяться:</p>
-<ul>
-<li>спосіб обчислення ознак;</li>
-<li>навчена на Bybit модель без перенавчання;</li>
-<li>пороги відкриття та закриття позиції;</li>
-<li>напрям сигналу;</li>
-<li>правило розміру позиції;</li>
-<li>порядок обчислення результату.</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled" title="Контроль не можна перетворювати на нове навчання">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Контроль не можна перетворювати на нове навчання
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Критерії прийнятної різниці результатів потрібно визначити до перегляду фінального результату контрольної біржі.</p>
-<p>Якщо після першої перевірки змінити модель або правило з урахуванням контрольного результату, ця біржа більше не буде незалежним контролем.</p>
-</div>
-</div>
-<p>Якщо незмінені модель і правило дають співрозмірний результат на іншій біржі, це буде аргументом, що вони вловили закономірність руху BTC, а не лише особливість Bybit. Це не абсолютний доказ, але сильніша перевірка, ніж тест лише на одній біржі.</p>
-<p>Контрольна біржа має і додаткову роль ще до моделювання. Вона допомагає виявити зміщення часу, переплутані поля або іншу помилку, яка могла створити повний, але неправильний ряд Bybit.</p>
-</section>
-<section id="bitstamp-як-контрольна-біржа" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="bitstamp-як-контрольна-біржа"><span class="header-section-number">2.5</span> Bitstamp як контрольна біржа</h2>
-<p>Контрольним рядом є Bitstamp Spot BTC/USD, отриманий через офіційний OHLC API <span class="citation" data-cites="bitstampOhlc"><a href="references.html#ref-bitstampOhlc" role="doc-biblioref">[4]</a></span>.</p>
-<p>Bitstamp і Bybit перевіряються на тому самому 5-річному погодинному проміжку. Для обох джерел повнота є обов'язковою: якщо хоча б одна година відсутня, рендер зупиняється.</p>
+<section id="чи-узгоджується-bybit-з-незалежним-джерелом" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="чи-узгоджується-bybit-з-незалежним-джерелом"><span class="header-section-number">2.4</span> Чи узгоджується Bybit з незалежним джерелом</h2>
+<p>Bitstamp використовується як незалежна технічна перевірка. Bybit показує BTC/USDT, а Bitstamp BTC/USD, тому рівні цін не зобов'язані збігатися. Повнота файлів перевіряється за весь період, але значення цін і дохідностей порівнюються лише у початковому навчальному періоді.</p>
+<p>Для спільної години відносна різниця цін обчислюється так:</p>
+<p><span class="math display">\[
+D_t^{(\%)}=
+100\left(
+\frac{P_t^{\mathrm{Bybit}}}
+     {P_t^{\mathrm{Bitstamp}}}
+-1
+\right).
+\]</span></p>
+<p>Додатне <span class="math inline">\(D_t^{(\%)}\)</span> означає, що ціна Bybit вища. У таблиці показано модуль цієї різниці, тому знак не впливає на її величину. Медіана ділить спостереження навпіл, а 95-й процентиль є межею, яку не перевищують приблизно 95% спостережень. Кореляція вимірює силу лінійного спільного руху від <span class="math inline">\(-1\)</span> до <span class="math inline">\(1\)</span>, але не рівність двох цін.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -1252,50 +1223,52 @@ Table&nbsp;2.5: Однакова перевірка повноти Bybit і Bits
 </figure>
 </div>
 </div>
-<section id="поточна-технічна-перевірка-даних" class="level3" data-number="2.5.1">
-<h3 data-number="2.5.1" class="anchored" data-anchor-id="поточна-технічна-перевірка-даних"><span class="header-section-number">2.5.1</span> Поточна технічна перевірка даних</h3>
-<p>Bybit показує BTC/USDT, а Bitstamp показує BTC/USD. Тому рівні цін не повинні точно збігатися. Для поточного технічного аудиту порівнюються лише однакові години та погодинні логарифмічні дохідності:</p>
-<p><span class="math display">\[
-r_t=\ln\left(\frac{P_t}{P_{t-1}}\right).
-\]</span></p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>agreement <span class="ot">&lt;-</span> <span class="fu">compare_hourly_exchanges</span>(</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">primary =</span> primary_quality<span class="sc">$</span>data,</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">reference =</span> reference_quality<span class="sc">$</span>data,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">primary_name =</span> config<span class="sc">$</span>primary<span class="sc">$</span>name,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">reference_name =</span> config<span class="sc">$</span>reference<span class="sc">$</span>name</span>
-<span id="cb8-6"><a href="#cb8-6"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7"></a>agreement_values <span class="ot">&lt;-</span> agreement<span class="sc">$</span>summary<span class="sc">$</span>Значення</span>
-<span id="cb8-8"><a href="#cb8-8"></a>agreement_table <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb8-9"><a href="#cb8-9"></a>  <span class="st">`</span><span class="at">Показник</span><span class="st">`</span> <span class="ot">=</span> agreement<span class="sc">$</span>summary<span class="sc">$</span>Перевірка,</span>
-<span id="cb8-10"><a href="#cb8-10"></a>  <span class="st">`</span><span class="at">Результат</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    <span class="fu">format_count</span>(agreement_values[[<span class="dv">1</span>]]),</span>
-<span id="cb8-12"><a href="#cb8-12"></a>    <span class="fu">format_count</span>(agreement_values[[<span class="dv">2</span>]]),</span>
-<span id="cb8-13"><a href="#cb8-13"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">3</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
-<span id="cb8-14"><a href="#cb8-14"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">4</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
-<span id="cb8-15"><a href="#cb8-15"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">5</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
-<span id="cb8-16"><a href="#cb8-16"></a>    <span class="fu">format_decimal</span>(agreement_values[[<span class="dv">6</span>]], <span class="dv">6</span>)</span>
-<span id="cb8-17"><a href="#cb8-17"></a>  )</span>
-<span id="cb8-18"><a href="#cb8-18"></a>)</span>
-<span id="cb8-19"><a href="#cb8-19"></a></span>
-<span id="cb8-20"><a href="#cb8-20"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb8-21"><a href="#cb8-21"></a>  agreement_table,</span>
-<span id="cb8-22"><a href="#cb8-22"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>),</span>
-<span id="cb8-23"><a href="#cb8-23"></a>  <span class="at">caption =</span> <span class="fu">paste</span>(</span>
-<span id="cb8-24"><a href="#cb8-24"></a>    <span class="st">"Технічна узгодженість"</span>,</span>
-<span id="cb8-25"><a href="#cb8-25"></a>    config<span class="sc">$</span>primary<span class="sc">$</span>name,</span>
-<span id="cb8-26"><a href="#cb8-26"></a>    <span class="st">"і"</span>,</span>
-<span id="cb8-27"><a href="#cb8-27"></a>    config<span class="sc">$</span>reference<span class="sc">$</span>name,</span>
-<span id="cb8-28"><a href="#cb8-28"></a>    <span class="st">"до моделювання"</span></span>
-<span id="cb8-29"><a href="#cb8-29"></a>  )</span>
-<span id="cb8-30"><a href="#cb8-30"></a>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>agreement_primary <span class="ot">&lt;-</span> primary_quality<span class="sc">$</span>data <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    open_time <span class="sc">&lt;</span> config<span class="sc">$</span>evaluation<span class="sc">$</span>validation_start</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  )</span>
+<span id="cb8-5"><a href="#cb8-5"></a>agreement_reference <span class="ot">&lt;-</span> reference_quality<span class="sc">$</span>data <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    open_time <span class="sc">&lt;</span> config<span class="sc">$</span>evaluation<span class="sc">$</span>validation_start</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  )</span>
+<span id="cb8-9"><a href="#cb8-9"></a>agreement <span class="ot">&lt;-</span> <span class="fu">compare_hourly_exchanges</span>(</span>
+<span id="cb8-10"><a href="#cb8-10"></a>  <span class="at">primary =</span> agreement_primary,</span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="at">reference =</span> agreement_reference,</span>
+<span id="cb8-12"><a href="#cb8-12"></a>  <span class="at">primary_name =</span> config<span class="sc">$</span>primary<span class="sc">$</span>name,</span>
+<span id="cb8-13"><a href="#cb8-13"></a>  <span class="at">reference_name =</span> config<span class="sc">$</span>reference<span class="sc">$</span>name</span>
+<span id="cb8-14"><a href="#cb8-14"></a>)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>agreement_values <span class="ot">&lt;-</span> agreement<span class="sc">$</span>summary<span class="sc">$</span>Значення</span>
+<span id="cb8-16"><a href="#cb8-16"></a>agreement_table <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb8-17"><a href="#cb8-17"></a>  <span class="st">`</span><span class="at">Показник</span><span class="st">`</span> <span class="ot">=</span> agreement<span class="sc">$</span>summary<span class="sc">$</span>Перевірка,</span>
+<span id="cb8-18"><a href="#cb8-18"></a>  <span class="st">`</span><span class="at">Результат</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb8-19"><a href="#cb8-19"></a>    <span class="fu">format_count</span>(agreement_values[[<span class="dv">1</span>]]),</span>
+<span id="cb8-20"><a href="#cb8-20"></a>    <span class="fu">format_count</span>(agreement_values[[<span class="dv">2</span>]]),</span>
+<span id="cb8-21"><a href="#cb8-21"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">3</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
+<span id="cb8-22"><a href="#cb8-22"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">4</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
+<span id="cb8-23"><a href="#cb8-23"></a>    <span class="fu">paste0</span>(<span class="fu">format_decimal</span>(agreement_values[[<span class="dv">5</span>]], <span class="dv">6</span>), <span class="st">" %"</span>),</span>
+<span id="cb8-24"><a href="#cb8-24"></a>    <span class="fu">format_decimal</span>(agreement_values[[<span class="dv">6</span>]], <span class="dv">6</span>)</span>
+<span id="cb8-25"><a href="#cb8-25"></a>  )</span>
+<span id="cb8-26"><a href="#cb8-26"></a>)</span>
+<span id="cb8-27"><a href="#cb8-27"></a></span>
+<span id="cb8-28"><a href="#cb8-28"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb8-29"><a href="#cb8-29"></a>  agreement_table,</span>
+<span id="cb8-30"><a href="#cb8-30"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"r"</span>),</span>
+<span id="cb8-31"><a href="#cb8-31"></a>  <span class="at">caption =</span> <span class="fu">paste</span>(</span>
+<span id="cb8-32"><a href="#cb8-32"></a>    <span class="st">"Технічна узгодженість"</span>,</span>
+<span id="cb8-33"><a href="#cb8-33"></a>    config<span class="sc">$</span>primary<span class="sc">$</span>name,</span>
+<span id="cb8-34"><a href="#cb8-34"></a>    <span class="st">"і"</span>,</span>
+<span id="cb8-35"><a href="#cb8-35"></a>    config<span class="sc">$</span>reference<span class="sc">$</span>name,</span>
+<span id="cb8-36"><a href="#cb8-36"></a>    <span class="st">"на однакових годинах початкового навчального періоду"</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a>  )</span>
+<span id="cb8-38"><a href="#cb8-38"></a>)</span></code></pre></div>
 </details>
 <div id="tbl-bybit-bitstamp-agreement" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bybit-bitstamp-agreement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp до моделювання
+Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp на однакових годинах початкового навчального періоду
 </figcaption>
 <div aria-describedby="tbl-bybit-bitstamp-agreement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1309,19 +1282,19 @@ Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp до
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Спільні годинні ціни</td>
-<td style="text-align: right;">43 824</td>
+<td style="text-align: right;">26 304</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Спільні суміжні дохідності</td>
-<td style="text-align: right;">43 823</td>
+<td style="text-align: right;">26 303</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Медіанна абсолютна різниця цін, %</td>
-<td style="text-align: right;">0,039064 %</td>
+<td style="text-align: right;">0,041632 %</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">95-й процентиль абсолютної різниці цін, %</td>
-<td style="text-align: right;">0,148318 %</td>
+<td style="text-align: right;">0,156069 %</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Максимальна абсолютна різниця цін, %</td>
@@ -1329,7 +1302,7 @@ Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp до
 </tr>
 <tr class="even">
 <td style="text-align: left;">Кореляція логарифмічних дохідностей</td>
-<td style="text-align: right;">0,996132</td>
+<td style="text-align: right;">0,995040</td>
 </tr>
 </tbody>
 </table>
@@ -1338,13 +1311,11 @@ Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp до
 </figure>
 </div>
 </div>
-<p>Висока кореляція дохідностей означає, що два незалежні джерела показують дуже схожий погодинний рух BTC. Вона не доводить правильність кожної ціни, не робить BTC/USDT та BTC/USD взаємозамінними й ще не є перевіркою майбутньої моделі.</p>
+<p>Висока кореляція означає, що два незалежні джерела показують схожий погодинний рух BTC. Вона не робить BTC/USDT і BTC/USD одним ринком і не доводить правильність кожного окремого значення.</p>
 </section>
-</section>
-<section id="як-джерела-та-кеші-контролюються" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="як-джерела-та-кеші-контролюються"><span class="header-section-number">2.6</span> Як джерела та кеші контролюються</h2>
-<p>Перед кожним рендером <code>scripts/ensure_project_data.R</code> звіряє локальні RDS із <code>config.yml</code>. Мережевий запит виконується лише тоді, коли потрібного файла немає, він не читається, його походження не підтверджено або метадані не відповідають конфігурації.</p>
-<p>У таблиці показано короткі назви посилань замість довгих URL.</p>
+<section id="як-перевіряється-походження-даних" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="як-перевіряється-походження-даних"><span class="header-section-number">2.5</span> Як перевіряється походження даних</h2>
+<p>Локальні файли містять метадані джерела, ринку, інтервалу та часових меж. Перед рендером вони звіряються з <code>config.yml</code>. Контрольна сума SHA-256 є цифровим відбитком файлу: якщо зміниться хоча б один байт, відбиток також зміниться. Значення в <code>data-manifest.yml</code> тому допомагає підтвердити точний вміст локальних даних.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Показати / приховати код</summary>
@@ -1357,9 +1328,9 @@ Table&nbsp;2.6: Технічна узгодженість Bybit і Bitstamp до
 <span id="cb9-7"><a href="#cb9-7"></a>)</span>
 <span id="cb9-8"><a href="#cb9-8"></a>source_roles <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">setNames</span>(</span>
 <span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">c</span>(</span>
-<span id="cb9-10"><a href="#cb9-10"></a>    <span class="st">"Початкове порівняння"</span>,</span>
-<span id="cb9-11"><a href="#cb9-11"></a>    <span class="st">"Основні дані"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12"></a>    <span class="st">"Контроль"</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    <span class="st">"Початковий аудит"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="st">"Основний ряд"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="st">"Незалежна перевірка даних"</span></span>
 <span id="cb9-13"><a href="#cb9-13"></a>  ),</span>
 <span id="cb9-14"><a href="#cb9-14"></a>  <span class="fu">c</span>(</span>
 <span id="cb9-15"><a href="#cb9-15"></a>    config<span class="sc">$</span>candidate<span class="sc">$</span>id,</span>
@@ -1432,10 +1403,10 @@ Table&nbsp;2.7: Роль і перевірені параметри кожног
 <div class="cell-output-display">
 <table class="cell caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 11%">
+<col style="width: 13%">
 <col style="width: 4%">
-<col style="width: 21%">
-<col style="width: 55%">
+<col style="width: 20%">
+<col style="width: 54%">
 <col style="width: 6%">
 </colgroup>
 <thead>
@@ -1449,21 +1420,21 @@ Table&nbsp;2.7: Роль і перевірені параметри кожног
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Початкове порівняння</td>
+<td style="text-align: left;">Початковий аудит</td>
 <td style="text-align: left;">Binance</td>
 <td style="text-align: left;">BTC/USDT, <code>BTCUSDT</code>, 1h, UTC</td>
 <td style="text-align: left;"><a href="https://github.com/binance/binance-public-data">Public Data</a></td>
 <td style="text-align: left;">Підтверджено</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Основні дані</td>
+<td style="text-align: left;">Основний ряд</td>
 <td style="text-align: left;">Bybit</td>
 <td style="text-align: left;">BTC/USDT, <code>BTCUSDT</code>, 1h, UTC</td>
 <td style="text-align: left;"><a href="https://bybit-exchange.github.io/docs/v5/market/kline">Документація Kline API</a></td>
 <td style="text-align: left;">Підтверджено</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Контроль</td>
+<td style="text-align: left;">Незалежна перевірка даних</td>
 <td style="text-align: left;">Bitstamp</td>
 <td style="text-align: left;">BTC/USD, <code>btcusd</code>, 1h, UTC</td>
 <td style="text-align: left;"><a href="https://www.bitstamp.net/api/#tag/Market-info/operation/GetOHLCData">Документація OHLC API</a></td>
@@ -1476,112 +1447,17 @@ Table&nbsp;2.7: Роль і перевірені параметри кожног
 </figure>
 </div>
 </div>
-<p>SHA-256 зв'язує метадані з точним вмістом кожного локального RDS. Значення зберігаються в <code>data-manifest.yml</code>.</p>
-<div class="cell">
-<details open="" class="code-fold">
-<summary>Показати / приховати код</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>manifest_table <span class="ot">&lt;-</span> manifest_check <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="st">`</span><span class="at">Файл</span><span class="st">`</span>,</span>
-<span id="cb10-4"><a href="#cb10-4"></a>    <span class="st">`</span><span class="at">Існує</span><span class="st">`</span>,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>    <span class="st">`</span><span class="at">Шлях збігається</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Шлях відповідає маніфесту</span><span class="st">`</span>,</span>
-<span id="cb10-6"><a href="#cb10-6"></a>    <span class="st">`</span><span class="at">SHA-256 збігається</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">SHA-256 відповідає маніфесту</span><span class="st">`</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>  )</span>
-<span id="cb10-8"><a href="#cb10-8"></a></span>
-<span id="cb10-9"><a href="#cb10-9"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb10-10"><a href="#cb10-10"></a>  manifest_table,</span>
-<span id="cb10-11"><a href="#cb10-11"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>, <span class="st">"c"</span>),</span>
-<span id="cb10-12"><a href="#cb10-12"></a>  <span class="at">caption =</span> <span class="st">"Перевірка локальних файлів за SHA-256"</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a>)</span></code></pre></div>
-</details>
-<div id="tbl-data-manifest" class="cell quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-data-manifest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2.8: Перевірка локальних файлів за SHA-256
-</figcaption>
-<div aria-describedby="tbl-data-manifest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output-display">
-<table class="cell caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">Файл</th>
-<th style="text-align: center;">Існує</th>
-<th style="text-align: center;">Шлях збігається</th>
-<th style="text-align: center;">SHA-256 збігається</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">binance</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">bybit</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bitstamp</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">prepared</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-<td style="text-align: center;">TRUE</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Перший рендер із чистого архіву">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Перший рендер із чистого архіву
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>У GitHub немає готових ринкових даних. Одна команда <code>quarto render</code> відновлює зафіксовані R-пакети, отримує Binance для початкового порівняння, отримує Bybit і Bitstamp, перевіряє джерела, готує дохідності з Bybit і будує книгу.</p>
-<p>Якщо локальні файли вже відповідають <code>config.yml</code>, повторний рендер виконує перевірки без нового завантаження.</p>
-</div>
-</div>
+<p>Якщо файл відсутній або не відповідає конфігурації, підготовка даних зупиняється або виконується заново. Це не дозволяє непомітно використати старий чи сторонній набір.</p>
 </section>
-<section id="які-дані-використовуються-далі" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="які-дані-використовуються-далі"><span class="header-section-number">2.7</span> Які дані використовуються далі</h2>
-<div class="callout callout-style-default callout-important callout-titled" title="Три джерела мають три різні ролі">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Три джерела мають три різні ролі
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="висновок" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="висновок"><span class="header-section-number">2.6</span> Висновок</h2>
 <ul>
-<li>Binance Spot BTC/USDT використовується лише в цьому розділі для відтворюваного порівняння повноти з Bybit.</li>
-<li>Bybit Spot BTC/USDT є єдиним джерелом підготовлених даних, графіків, розробки моделі й коригування торгового правила.</li>
-<li>Bitstamp Spot BTC/USD зберігається окремо для технічного аудиту та майбутньої одноразової перевірки незмінених моделі й правила.</li>
+<li>Binance показує відтворювану проблему з пропущеними годинами.</li>
+<li>Bybit дає повний основний ряд BTC/USDT.</li>
+<li>Bitstamp незалежно підтверджує загальний погодинний рух BTC.</li>
+<li>Дані різних бірж не змішуються.</li>
 </ul>
-</div>
-</div>
-<p>Останній календарний рік Bybit уже зарезервовано для фінального часового тесту. Bitstamp не використовується для вибору моделі, параметрів або торгового правила. Комісію, спред, ліквідність і прослизання буде враховано на етапі практичного тесту <span class="citation" data-cites="bybitRestrictedCountries bybitTradingFees"><a href="references.html#ref-bybitRestrictedCountries" role="doc-biblioref">[5]</a>, <a href="references.html#ref-bybitTradingFees" role="doc-biblioref">[6]</a></span>.</p>
-</section>
-<section id="висновок" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="висновок"><span class="header-section-number">2.8</span> Висновок</h2>
-<p>Спочатку перевірено Binance. Графік і таблиця показують його розриви на тому самому повному багаторічному проміжку, на якому перевірено Bybit. Оскільки Bybit має повний ряд, воно обране єдиним основним джерелом.</p>
-<p>Після цього Bitstamp введено як незалежний контроль. Зараз він додатково перевіряє часову й числову узгодженість даних. Пізніше на ньому один раз застосовуватимуть ту саму навчену на Bybit модель і те саме торгове правило без коригування. Дані трьох бірж не змішуються.</p>
+<p>Отже, подальші обчислення спираються на повний ряд Bybit, а проблеми початкового джерела залишаються видимими.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -1597,16 +1473,355 @@ Table&nbsp;2.8: Перевірка локальних файлів за SHA-256
 <div id="ref-bitstampOhlc" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[4] </div><div class="csl-right-inline">Bitstamp, <span>«OHLC Data»</span>. [Online]. Доступний у: <a href="https://www.bitstamp.net/api/">https://www.bitstamp.net/api/</a>. [Дата звернення: 23-Лип-2026]</div>
 </div>
-<div id="ref-bybitRestrictedCountries" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Bybit, <span>«Service Restricted Countries»</span>. 2026 [Online]. Доступний у: <a href="https://www.bybit.com/en/help-center/article/Service-Restricted-Countries">https://www.bybit.com/en/help-center/article/Service-Restricted-Countries</a>. [Дата звернення: 20-Лип-2026]</div>
-</div>
-<div id="ref-bybitTradingFees" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline">Bybit, <span>«Trading Fee Structure»</span>. [Online]. Доступний у: <a href="https://www.bybit.com/en/help-center/article/Trading-Fee-Structure">https://www.bybit.com/en/help-center/article/Trading-Fee-Structure</a>. [Дата звернення: 20-Лип-2026]</div>
-</div>
 </div>
 </section>
 
 </main> <!-- /main -->
+<script>
+(function () {
+  "use strict";
+
+  function isDarkTheme() {
+    return document.body.classList.contains("quarto-dark") ||
+      document.documentElement.getAttribute("data-bs-theme") === "dark";
+  }
+
+  function chartMeta(plot) {
+    return (plot && plot.layout && plot.layout.meta) || {};
+  }
+
+  function fallbackPalette(dark) {
+    return dark
+      ? {
+          ar1: "#60A5FA",
+          naive: "#FBBF24",
+          buy_hold: "#14B8A6",
+          cash: "#C084FC",
+          actual: "#22C55E",
+          price: "#F59E0B",
+          positive: "#4ADE80",
+          negative: "#FB7185",
+          accent: "#38BDF8",
+          neutral: "#94A3B8",
+          grid: "#465266",
+          text: "#F3F4F6"
+        }
+      : {
+          ar1: "#2563EB",
+          naive: "#B45309",
+          buy_hold: "#0F766E",
+          cash: "#7C3AED",
+          actual: "#15803D",
+          price: "#B45309",
+          positive: "#16A34A",
+          negative: "#BE123C",
+          accent: "#0369A1",
+          neutral: "#64748B",
+          grid: "#D1D5DB",
+          text: "#111827"
+        };
+  }
+
+  function rolePalette(plot) {
+    const dark = isDarkTheme();
+    const palettes = chartMeta(plot).palettes || {};
+    return palettes[dark ? "dark" : "light"] || fallbackPalette(dark);
+  }
+
+  function themeColours(plot) {
+    const dark = isDarkTheme();
+    const bodyStyle = window.getComputedStyle(document.body);
+    const palette = rolePalette(plot);
+    const pageBackground = bodyStyle.backgroundColor ||
+      (dark ? "#212121" : "#FFFFFF");
+    const pageText = bodyStyle.color || palette.text;
+
+    return dark
+      ? {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: palette.grid || "#465266",
+          axis: palette.neutral || "#CBD5E1",
+          slider: "rgba(148,163,184,0.14)",
+          sliderBorder: "rgba(203,213,225,0.45)",
+          button: "rgba(248,250,252,0.97)",
+          buttonText: "#0F172A",
+          buttonActive: "rgba(253,224,71,0.97)",
+          hover: "rgba(17,24,39,0.98)"
+        }
+      : {
+          page: pageBackground,
+          plot: pageBackground,
+          text: pageText,
+          grid: palette.grid || "#D1D5DB",
+          axis: palette.neutral || "#4B5563",
+          slider: "rgba(107,114,128,0.10)",
+          sliderBorder: "rgba(75,85,99,0.35)",
+          button: "rgba(255,255,255,0.98)",
+          buttonText: "#0F172A",
+          buttonActive: "rgba(253,224,71,0.97)",
+          hover: "rgba(255,255,255,0.98)"
+        };
+  }
+
+  function roleOf(trace) {
+    if (!trace || !trace.meta) return null;
+    return trace.meta.book_role || null;
+  }
+
+  function alphaColour(hex, alpha) {
+    if (typeof hex !== "string" || !/^#[0-9a-f]{6}$/i.test(hex)) return hex;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    return "rgba(" + red + "," + green + "," + blue + "," + alpha + ")";
+  }
+
+  function restyleTrace(plot, trace, index, palette, colours) {
+    const role = roleOf(trace);
+    const update = {
+      "hoverlabel.bgcolor": colours.hover,
+      "hoverlabel.font.color": colours.text,
+      "hoverlabel.bordercolor": colours.axis
+    };
+
+    if (role && palette[role]) {
+      if (trace.line) update["line.color"] = palette[role];
+      if (trace.marker) update["marker.color"] = palette[role];
+      if (trace.fill && trace.fill !== "none") {
+        const alpha = trace.meta.book_fill_alpha || 0.14;
+        update.fillcolor = alphaColour(palette[role], alpha);
+      }
+    }
+
+    if ((trace.mode || "").indexOf("text") >= 0 || trace.textfont) {
+      update["textfont.color"] = colours.text;
+    }
+
+    if (trace.type === "histogram2d" || role === "density") {
+      update.colorscale = isDarkTheme()
+        ? [[0, "#13213A"], [0.25, "#1D4ED8"], [0.6, "#38BDF8"], [1, "#FBBF24"]]
+        : [[0, "#F8FAFC"], [0.25, "#BFDBFE"], [0.6, "#0284C7"], [1, "#7C2D12"]];
+      update["colorbar.tickfont.color"] = colours.text;
+      update["colorbar.title.font.color"] = colours.text;
+    }
+
+    Plotly.restyle(plot, update, [index]);
+  }
+
+  function mappedThemeColour(value, plot) {
+    if (typeof value !== "string") return value;
+    const palettes = chartMeta(plot).palettes || {};
+    const darkPalette = palettes.dark || fallbackPalette(true);
+    const activePalette = rolePalette(plot);
+    const roles = Object.keys(darkPalette);
+    for (let i = 0; i < roles.length; i += 1) {
+      const role = roles[i];
+      if (darkPalette[role] === value && activePalette[role]) {
+        return activePalette[role];
+      }
+    }
+    return value;
+  }
+
+  function themeUpdate(plot) {
+    const colours = themeColours(plot);
+    const palette = rolePalette(plot);
+    const compact = Math.max(320, plot.clientWidth || 720) < 600;
+    const update = {
+      paper_bgcolor: colours.page,
+      plot_bgcolor: colours.plot,
+      "font.color": colours.text,
+      "title.font.color": colours.text,
+      "title.font.size": compact ? 16 : 19,
+      "legend.font.color": colours.text,
+      "legend.font.size": compact ? 11 : 13,
+      "hoverlabel.bgcolor": colours.hover,
+      "hoverlabel.font.color": colours.text,
+      "hoverlabel.bordercolor": colours.axis
+    };
+
+    Object.keys(plot.layout || {}).forEach(function (key) {
+      if (!/^xaxis\d*$/.test(key) && !/^yaxis\d*$/.test(key)) return;
+      update[key + ".color"] = colours.text;
+      update[key + ".tickfont.color"] = colours.text;
+      update[key + ".tickfont.size"] = compact ? 11 : 13;
+      update[key + ".title.font.color"] = colours.text;
+      update[key + ".title.font.size"] = compact ? 12 : 15;
+      update[key + ".gridcolor"] = colours.grid;
+      update[key + ".linecolor"] = colours.axis;
+      update[key + ".zerolinecolor"] = colours.axis;
+
+      if (/^xaxis\d*$/.test(key) && plot.layout[key].rangeslider) {
+        update[key + ".rangeslider.bgcolor"] = colours.slider;
+        update[key + ".rangeslider.bordercolor"] = colours.sliderBorder;
+      }
+
+      if (/^xaxis\d*$/.test(key) && plot.layout[key].rangeselector) {
+        update[key + ".rangeselector.bgcolor"] = colours.button;
+        update[key + ".rangeselector.activecolor"] = colours.buttonActive;
+        update[key + ".rangeselector.bordercolor"] = colours.axis;
+        update[key + ".rangeselector.font.color"] = colours.buttonText;
+        update[key + ".rangeselector.font.size"] = compact ? 11 : 12;
+      }
+    });
+
+    const currentMargin = plot.layout.margin || {};
+    const currentLeft = Number(currentMargin.l) || 72;
+    const currentRight = Number(currentMargin.r) || 18;
+    update["margin.l"] = compact
+      ? Math.min(82, Math.max(54, currentLeft))
+      : Math.max(60, currentLeft);
+    update["margin.r"] = compact
+      ? Math.min(24, Math.max(12, currentRight))
+      : Math.min(36, Math.max(14, currentRight));
+
+    (plot.layout.annotations || []).forEach(function (_, index) {
+      update["annotations[" + index + "].font.color"] = colours.text;
+    });
+
+    (plot.layout.shapes || []).forEach(function (shape, index) {
+      if (!shape || !shape.line) return;
+      const mapped = mappedThemeColour(shape.line.color, plot);
+      if (mapped) update["shapes[" + index + "].line.color"] = mapped;
+    });
+
+    Plotly.relayout(plot, update);
+
+    (plot.data || []).forEach(function (trace, index) {
+      restyleTrace(plot, trace, index, palette, colours);
+    });
+  }
+
+  function visibleNumericYRange(plot, xMin, xMax) {
+    let yMin = Infinity;
+    let yMax = -Infinity;
+
+    (plot.data || []).forEach(function (trace) {
+      if (!trace || trace.visible === "legendonly") return;
+      if (!trace.x || !trace.y) return;
+      const traceType = trace.type || "scatter";
+      if (traceType.indexOf("scatter") !== 0) return;
+
+      const n = Math.min(trace.x.length || 0, trace.y.length || 0);
+      for (let i = 0; i < n; i += 1) {
+        const xVal = new Date(trace.x[i]).getTime();
+        const yVal = Number(trace.y[i]);
+        if (!Number.isFinite(xVal) || !Number.isFinite(yVal)) continue;
+        if (xVal >= xMin && xVal <= xMax) {
+          if (yVal < yMin) yMin = yVal;
+          if (yVal > yMax) yMax = yVal;
+        }
+      }
+    });
+
+    if (!Number.isFinite(yMin) || !Number.isFinite(yMax)) return null;
+
+    if (yMin === yMax) {
+      const pad = Math.abs(yMin) > 0 ? Math.abs(yMin) * 0.08 : 1;
+      return [yMin - pad, yMax + pad];
+    }
+
+    const pad = (yMax - yMin) * 0.10;
+    return [yMin - pad, yMax + pad];
+  }
+
+  function resizePlot(plot) {
+    if (!window.Plotly || !plot) return;
+    const container = plot.parentElement || plot;
+    const width = Math.max(320, container.clientWidth || plot.clientWidth || 720);
+    const meta = chartMeta(plot);
+    const compact = width < 600;
+    const ratio = Number(compact ? meta.mobile_aspect_ratio : meta.aspect_ratio) ||
+      (compact ? 1.18 : 0.92);
+    const minHeight = Number(compact ? meta.mobile_min_height : meta.min_height) ||
+      (compact ? 560 : 620);
+    const maxHeight = Number(compact ? meta.mobile_max_height : meta.max_height) ||
+      (compact ? 900 : 980);
+    const height = Math.min(maxHeight, Math.max(minHeight, Math.round(width * ratio)));
+
+    plot.style.height = height + "px";
+    Plotly.relayout(plot, { height: height, autosize: true });
+  }
+
+  function bindAutoY(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    if (plot.__bookAutoYBound) return;
+    if (!(chartMeta(plot).auto_y_on_x === true)) return;
+
+    plot.__bookAutoYBound = true;
+    let updating = false;
+
+    plot.on("plotly_relayout", function (eventData) {
+      if (updating) return;
+      const keys = Object.keys(eventData || {});
+      const xChanged = keys.some(function (key) {
+        return key.indexOf("xaxis.range") === 0 || key === "xaxis.autorange";
+      });
+      if (!xChanged) return;
+
+      if (eventData["xaxis.autorange"] === true) {
+        updating = true;
+        Plotly.relayout(plot, { "yaxis.autorange": true })
+          .finally(function () { updating = false; });
+        return;
+      }
+
+      const xRange = plot.layout.xaxis && plot.layout.xaxis.range;
+      if (!Array.isArray(xRange) || xRange.length !== 2) return;
+
+      const xMin = new Date(xRange[0]).getTime();
+      const xMax = new Date(xRange[1]).getTime();
+      if (!Number.isFinite(xMin) || !Number.isFinite(xMax)) return;
+
+      const yRange = visibleNumericYRange(plot, xMin, xMax);
+      if (!yRange) return;
+
+      updating = true;
+      Plotly.relayout(plot, { "yaxis.range": yRange })
+        .finally(function () { updating = false; });
+    });
+  }
+
+  function preparePlot(plot) {
+    if (!window.Plotly || !plot || !plot.layout) return;
+    themeUpdate(plot);
+    resizePlot(plot);
+    bindAutoY(plot);
+  }
+
+  function prepareAllPlots() {
+    document.querySelectorAll(".js-plotly-plot").forEach(preparePlot);
+  }
+
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      document.querySelectorAll(".js-plotly-plot").forEach(function (plot) {
+        resizePlot(plot);
+        themeUpdate(plot);
+      });
+    }, 160);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    [80, 300, 900].forEach(function (delay) {
+      window.setTimeout(prepareAllPlots, delay);
+    });
+  });
+
+  document.addEventListener("quarto:themeChanged", function () {
+    window.setTimeout(prepareAllPlots, 40);
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".quarto-color-scheme-toggle")) return;
+    window.setTimeout(prepareAllPlots, 120);
+  });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -2016,8 +2231,8 @@ Table&nbsp;2.8: Перевірка локальних файлів за SHA-256
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./03-price-and-returns.html" class="pagination-link" aria-label="Ціна та підготовка дохідностей BTC">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна та підготовка дохідностей BTC</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./03-price-and-returns.html" class="pagination-link" aria-label="Ціна і дохідність BTC">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ціна і дохідність BTC</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

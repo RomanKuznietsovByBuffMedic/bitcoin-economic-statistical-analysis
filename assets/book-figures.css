@@ -1,42 +1,49 @@
-:root {
-  --book-interactive-chart-height: 720px;
-}
+/* Plotly widgets only. Static tables and figures keep Quarto styles. */
 
-.cell-output-display .plotly.html-widget {
+.plotly.html-widget {
+  display: block;
   width: 100% !important;
-  height: var(--book-interactive-chart-height) !important;
-  min-height: var(--book-interactive-chart-height) !important;
+  max-width: 100% !important;
+  min-height: 560px;
+  margin: 0 !important;
+  border: 0 !important;
 }
 
-.cell-output-display .plotly .hoverlayer .hovertext path,
-.cell-output-display .plotly .hoverlayer .hovertext rect,
-.cell-output-display .plotly .hoverlayer .axistext path,
-.cell-output-display .plotly .hoverlayer .axistext rect {
-  fill: var(--bs-body-bg) !important;
-  stroke: var(--bs-border-color, #6c757d) !important;
+.quarto-figure:has(.plotly.html-widget),
+figure:has(.plotly.html-widget),
+.cell-output-display:has(.plotly.html-widget) {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 1rem 0;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
 }
 
-.cell-output-display .plotly .hoverlayer text {
-  fill: var(--bs-body-color) !important;
+.cell-output-display:has(.plotly.html-widget) > figure,
+figure:has(.plotly.html-widget) > div[aria-describedby] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
 }
 
-.cell-output-display .plotly g.updatemenu-button {
-  cursor: pointer;
+.figure-reading-guide,
+.figure-reader-comment,
+.figure-reader-review,
+.model-decision {
+  margin-block: 1rem 1.25rem;
 }
 
-.cell-output-display .plotly g.updatemenu-button text,
-.cell-output-display .plotly g.updatemenu-button tspan {
-  opacity: 1 !important;
+.figure-reading-guide .callout-body > :last-child,
+.figure-reader-comment .callout-body > :last-child,
+.figure-reader-review .callout-body > :last-child,
+.model-decision .callout-body > :last-child {
+  margin-bottom: 0;
 }
 
-.cell-output-display
-  .plotly
-  g.updatemenu-button[data-book-toggle-state="on"] {
-  filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.55));
-}
-
-@media (max-width: 575.98px) {
-  :root {
-    --book-interactive-chart-height: 600px;
+@media (max-width: 600px) {
+  .plotly.html-widget {
+    min-height: 520px;
   }
 }
