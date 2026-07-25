@@ -30,15 +30,13 @@ figure:has(.plotly.html-widget) > div[aria-describedby] {
 
 .figure-reading-guide,
 .figure-reader-comment,
-.figure-reader-review,
-.model-decision {
+.figure-reader-review {
   margin-block: 1rem 1.25rem;
 }
 
 .figure-reading-guide .callout-body > :last-child,
 .figure-reader-comment .callout-body > :last-child,
-.figure-reader-review .callout-body > :last-child,
-.model-decision .callout-body > :last-child {
+.figure-reader-review .callout-body > :last-child {
   margin-bottom: 0;
 }
 
