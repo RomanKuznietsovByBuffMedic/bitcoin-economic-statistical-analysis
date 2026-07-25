@@ -36,7 +36,9 @@ complete_hourly_price_return_grid <- function(data) {
     dplyr::left_join(observed_values, by = "open_time") |>
     dplyr::mutate(
       simple_return_percent = 100 * simple_return_1h,
-      log_return_percent = 100 * log_return_1h
+      log_return_percent = 100 * log_return_1h,
+      return_difference_basis_points =
+        10000 * (simple_return_1h - log_return_1h)
     )
 }
 
@@ -46,6 +48,7 @@ make_price_widget <- function(
   market_label = "BTC/USDT"
 ) {
   chart_data <- complete_hourly_price_return_grid(data)
+  palette <- book_plot_palette("dark")
 
   plotly::plot_ly(
     data = chart_data,
@@ -53,7 +56,9 @@ make_price_widget <- function(
     y = ~price_quote_per_btc,
     type = "scattergl",
     mode = "lines",
-    line = list(color = "#F2A900", width = 1.8),
+    line = list(color = palette[["price"]], width = 2.1),
+    meta = book_trace_meta("price"),
+    connectgaps = FALSE,
     hovertemplate = paste0(
       "%{x|%Y-%m-%d %H:%M} UTC",
       "<br>1 BTC: %{y:,.2f} ",
@@ -63,14 +68,19 @@ make_price_widget <- function(
     showlegend = FALSE
   ) |>
     plotly::layout(
-      title = book_plot_title(paste("Ціна 1 BTC на ринку", market_label)),
-      xaxis = book_time_axis("Дата і час, UTC"),
+      title = book_plot_title(
+        paste("Ціна закриття", market_label, "за годинами")
+      ),
+      xaxis = book_time_axis(
+        "Дата і час, UTC",
+        rangeslider = TRUE
+      ),
       yaxis = book_axis_style(paste(quote_currency, "за 1 BTC"))
     ) |>
     render_book_widget(
       hovermode = "x unified",
-      height = 760,
-      margin = list(l = 92, r = 24, t = 100, b = 82),
+      size = "tall",
+      margin = book_chart_margin("price"),
       showlegend = FALSE,
       auto_y_on_x = TRUE
     )
@@ -81,46 +91,95 @@ make_returns_widget <- function(
   market_label = "BTC/USDT"
 ) {
   chart_data <- complete_hourly_price_return_grid(data)
-  palette <- book_plot_palette()
+  palette <- book_plot_palette("dark")
 
-  plotly::plot_ly() |>
-    plotly::add_trace(
-      data = chart_data,
-      x = ~open_time,
-      y = ~simple_return_percent,
-      type = "scattergl",
-      mode = "lines",
-      name = "Звичайна дохідність",
-      line = list(color = palette[["ar1"]], width = 1.2),
-      hovertemplate = paste0(
-        "%{x|%Y-%m-%d %H:%M} UTC",
-        "<br>Звичайна дохідність: %{y:.3f}%",
-        "<extra></extra>"
-      )
-    ) |>
-    plotly::add_trace(
-      data = chart_data,
-      x = ~open_time,
-      y = ~log_return_percent,
-      type = "scattergl",
-      mode = "lines",
-      name = "Логарифмічна дохідність",
-      line = list(color = palette[["negative"]], width = 1.2),
-      hovertemplate = paste0(
-        "%{x|%Y-%m-%d %H:%M} UTC",
-        "<br>Логарифмічна дохідність: %{y:.3f}%",
-        "<extra></extra>"
-      )
-    ) |>
+  return_plot <- plotly::plot_ly(
+    data = chart_data,
+    x = ~open_time,
+    y = ~log_return_percent,
+    type = "scattergl",
+    mode = "lines",
+    line = list(color = palette[["accent"]], width = 1.35),
+    meta = book_trace_meta("accent"),
+    connectgaps = FALSE,
+    hovertemplate = paste0(
+      "%{x|%Y-%m-%d %H:%M} UTC",
+      "<br>Логарифмічна дохідність: %{y:.3f}%",
+      "<extra></extra>"
+    ),
+    showlegend = FALSE
+  ) |>
     plotly::layout(
-      title = book_plot_title(paste("Годинні дохідності", market_label)),
-      xaxis = book_time_axis("Дата і час, UTC"),
-      yaxis = book_axis_style("Дохідність за годину, %")
+      xaxis = modifyList(
+        book_time_axis(NULL),
+        list(showticklabels = FALSE)
+      ),
+      yaxis = book_axis_style("Лог-дохідність, %")
+    )
+
+  difference_plot <- plotly::plot_ly(
+    data = chart_data,
+    x = ~open_time,
+    y = ~return_difference_basis_points,
+    type = "scattergl",
+    mode = "lines",
+    line = list(color = palette[["naive"]], width = 1.35),
+    meta = book_trace_meta("naive"),
+    connectgaps = FALSE,
+    hovertemplate = paste0(
+      "%{x|%Y-%m-%d %H:%M} UTC",
+      "<br>Звичайна мінус логарифмічна: %{y:.3f} б.п.",
+      "<extra></extra>"
+    ),
+    showlegend = FALSE
+  ) |>
+    plotly::layout(
+      xaxis = book_time_axis("Дата і час, UTC", rangeslider = TRUE),
+      yaxis = book_axis_style("Різниця, б.п.")
+    )
+
+  plotly::subplot(
+    return_plot,
+    difference_plot,
+    nrows = 2,
+    shareX = TRUE,
+    heights = c(0.68, 0.32),
+    margin = 0.07,
+    titleX = TRUE,
+    titleY = TRUE
+  ) |>
+    plotly::layout(
+      title = book_plot_title(
+        paste("Годинні дохідності", market_label)
+      ),
+      annotations = list(
+        list(
+          x = 0,
+          y = 1.01,
+          xref = "paper",
+          yref = "paper",
+          text = paste("Логарифмічна дохідність", market_label),
+          showarrow = FALSE,
+          xanchor = "left",
+          font = list(size = 13)
+        ),
+        list(
+          x = 0,
+          y = 0.31,
+          xref = "paper",
+          yref = "paper",
+          text = "Різниця між звичайною і логарифмічною дохідністю",
+          showarrow = FALSE,
+          xanchor = "left",
+          font = list(size = 13)
+        )
+      )
     ) |>
     render_book_widget(
       hovermode = "x unified",
-      height = 760,
-      margin = list(l = 92, r = 24, t = 112, b = 82),
-      auto_y_on_x = TRUE
+      size = "double",
+      margin = book_chart_margin("two_panel"),
+      showlegend = FALSE,
+      auto_y_on_x = FALSE
     )
 }

@@ -55,6 +55,37 @@ normalize_epoch_milliseconds <- function(x) {
   x
 }
 
+next_binance_cursor_ms <- function(
+  batch_open_time_ms,
+  current_cursor_ms,
+  end_ms,
+  interval_ms
+) {
+  open_times <- suppressWarnings(as.numeric(batch_open_time_ms))
+  open_times <- open_times[is.finite(open_times)]
+  if (length(open_times) == 0L) {
+    stop("Binance повернув пакет без коректного часу відкриття.")
+  }
+
+  last_open_ms <- max(open_times)
+  next_cursor_ms <- last_open_ms + interval_ms
+  if (
+    last_open_ms < current_cursor_ms ||
+      last_open_ms >= end_ms ||
+      !is.finite(next_cursor_ms) ||
+      next_cursor_ms <= current_cursor_ms
+  ) {
+    stop(
+      paste(
+        "Binance не просунув часовий курсор у межах запиту.",
+        "Завантаження зупинено, щоб уникнути нескінченного циклу."
+      )
+    )
+  }
+
+  next_cursor_ms
+}
+
 normalize_binance_klines <- function(data, start_time, end_time) {
   columns <- binance_kline_columns()
 
@@ -108,6 +139,12 @@ download_binance_klines <- function(
   request_pause = 0.05,
   allow_empty = FALSE
 ) {
+  validate_time_range(
+    start_time,
+    end_time,
+    context = "завантаження Binance"
+  )
+
   interval_ms <- interval_to_milliseconds(interval)
   columns <- binance_kline_columns()
 
@@ -116,8 +153,22 @@ download_binance_klines <- function(
 
   batches <- list()
   batch_index <- 1L
+  request_count <- 0L
+  maximum_requests <- ceiling(
+    (end_ms - cursor_ms) / interval_ms
+  ) + 1L
 
   while (cursor_ms < end_ms) {
+    request_count <- request_count + 1L
+    if (request_count > maximum_requests) {
+      stop(
+        paste(
+          "Binance перевищив безпечну кількість запитів.",
+          "Завантаження зупинено."
+        )
+      )
+    }
+
     request_url <- sprintf(
       paste0(
         "%s?symbol=%s&interval=%s&startTime=%.0f",
@@ -164,14 +215,12 @@ download_binance_klines <- function(
     batches[[batch_index]] <- batch
     batch_index <- batch_index + 1L
 
-    last_open_ms <- max(as.numeric(batch$open_time_ms))
-    next_cursor_ms <- last_open_ms + interval_ms
-
-    if (next_cursor_ms <= cursor_ms) {
-      stop("Часовий курсор не змінився. Завантаження зупинено.")
-    }
-
-    cursor_ms <- next_cursor_ms
+    cursor_ms <- next_binance_cursor_ms(
+      batch_open_time_ms = batch$open_time_ms,
+      current_cursor_ms = cursor_ms,
+      end_ms = end_ms,
+      interval_ms = interval_ms
+    )
 
     if (nrow(batch) < 1000) {
       break
@@ -408,6 +457,12 @@ download_binance_hybrid_klines <- function(
   rest_endpoint =
     "https://data-api.binance.vision/api/v3/klines"
 ) {
+  validate_time_range(
+    start_time,
+    end_time,
+    context = "завантаження Binance"
+  )
+
   months <- complete_months_in_period(start_time, end_time)
   workers <- max(1L, as.integer(workers))
 
@@ -476,7 +531,6 @@ download_binance_hybrid_klines <- function(
 
   rest_tail_rows <- 0L
   if (tail_start < end_time) {
-    cat("Binance: додатковий неповний місяць.\n")
     rest_tail <- download_binance_klines(
       symbol = symbol,
       interval = interval,
@@ -486,7 +540,6 @@ download_binance_hybrid_klines <- function(
     )
     data_parts[[length(data_parts) + 1L]] <- rest_tail
     rest_tail_rows <- nrow(rest_tail)
-    cat("[ГОТОВО] Binance: неповний місяць.\n")
   }
 
   data <- dplyr::bind_rows(data_parts) |>

@@ -1,11 +1,10 @@
-/* Plotly widgets only. Ordinary tables and static figures keep Quarto styles. */
+/* Plotly widgets only. Static tables and figures keep Quarto styles. */
 
 .plotly.html-widget {
   display: block;
   width: 100% !important;
   max-width: 100% !important;
-  min-height: 640px;
-  aspect-ratio: 1 / 1.08;
+  min-height: 560px;
   margin: 0 !important;
   border: 0 !important;
 }
@@ -19,4 +18,32 @@ figure:has(.plotly.html-widget),
   padding: 0;
   background: transparent !important;
   border: 0 !important;
+}
+
+.cell-output-display:has(.plotly.html-widget) > figure,
+figure:has(.plotly.html-widget) > div[aria-describedby] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+
+.figure-reading-guide,
+.figure-reader-comment,
+.figure-reader-review,
+.model-decision {
+  margin-block: 1rem 1.25rem;
+}
+
+.figure-reading-guide .callout-body > :last-child,
+.figure-reader-comment .callout-body > :last-child,
+.figure-reader-review .callout-body > :last-child,
+.model-decision .callout-body > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .plotly.html-widget {
+    min-height: 520px;
+  }
 }

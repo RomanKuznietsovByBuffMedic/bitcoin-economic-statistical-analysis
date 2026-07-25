@@ -11,6 +11,7 @@ source("R/project_io.R")
 source("R/data_provenance.R")
 source("R/hourly_ohlc_quality.R")
 source("R/bitstamp_ohlc.R")
+source("R/data_pipeline.R")
 
 config <- read_project_config()
 rscript <- file.path(R.home("bin"), "Rscript")
@@ -250,41 +251,12 @@ prepared_state <- function() {
   }
 
   raw_path <- config$paths$cache[[config$primary$id]]
-  expected_attributes <- list(
-    primary_exchange_id = config$primary$id,
-    market_symbol = config$primary$symbol,
-    market_type = config$study$market_type,
-    interval = config$study$interval,
-    price_field = config$study$price_field,
-    period_start_utc = format_utc(
-      config$study$data_start,
-      include_seconds = TRUE
-    ),
-    period_end_exclusive_utc = format_utc(
-      config$study$data_end_exclusive,
-      include_seconds = TRUE
-    ),
-    raw_sha256 = sha256_file(raw_path),
-    test_start_utc = format_utc(
-      config$evaluation$test_start,
-      include_seconds = TRUE
-    ),
-    test_end_exclusive_utc = format_utc(
-      config$evaluation$test_end_exclusive,
-      include_seconds = TRUE
-    )
+  metadata_check <- check_prepared_metadata(
+    data = data,
+    config = config,
+    raw_sha256 = sha256_file(raw_path)
   )
-  attributes_match <- all(vapply(
-    names(expected_attributes),
-    function(name) {
-      identical(
-        as.character(attr(data, name)),
-        as.character(expected_attributes[[name]])
-      )
-    },
-    logical(1)
-  ))
-  if (!attributes_match) {
+  if (!isTRUE(metadata_check$matches)) {
     return(list(
       current = FALSE,
       reason = paste(
@@ -361,8 +333,7 @@ if (inherits(manifest_check, "error")) {
     "ОБРОБКА",
     "маніфест відсутній або застарів."
   )
-  write_data_manifest(config)
-  validate_data_manifest(config)
+  write_current_data_manifest(config)
   print_data_status("ГОТОВО", "маніфест оновлено.")
 } else {
   print_data_status("ГОТОВО", "маніфест актуальний.")

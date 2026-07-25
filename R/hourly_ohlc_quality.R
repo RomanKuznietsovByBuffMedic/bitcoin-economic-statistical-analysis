@@ -23,15 +23,11 @@ find_hourly_gaps <- function(data) {
 }
 
 validate_hourly_ohlc <- function(data, start_time, end_time) {
-  if (
-    length(start_time) != 1L ||
-      length(end_time) != 1L ||
-      is.na(start_time) ||
-      is.na(end_time) ||
-      start_time >= end_time
-  ) {
-    stop("Некоректні часові межі для перевірки OHLC.")
-  }
+  validate_time_range(
+    start_time,
+    end_time,
+    context = "перевірки OHLC"
+  )
 
   required_columns <- c("open_time", "open", "high", "low", "close")
   missing_columns <- setdiff(required_columns, names(data))
@@ -205,5 +201,76 @@ require_complete_hourly_ohlc <- function(
     end_time = end_time,
     source_label = source_label,
     allow_internal_gaps = FALSE
+  )
+}
+
+summarize_hourly_sources <- function(
+  sources,
+  start_time,
+  end_time,
+  source_labels = names(sources)
+) {
+  if (
+    !is.list(sources) ||
+      length(sources) == 0L ||
+      is.null(names(sources)) ||
+      any(!nzchar(names(sources))) ||
+      length(source_labels) != length(sources)
+  ) {
+    stop("sources має бути непорожнім іменованим списком OHLC-джерел.")
+  }
+  source_labels <- as.character(source_labels)
+  if (anyNA(source_labels) || any(!nzchar(source_labels))) {
+    stop("Кожне OHLC-джерело повинно мати зрозумілу назву.")
+  }
+
+  checks <- lapply(
+    sources,
+    validate_hourly_ohlc,
+    start_time = start_time,
+    end_time = end_time
+  )
+  names(checks) <- names(sources)
+  value_from <- function(check, label) {
+    check$summary$Значення[
+      check$summary$Перевірка == label
+    ][[1L]]
+  }
+  summary_rows <- lapply(
+    seq_along(checks),
+    function(index) {
+      check <- checks[[index]]
+      data.frame(
+        source_id = names(checks)[[index]],
+        source = source_labels[[index]],
+        observations = nrow(check$data),
+        missing_hours = value_from(
+          check,
+          "Пропущені години"
+        ),
+        completeness_percent = value_from(
+          check,
+          "Повнота, %"
+        ),
+        duplicate_hours = value_from(
+          check,
+          "Повторені години"
+        ),
+        invalid_ohlc_rows = value_from(
+          check,
+          "Порушення співвідношень OHLC"
+        ),
+        invalid_volume_rows = value_from(
+          check,
+          "Від'ємний або нечисловий обсяг"
+        ),
+        stringsAsFactors = FALSE
+      )
+    }
+  )
+
+  list(
+    checks = checks,
+    summary = do.call(rbind, summary_rows)
   )
 }

@@ -70,25 +70,15 @@ download_bybit_window <- function(
     limit = limit
   )
 
-  response <- NULL
-  last_error <- NULL
-  for (attempt in seq_len(attempts)) {
-    response <- tryCatch(
-      jsonlite::fromJSON(url, simplifyVector = FALSE),
-      error = function(error) {
-        last_error <<- conditionMessage(error)
-        NULL
-      }
-    )
-    if (!is.null(response)) {
-      break
-    }
-    Sys.sleep(min(2^(attempt - 1L), 4))
-  }
-
-  if (is.null(response)) {
-    stop("Bybit API недоступний після повторів: ", last_error)
-  }
+  response <- retry_with_backoff(
+    action = function() {
+      jsonlite::fromJSON(url, simplifyVector = FALSE)
+    },
+    attempts = attempts,
+    initial_pause_seconds = 1,
+    maximum_pause_seconds = 4,
+    context = "Bybit API недоступний"
+  )
   if (!identical(as.integer(response$retCode), 0L)) {
     stop(
       "Bybit повернув помилку ",
@@ -158,15 +148,11 @@ download_bybit_klines <- function(
   workers = 2L,
   endpoint = "https://api.bybit.com/v5/market/kline"
 ) {
-  if (
-    length(start_time) != 1L ||
-      length(end_time) != 1L ||
-      is.na(start_time) ||
-      is.na(end_time) ||
-      start_time >= end_time
-  ) {
-    stop("Некоректні часові межі для завантаження Bybit.")
-  }
+  validate_time_range(
+    start_time,
+    end_time,
+    context = "завантаження Bybit"
+  )
 
   hour_ms <- 60 * 60 * 1000
   start_ms <- as.numeric(start_time) * 1000
@@ -202,11 +188,6 @@ download_bybit_klines <- function(
     label = "Завантаження Bybit",
     unit = "частин"
   )
-
-  failed <- vapply(batches, inherits, logical(1), what = "try-error")
-  if (any(failed)) {
-    stop("Не вдалося отримати ", sum(failed), " пакетів Bybit.")
-  }
 
   data <- dplyr::bind_rows(batches) |>
     dplyr::filter(open_time >= start_time, open_time < end_time) |>

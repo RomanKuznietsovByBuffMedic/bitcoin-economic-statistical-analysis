@@ -6,25 +6,14 @@ source("R/data_provenance.R")
 source("R/hourly_ohlc_quality.R")
 source("R/download_progress.R")
 source("R/binance_klines.R")
+source("R/data_pipeline.R")
 
 config <- read_project_config()
 exchange <- config$exchanges$binance
-start_time <- config$study$data_start
-end_time <- config$study$data_end_exclusive
-cache_file <- config$paths$cache$binance
-
-workers <- suppressWarnings(as.integer(Sys.getenv(
-  "BINANCE_ARCHIVE_WORKERS",
-  as.character(config$runtime$workers)
-)))
-if (is.na(workers) || workers < 1L) {
-  stop("BINANCE_ARCHIVE_WORKERS має бути додатним цілим числом.")
-}
-
-refresh_checksums <- tolower(Sys.getenv(
-  "BINANCE_REFRESH_CHECKSUMS",
-  "false"
-)) %in% c("1", "true", "yes")
+workers <- runtime_worker_count(config, "BINANCE_ARCHIVE_WORKERS")
+refresh_checksums <- environment_flag(
+  "BINANCE_REFRESH_CHECKSUMS"
+)
 
 cat(
   "Оновлення ",
@@ -38,36 +27,13 @@ cat("Повні місяці: офіційні ZIP-архіви з переві�
 cat("Неповний хвіст і повторна перевірка розривів: REST API.\n")
 cat("Паралельних процесів:", workers, "\n\n")
 
-btc_raw <- download_binance_hybrid_klines(
-  symbol = exchange$symbol,
-  interval = config$study$interval,
-  start_time = start_time,
-  end_time = end_time,
-  archive_dir = config$paths$binance_archives,
-  workers = workers,
-  refresh_checksums = refresh_checksums,
-  archive_base_url = exchange$archive_base_url,
-  rest_endpoint = exchange$rest_endpoint
-)
-
-data_check <- require_bounded_hourly_ohlc(
-  data = btc_raw,
-  start_time = start_time,
-  end_time = end_time,
-  source_label = exchange$market_label,
-  allow_internal_gaps = TRUE
-)
-
-btc_raw <- attach_source_metadata(
-  data = btc_raw,
+result <- refresh_binance_market_data(
   config = config,
-  exchange_id = exchange$id,
-  verification_level = "verified_on_download"
+  workers = workers,
+  refresh_checksums = refresh_checksums
 )
+acquisition_info <- result$acquisition_info
 
-save_rds_atomic(btc_raw, cache_file)
-
-acquisition_info <- attr(btc_raw, "acquisition_info")
 cat("Метод:", acquisition_info$method, "\n")
 cat("Місяців з архівів:", acquisition_info$archive_months_used, "\n")
 cat(
@@ -85,11 +51,10 @@ cat(
   "\n\n"
 )
 
-print(data_check$summary, n = Inf, digits = 7)
-
-if (nrow(data_check$gaps) > 0L) {
+print(result$quality$summary, n = Inf, digits = 7)
+if (nrow(result$quality$gaps) > 0L) {
   cat("\nРозриви, що залишилися в офіційних джерелах:\n")
-  print(data_check$gaps, n = Inf)
+  print(result$quality$gaps, n = Inf)
 }
 
 cat(
@@ -98,5 +63,5 @@ cat(
   " завантажено, перевірено й збережено.\n",
   sep = ""
 )
-cat("\nКеш оновлено:", cache_file, "\n")
-cat("SHA-256:", sha256_file(cache_file), "\n")
+cat("\nКеш оновлено:", result$cache_file, "\n")
+cat("SHA-256:", result$sha256, "\n")

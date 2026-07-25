@@ -10,6 +10,7 @@ Imports:
     htmlwidgets,
     jsonlite,
     knitr,
+    openssl,
     plotly,
     renv,
     rmarkdown,

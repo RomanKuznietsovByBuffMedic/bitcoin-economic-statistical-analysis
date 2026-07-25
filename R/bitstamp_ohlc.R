@@ -172,41 +172,26 @@ download_bitstamp_batch <- function(
     end_timestamp
   )
 
-  last_error <- NULL
-  for (attempt in seq_len(attempts)) {
-    result <- tryCatch(
-      {
-        response <- jsonlite::fromJSON(
-          request_url,
-          simplifyVector = TRUE,
-          simplifyDataFrame = TRUE
-        )
-        normalize_bitstamp_response(
-          response = response,
-          market_symbol = market_symbol,
-          request_url = request_url
-        )
-      },
-      error = function(error) error
+  retry_with_backoff(
+    action = function() {
+      response <- jsonlite::fromJSON(
+        request_url,
+        simplifyVector = TRUE,
+        simplifyDataFrame = TRUE
+      )
+      normalize_bitstamp_response(
+        response = response,
+        market_symbol = market_symbol,
+        request_url = request_url
+      )
+    },
+    attempts = attempts,
+    initial_pause_seconds = 0.5,
+    maximum_pause_seconds = 2,
+    context = paste0(
+      "Не вдалося отримати пакет Bitstamp. Запит: ",
+      request_url
     )
-
-    if (!inherits(result, "error")) {
-      return(result)
-    }
-
-    last_error <- result
-    if (attempt < attempts) {
-      Sys.sleep(0.5 * attempt)
-    }
-  }
-
-  stop(
-    "Не вдалося отримати пакет Bitstamp після ",
-    attempts,
-    " спроб. Запит: ",
-    request_url,
-    ". Причина: ",
-    conditionMessage(last_error)
   )
 }
 
@@ -254,15 +239,11 @@ download_bitstamp_ohlc <- function(
   workers = 2L,
   endpoint = "https://www.bitstamp.net/api/v2/ohlc"
 ) {
-  if (
-    length(start_time) != 1L ||
-      length(end_time) != 1L ||
-      is.na(start_time) ||
-      is.na(end_time) ||
-      start_time >= end_time
-  ) {
-    stop("Некоректні часові межі для завантаження Bitstamp.")
-  }
+  validate_time_range(
+    start_time,
+    end_time,
+    context = "завантаження Bitstamp"
+  )
 
   expected_periods <- ceiling(
     as.numeric(difftime(end_time, start_time, units = "secs")) /

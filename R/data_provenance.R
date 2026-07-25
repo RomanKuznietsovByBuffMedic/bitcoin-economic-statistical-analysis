@@ -84,6 +84,95 @@ canonical_metadata_value <- function(value) {
   paste(value_names, as.character(value), sep = "=", collapse = "|")
 }
 
+expected_prepared_metadata <- function(config, raw_sha256) {
+  list(
+    data_source = config$primary$market_label,
+    primary_exchange_id = config$primary$id,
+    market_symbol = config$primary$symbol,
+    market_type = config$study$market_type,
+    interval = config$study$interval,
+    price_field = config$study$price_field,
+    period_start_utc = format_utc(
+      config$study$data_start,
+      include_seconds = TRUE
+    ),
+    period_end_exclusive_utc = format_utc(
+      config$study$data_end_exclusive,
+      include_seconds = TRUE
+    ),
+    raw_sha256 = normalize_sha256(
+      raw_sha256,
+      "SHA-256 основного кешу"
+    ),
+    test_start_utc = format_utc(
+      config$evaluation$test_start,
+      include_seconds = TRUE
+    ),
+    test_end_exclusive_utc = format_utc(
+      config$evaluation$test_end_exclusive,
+      include_seconds = TRUE
+    )
+  )
+}
+
+attach_prepared_metadata <- function(
+  data,
+  config,
+  raw_sha256,
+  prepared_at = Sys.time()
+) {
+  metadata <- expected_prepared_metadata(config, raw_sha256)
+  for (field in names(metadata)) {
+    attr(data, field) <- metadata[[field]]
+  }
+  attr(data, "prepared_at_utc") <- format(
+    prepared_at,
+    "%Y-%m-%d %H:%M:%S UTC",
+    tz = "UTC"
+  )
+
+  data
+}
+
+check_prepared_metadata <- function(data, config, raw_sha256) {
+  expected <- expected_prepared_metadata(config, raw_sha256)
+  field_matches <- vapply(
+    names(expected),
+    function(field) {
+      identical(
+        canonical_metadata_value(attr(data, field, exact = TRUE)),
+        canonical_metadata_value(expected[[field]])
+      )
+    },
+    logical(1)
+  )
+
+  list(
+    matches = all(field_matches),
+    field_matches = field_matches
+  )
+}
+
+require_prepared_metadata <- function(data, config, raw_sha256) {
+  check <- check_prepared_metadata(data, config, raw_sha256)
+  if (!isTRUE(check$matches)) {
+    mismatched_fields <- names(check$field_matches)[
+      !check$field_matches
+    ]
+    stop(
+      paste(
+        "Метадані підготовленого набору не відповідають",
+        "поточному config.yml або основному кешу."
+      ),
+      " Невідповідні поля: ",
+      paste(mismatched_fields, collapse = ", "),
+      ". Виконайте Rscript scripts/prepare_price_returns.R."
+    )
+  }
+
+  invisible(check)
+}
+
 check_source_metadata <- function(data, config, exchange_id) {
   expected <- expected_source_metadata(config, exchange_id)
   actual <- attr(data, "source_metadata")
@@ -216,11 +305,18 @@ build_data_manifest <- function(config) {
     config$paths$prepared,
     "підготовлений набір"
   )
+  primary_file <- config$paths$cache[[config$primary$id]]
+  primary_raw_sha256 <- sha256_file(primary_file)
+  require_prepared_metadata(
+    data = prepared,
+    config = config,
+    raw_sha256 = primary_raw_sha256
+  )
   prepared_entry <- list(
     role = "prepared",
     path = config$paths$prepared,
     sha256 = sha256_file(config$paths$prepared),
-    raw_sha256 = attr(prepared, "raw_sha256")
+    raw_sha256 = primary_raw_sha256
   )
 
   list(
@@ -292,6 +388,34 @@ validate_data_manifest <- function(
     )
   }
 
+  primary_file <- config$paths$cache[[config$primary$id]]
+  primary_raw_sha256 <- sha256_file(primary_file)
+  prepared <- read_rds_required(
+    config$paths$prepared,
+    "підготовлений набір"
+  )
+  require_prepared_metadata(
+    data = prepared,
+    config = config,
+    raw_sha256 = primary_raw_sha256
+  )
+  if (
+    !identical(
+      normalize_sha256(
+        manifest$files$prepared$raw_sha256,
+        "SHA-256 вхідного кешу в manifest.yml"
+      ),
+      primary_raw_sha256
+    )
+  ) {
+    stop(
+      paste(
+        "SHA-256 вхідного кешу в manifest.yml",
+        "не відповідає поточному основному кешу."
+      )
+    )
+  }
+
   expected_paths <- c(
     config$paths$cache,
     list(prepared = config$paths$prepared)
@@ -304,10 +428,21 @@ validate_data_manifest <- function(
       file_exists <- file.exists(expected_path)
       path_matches <- !is.null(manifest_entry$path) &&
         identical(as.character(manifest_entry$path), expected_path)
+      manifest_sha256 <- if (is.null(manifest_entry$sha256)) {
+        NA_character_
+      } else {
+        tryCatch(
+          normalize_sha256(
+            manifest_entry$sha256,
+            paste("SHA-256 файла", file_id, "у manifest.yml")
+          ),
+          error = function(error) NA_character_
+        )
+      }
       sha_matches <- file_exists &&
-        !is.null(manifest_entry$sha256) &&
+        !is.na(manifest_sha256) &&
         identical(
-          as.character(manifest_entry$sha256),
+          manifest_sha256,
           sha256_file(expected_path)
         )
 

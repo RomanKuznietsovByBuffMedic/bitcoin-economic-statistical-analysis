@@ -106,3 +106,147 @@ compare_hourly_exchanges <- function(
 
   list(data = common, summary = summary)
 }
+
+hourly_return_frame <- function(data, source_id) {
+  if (
+    !is.data.frame(data) ||
+      !all(c("open_time", "close") %in% names(data)) ||
+      nrow(data) < 2L
+  ) {
+    stop(
+      "Для перевірки екстремальних доходностей джерело ",
+      source_id,
+      " повинно містити open_time і close."
+    )
+  }
+  ordered <- data[
+    order(data$open_time),
+    c("open_time", "close"),
+    drop = FALSE
+  ]
+  if (
+    !inherits(ordered$open_time, "POSIXt") ||
+      anyNA(ordered$open_time) ||
+      anyDuplicated(ordered$open_time) ||
+      anyNA(ordered$close) ||
+      any(!is.finite(ordered$close)) ||
+      any(ordered$close <= 0)
+  ) {
+    stop("Некоректні часові мітки або ціни в джерелі ", source_id, ".")
+  }
+
+  consecutive <- c(
+    FALSE,
+    diff(as.numeric(ordered$open_time)) == 60 * 60
+  )
+  returns <- c(
+    NA_real_,
+    diff(log(ordered$close))
+  )
+  returns[!consecutive] <- NA_real_
+  result <- data.frame(
+    open_time = ordered$open_time,
+    value = returns,
+    stringsAsFactors = FALSE
+  )
+  names(result)[[2L]] <- source_id
+  result
+}
+
+compare_extreme_hourly_returns <- function(
+  sources,
+  primary_id,
+  start_time,
+  end_time,
+  top_n = 10L
+) {
+  if (
+    !is.list(sources) ||
+      length(sources) < 2L ||
+      is.null(names(sources)) ||
+      any(!nzchar(names(sources))) ||
+      !primary_id %in% names(sources)
+  ) {
+    stop("sources має бути іменованим списком щонайменше двох джерел.")
+  }
+  top_n <- as.integer(top_n)
+  if (length(top_n) != 1L || is.na(top_n) || top_n < 1L) {
+    stop("top_n має бути додатним цілим числом.")
+  }
+
+  frames <- lapply(
+    names(sources),
+    function(source_id) {
+      hourly_return_frame(
+        sources[[source_id]],
+        source_id
+      )
+    }
+  )
+  common <- Reduce(
+    function(left, right) {
+      merge(
+        left,
+        right,
+        by = "open_time",
+        all = FALSE,
+        sort = TRUE
+      )
+    },
+    frames
+  )
+  common <- common[
+    common$open_time >= start_time &
+      common$open_time < end_time,
+    ,
+    drop = FALSE
+  ]
+  complete <- stats::complete.cases(common)
+  common <- common[complete, , drop = FALSE]
+  if (nrow(common) < top_n) {
+    stop("Недостатньо спільних доходностей для перевірки екстремумів.")
+  }
+
+  primary_return <- common[[primary_id]]
+  extreme_indices <- utils::head(
+    order(abs(primary_return), decreasing = TRUE),
+    top_n
+  )
+  controls <- setdiff(names(sources), primary_id)
+  rows <- lapply(
+    controls,
+    function(control_id) {
+      differences <- 100 * (
+        primary_return - common[[control_id]]
+      )
+      data.frame(
+        source = control_id,
+        common_return_hours = nrow(common),
+        return_correlation = stats::cor(
+          primary_return,
+          common[[control_id]]
+        ),
+        median_absolute_difference_pp =
+          stats::median(abs(differences)),
+        maximum_absolute_difference_pp =
+          max(abs(differences)),
+        same_sign_among_primary_extremes = sum(
+          sign(primary_return[extreme_indices]) ==
+            sign(common[[control_id]][extreme_indices])
+        ),
+        checked_extremes = top_n,
+        stringsAsFactors = FALSE
+      )
+    }
+  )
+
+  list(
+    common = common,
+    summary = do.call(rbind, rows),
+    extremes = common[
+      extreme_indices,
+      ,
+      drop = FALSE
+    ]
+  )
+}

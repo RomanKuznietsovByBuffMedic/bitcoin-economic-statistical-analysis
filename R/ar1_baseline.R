@@ -26,6 +26,17 @@ fit_ar1_ols <- function(returns, minimum_pairs = 168L) {
   model_summary <- summary(model)
   coefficients <- model_summary$coefficients
   residuals <- stats::residuals(model)
+  phi <- unname(
+    coefficients["lagged_return", "Estimate"]
+  )
+  if (!is.finite(phi) || abs(phi) >= 1) {
+    stop(
+      paste(
+        "Оцінена AR(1) не задовольняє умову стаціонарності",
+        "|phi1| < 1."
+      )
+    )
+  }
   ljung_box_lag <- min(24L, max(2L, floor(length(residuals) / 10L)))
   ljung_box <- stats::Box.test(
     residuals,
@@ -37,7 +48,7 @@ fit_ar1_ols <- function(returns, minimum_pairs = 168L) {
   list(
     model = model,
     intercept = unname(coefficients["(Intercept)", "Estimate"]),
-    phi = unname(coefficients["lagged_return", "Estimate"]),
+    phi = phi,
     intercept_standard_error = unname(
       coefficients["(Intercept)", "Std. Error"]
     ),
@@ -220,7 +231,13 @@ forecast_accuracy_table <- function(forecasts) {
   )
 }
 
-run_ar1_development_experiment <- function(hourly_data, config) {
+run_ar1_development_experiment <- function(
+  hourly_data,
+  config,
+  diagnostics
+) {
+  assert_ar1_selected(diagnostics)
+
   if (
     !identical(config$model$family, "ar") ||
       !identical(config$model$order, 1L) ||

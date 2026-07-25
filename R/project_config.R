@@ -366,6 +366,7 @@ read_project_config <- function(path = "config.yml") {
       c(
         "study",
         "evaluation",
+        "analysis",
         "model",
         "trading",
         "exchanges",
@@ -378,7 +379,7 @@ read_project_config <- function(path = "config.yml") {
       paste(
         "config.yml повинен містити розділи",
         paste(
-          "study, evaluation, model, trading,",
+          "study, evaluation, analysis, model, trading,",
           "exchanges і runtime."
         )
       )
@@ -601,6 +602,75 @@ read_project_config <- function(path = "config.yml") {
   if (!identical(target_interval, interval)) {
     stop("Інтервал моделі має збігатися з базовим інтервалом даних.")
   }
+  analysis_alpha <- require_finite_number(
+    raw_config$analysis$alpha,
+    "analysis.alpha",
+    minimum = 0.01,
+    maximum = 0.1
+  )
+  if (!identical(analysis_alpha, 0.05)) {
+    stop(
+      paste(
+        "Поточні критичні значення діагностики зафіксовано для",
+        "analysis.alpha = 0.05."
+      )
+    )
+  }
+  mean_max_lag <- require_integer(
+    raw_config$analysis$mean_max_lag,
+    "analysis.mean_max_lag",
+    minimum = 1,
+    maximum = 168
+  )
+  dependence_max_lag <- require_integer(
+    raw_config$analysis$dependence_max_lag,
+    "analysis.dependence_max_lag",
+    minimum = mean_max_lag,
+    maximum = 720
+  )
+  arma_max_ar <- require_integer(
+    raw_config$analysis$arma_max_ar,
+    "analysis.arma_max_ar",
+    minimum = 0,
+    maximum = 10
+  )
+  arma_max_ma <- require_integer(
+    raw_config$analysis$arma_max_ma,
+    "analysis.arma_max_ma",
+    minimum = 0,
+    maximum = 10
+  )
+  if (arma_max_ar == 0L && arma_max_ma == 0L) {
+    stop(
+      paste(
+        "Сітка ARMA повинна містити хоча б одну модель",
+        "складнішу за ARMA(0,0)."
+      )
+    )
+  }
+  rolling_window_hours <- require_integer(
+    raw_config$analysis$rolling_window_hours,
+    "analysis.rolling_window_hours",
+    minimum = 168
+  )
+  rolling_step_hours <- require_integer(
+    raw_config$analysis$rolling_step_hours,
+    "analysis.rolling_step_hours",
+    minimum = 24,
+    maximum = rolling_window_hours
+  )
+  arch_lag <- require_integer(
+    raw_config$analysis$arch_lag,
+    "analysis.arch_lag",
+    minimum = 1,
+    maximum = dependence_max_lag
+  )
+  normal_qq_points <- require_integer(
+    raw_config$analysis$normal_qq_points,
+    "analysis.normal_qq_points",
+    minimum = 101,
+    maximum = 2001
+  )
 
   starting_capital_quote <- require_finite_number(
     raw_config$trading$starting_capital_quote,
@@ -649,6 +719,17 @@ read_project_config <- function(path = "config.yml") {
       execution_price = execution_price,
       refit_every_months = refit_every_months,
       training_window = training_window
+    ),
+    analysis = list(
+      alpha = analysis_alpha,
+      mean_max_lag = mean_max_lag,
+      dependence_max_lag = dependence_max_lag,
+      arma_max_ar = arma_max_ar,
+      arma_max_ma = arma_max_ma,
+      rolling_window_hours = rolling_window_hours,
+      rolling_step_hours = rolling_step_hours,
+      arch_lag = arch_lag,
+      normal_qq_points = normal_qq_points
     ),
     model = list(
       family = model_family,

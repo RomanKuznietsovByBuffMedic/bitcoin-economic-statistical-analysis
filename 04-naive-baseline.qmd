@@ -1,15 +1,11 @@
-# Найпростіший прогноз без статистичної моделі
+# Наївний орієнтир до відкриття validation
 
-Почнемо з питання, яке не потребує жодної моделі:
+::: {.callout-important appearance="simple"}
+## Головне питання
 
-::: {.callout-important appearance="simple" title="Перше питання"}
-**Що прогнозувати на наступну годину, якщо ми ще не знайшли жодної
-надійної закономірності?**
+**Який найпростіший прогноз повинна перевершити допущена модель — і
+як зафіксувати його, не переглядаючи validation наперед?**
 :::
-
-Відповідь потрібна не для того, щоб одразу торгувати. Вона створює
-простий орієнтир, з яким надалі порівнюватимуться всі статистичні
-моделі.
 
 ```{r}
 #| label: setup-naive
@@ -34,6 +30,7 @@ load_book_environment(
     "R/data_provenance.R",
     "R/hourly_ohlc_quality.R",
     "R/book_charts.R",
+    "R/model_data.R",
     "R/naive_baseline.R",
     "R/naive_baseline_charts.R"
   ),
@@ -47,19 +44,14 @@ btc_1h <- read_rds_required(
   config$paths$prepared,
   "підготовлений набір ціни й дохідностей"
 )
-
 primary_raw_sha256 <- sha256_file(
   config$paths$cache[[config$primary$id]]
 )
-if (!identical(attr(btc_1h, "raw_sha256"), primary_raw_sha256)) {
-  stop(
-    paste(
-      "Підготовлений набір створено не з поточного основного кешу.",
-      "Виконайте Rscript scripts/prepare_price_returns.R."
-    )
-  )
-}
-
+require_prepared_metadata(
+  data = btc_1h,
+  config = config,
+  raw_sha256 = primary_raw_sha256
+)
 btc_1h <- require_complete_hourly_ohlc(
   data = btc_1h,
   start_time = config$study$data_start,
@@ -67,43 +59,34 @@ btc_1h <- require_complete_hourly_ohlc(
   source_label = "Підготовлений набір"
 )$data
 
-naive_experiment <- run_naive_baseline_experiment(
-  hourly_data = btc_1h,
-  config = config
-)
-naive_forecasts <- naive_experiment$forecasts
-naive_metrics <- naive_experiment$forecast_metrics
-naive_chart_data <- prepare_naive_chart_data(naive_forecasts)
-
-time_split_chart_data <- data.frame(
-  part = factor(
-    c("Навчання", "Перевірка", "Закритий тест"),
-    levels = rev(c("Навчання", "Перевірка", "Закритий тест"))
-  ),
-  start = c(
-    config$study$data_start,
-    naive_experiment$validation$start,
-    naive_experiment$sealed_test$start
-  ),
-  end = c(
-    naive_experiment$validation$start,
-    naive_experiment$validation$end_exclusive,
-    naive_experiment$sealed_test$end_exclusive
-  )
-)
-
-format_number <- function(value, digits = 2L) {
-  formatC(value, format = "f", digits = digits, big.mark = " ")
+example_start <- config$study$data_start + 24 * 60 * 60
+example_end <- example_start + 14 * 24 * 60 * 60
+if (example_end >= config$evaluation$validation_start) {
+  stop("Ілюстративний baseline випадково досяг validation.")
 }
+naive_example_forecasts <- build_naive_hourly_forecasts(
+  hourly_data = btc_1h,
+  evaluation_start = example_start,
+  evaluation_end_exclusive = example_end
+)
+if (
+  any(naive_example_forecasts$target_time >=
+    config$evaluation$validation_start)
+) {
+  stop("Ілюстрація наївного прогнозу використала майбутні дані.")
+}
+naive_example_chart <- prepare_naive_chart_data(
+  naive_example_forecasts
+)
+
+time_split_chart_data <- build_model_time_split_chart_data(config)
 
 options(scipen = 999, digits = 7)
 ```
 
-## Наївний прогноз
+## Який прогноз є найпростішим
 
-Найпростіше правило називається **наївним прогнозом**
-(*naive forecast*) або **прогнозом збереження поточного рівня**
-(*persistence forecast*):
+Для рівня ціни використовується прогноз збереження поточного рівня:
 
 $$
 \widehat P_{t+1}=P_t.
@@ -115,146 +98,205 @@ $$
 \widehat r_{t+1}=0.
 $$
 
-Простими словами: прогноз на наступну годину дорівнює ціні, яку ми
-бачимо зараз. Правило не навчається, не має коефіцієнтів і ніколи не
-змінюється.
+Правило не оцінює коефіцієнтів і не шукає закономірностей. Для
+випадкового блукання воно є стандартним точковим прогнозом
+[@tsay2010, розд. 2.7.1]. Складніша модель середньої повинна
+перевершити його на точно тих самих годинах, а не лише мати
+складнішу формулу.
 
-Для моделі випадкового блукання поточна ціна є стандартним точковим
-прогнозом майбутньої ціни
-[@tsay2010, розд. 2.7.1, с. 72-73].
+Цей baseline стосується ціни та середньої доходності. Для
+волатильності потрібні інші орієнтири: історичний масштаб,
+календарний профіль, EWMA та лагований OHLC-діапазон. Підміняти ними
+один одного не можна, бо це різні прогнозні цілі.
 
-::: {.callout-note title="Чого цей прогноз не стверджує"}
-Наївний прогноз не стверджує, що ціна справді залишиться незмінною.
-Він лише відповідає на питання: що прогнозувати, коли складнішого
-обґрунтованого правила ще немає?
-:::
+## Коли можна обчислити його якість
 
-## Чому інтервал дорівнює одній годині
+```{r}
+#| label: intro-naive-time-split
+#| echo: false
+#| results: asis
 
-Вихідні дані складаються з годинних свічок `1h`. Тому один модельний
-період у цьому проєкті також дорівнює одній годині:
-
-- у момент завершення години відома поточна ціна;
-- прогноз робиться на наступну годину;
-- статистична модель у наступному розділі також використовує годинні
-  дохідності;
-- порівняння відбувається на тих самих моментах часу.
-
-Агрегування до днів тут не виконується. Воно змінило б початкове
-питання і втратило б частину годинної інформації.
-
-## Як відокремлено розробку від фінального тесту
+book_figure_intro(
+  question = paste(
+    "Де дозволено описувати дані, а де можна оцінювати",
+    "лише вже допущену модель разом із baseline?"
+  ),
+  explanation = paste(
+    "Смуги показують послідовні train, validation і закритий test.",
+    "Їхні межі зафіксовано до моделювання."
+  ),
+  how_to_read = c(
+    "Train використовується для аналізу й вибору класу моделі.",
+    "Validation відкривається тільки після програмного допуску кандидата.",
+    "Test відкривається один раз після завершення всіх рішень."
+  ),
+  caution = paste(
+    "Сам факт, що baseline не має параметрів,",
+    "не дозволяє завчасно переглядати його validation-помилки."
+  )
+)
+```
 
 ```{r}
 #| label: fig-naive-time-split
-#| fig-cap: "Часовий поділ даних для годинного прогнозування"
+#| fig-cap: "Послідовні часові межі train, validation і закритого test"
 
 plot_model_time_split(time_split_chart_data)
 ```
 
-Наукові назви частин:
-
-- **training sample**, або навчальна вибірка: ранні дані, доступні для
-  побудови моделей;
-- **validation**, або внутрішня перевірка: період для порівняння ідей;
-- **sealed test**, або закритий тест: останній рік, який поки не
-  використовується.
-
-У validation є
-`r format(naive_experiment$validation$hours, big.mark = " ")`
-послідовних годинних прогнозів. Рядки не перемішуються, тому майбутнє
-не потрапляє в минуле.
-
-## Як виглядає прогноз
-
 ```{r}
-#| label: fig-naive-price-forecast
-#| fig-cap: "Фактична ціна і наївний прогноз на наступну годину"
+#| label: comment-naive-time-split
+#| echo: false
+#| results: asis
 
-plot_naive_price_forecast(naive_chart_data)
-```
-
-Спочатку показано весь період validation. Повзунок під графіком
-дозволяє вибрати коротший проміжок. Після зміни проміжку вісь ціни
-перебудовується під видимі значення. Подвійне клацання повертає весь
-період.
-
-Дві лінії часто майже збігаються, бо за одну годину ціна зазвичай
-змінюється значно менше, ніж її загальний рівень. Для оцінювання
-якості тому потрібен не лише графік ціни, а й окремий графік похибки.
-
-## Де прогноз помиляється найбільше
-
-```{r}
-#| label: fig-naive-absolute-error
-#| fig-cap: "Абсолютна похибка наївного прогнозу в кожну годину"
-
-plot_naive_absolute_error(naive_chart_data)
-```
-
-**Абсолютна похибка** означає відстань між прогнозованою і фактичною
-ціною без урахування знака. Значення 500 USDT означає промах на 500
-USDT незалежно від того, прогноз був завеликим чи замалим.
-
-Великі піки показують години різкого руху. Саме такі години сильніше
-впливають на RMSE.
-
-## Як розподіляються годинні зміни
-
-```{r}
-#| label: fig-naive-return-distribution
-#| fig-cap: "Розподіл фактичних годинних логарифмічних дохідностей"
-
-plot_naive_return_distribution(naive_chart_data)
-```
-
-**Гістограма** групує схожі значення у стовпчики. Високий стовпчик
-біля нуля означає, що багато годин мали невелику зміну. Далекі
-стовпчики показують рідкісні, але великі рухи.
-
-## Два числа для майбутніх порівнянь
-
-```{r}
-#| label: tbl-naive-metrics
-
-naive_metric_table <- tibble::tibble(
-  `Показник` = c(
-    "MAE ціни",
-    "RMSE ціни",
-    "MAE лог-дохідності",
-    "RMSE лог-дохідності"
+book_figure_comment(
+  observation = paste(
+    "Train закінчується до validation, а закритий test",
+    "є останнім неперервним відрізком."
   ),
-  `Значення` = c(
-    paste0(format_number(naive_metrics$price_mae, 2), " USDT"),
-    paste0(format_number(naive_metrics$price_rmse, 2), " USDT"),
-    paste0(format_number(100 * naive_metrics$return_mae, 4), " в.п."),
-    paste0(format_number(100 * naive_metrics$return_rmse, 4), " в.п.")
+  conclusion = paste(
+    "У цьому розділі не обчислюються жодні validation-метрики.",
+    "Baseline буде оцінено в одному запуску з допущеним кандидатом."
+  ),
+  follow_up = paste(
+    "Не запускати окремий validation baseline до формального",
+    "допуску моделі, з якою його порівнюватимуть."
+  )
+)
+```
+
+```{r}
+#| label: tbl-evaluation-periods
+
+evaluation_periods <- tibble::tibble(
+  `Частина` = c("Train", "Validation", "Закритий test"),
+  `Час, UTC` = c(
+    format_utc_period(
+      config$study$data_start,
+      config$evaluation$validation_start
+    ),
+    format_utc_period(
+      config$evaluation$validation_start,
+      config$evaluation$validation_end_exclusive
+    ),
+    format_utc_period(
+      config$evaluation$test_start,
+      config$evaluation$test_end_exclusive
+    )
+  ),
+  `Статус зараз` = c(
+    "Доступний",
+    "Не відкрито",
+    "Не відкрито"
   )
 )
 
 knitr::kable(
-  naive_metric_table,
-  align = c("l", "r"),
-  caption = "Точні значення якості наївного прогнозу"
+  evaluation_periods,
+  align = c("l", "l", "c"),
+  caption = "Часові частини та їхній поточний статус"
 )
 ```
 
-**MAE**, або середня абсолютна похибка, показує типовий розмір
-промаху.
+## Як правило працює на відомому train
 
-**RMSE**, або корінь із середньої квадратичної похибки, сильніше
-збільшується через великі промахи. Тому RMSE зазвичай більша за MAE.
+Наступний графік є лише двотижневою ілюстрацією формули всередині
+train. Він не є оцінкою майбутньої якості й не використовується для
+вибору моделі.
 
-Ці числа самі по собі не доводять, що прогноз добрий чи поганий.
-Вони стають корисними як **benchmark**, тобто контрольний орієнтир:
-кожна наступна модель повинна показати меншу похибку на тих самих
-годинах.
+```{r}
+#| label: intro-naive-price-example
+#| echo: false
+#| results: asis
 
-## Межа цього розділу
+book_figure_intro(
+  question = paste(
+    "Як прогноз «наступна ціна дорівнює поточній»",
+    "реагує на вже відомий рух у train?"
+  ),
+  explanation = paste(
+    "Зелена лінія показує фактичну ціну, жовта — попередню",
+    "ціну, перенесену на наступну годину."
+  ),
+  how_to_read = c(
+    "Коли ціна майже не рухається, лінії збігаються.",
+    "Під час швидкого руху жовта лінія відстає на одну годину.",
+    "Розрив між лініями є похибкою в цій навчальній ілюстрації."
+  ),
+  caution = paste(
+    "Період обрано до validation лише для пояснення механізму.",
+    "Числа з нього не є зафіксованим benchmark."
+  )
+)
+```
 
-Наївний прогноз не є статистичною моделлю і не створює нового
-торгового правила. Він лише фіксує мінімальний рівень, який складніша
-модель повинна перевершити.
+```{r}
+#| label: fig-naive-price-example
+#| fig-cap: "Ілюстрація наївного прогнозу на двох тижнях усередині train"
 
-У наступному розділі виникає нове питання: чи містить дохідність
-попередньої години інформацію про наступну?
+plot_naive_price_forecast(
+  naive_example_chart
+)
+```
+
+```{r}
+#| label: comment-naive-price-example
+#| echo: false
+#| results: asis
+
+book_figure_comment(
+  observation = paste(
+    "Прогноз механічно повторює останню ціну й тому",
+    "не може передбачити новий рух до його появи."
+  ),
+  conclusion = paste(
+    "Саме простота робить його корисним контролем:",
+    "складна модель повинна довести додаткову користь."
+  ),
+  follow_up = paste(
+    "Після допуску кандидата обчислити обидва прогнози",
+    "на одному validation і порівняти наперед визначені метрики."
+  )
+)
+```
+
+## Які метрики зафіксовано до validation
+
+```{r}
+#| label: tbl-naive-metric-contract
+
+metric_contract <- tibble::tribble(
+  ~`Ціль`, ~`Основні метрики`, ~`Що означає перевага`,
+  "Ціна / середня доходність",
+  "MAE і RMSE ціни та log-дохідності",
+  "помітно менша похибка кандидата на тих самих годинах",
+  "Напрям",
+  "accuracy разом із часткою додатних годин",
+  "перевага над тривіальним класом, не лише над 50%",
+  "Волатильність",
+  "QLIKE, похибка |r|, калібрування інтервалів",
+  "перевага над історичним, календарним, EWMA і range baseline",
+  "Торгова дія",
+  "дохідність після витрат, drawdown, turnover",
+  "перевага над buy-and-hold і cash за порівнюваного ризику"
+)
+
+knitr::kable(
+  metric_contract,
+  align = c("l", "l", "l"),
+  caption = "Контракт метрик до перегляду validation"
+)
+```
+
+MAE вимірює типову абсолютну похибку, RMSE сильніше карає великі
+промахи. QLIKE є loss для прогнозу умовної дисперсії. Торгові
+результати не можуть замінити статистичну діагностику, а статистична
+перевага не гарантує переваги після витрат.
+
+## Висновок
+
+Наївне правило зафіксовано, але його validation-результат не
+обчислено. Якщо кандидат не пройшов умови застосування, порівняння не
+запускається. Для AR(1) це означає, що поточний розділ не відкриває
+validation; для наступної моделі волатильності спершу треба окремо
+зафіксувати відповідні volatility baseline.
