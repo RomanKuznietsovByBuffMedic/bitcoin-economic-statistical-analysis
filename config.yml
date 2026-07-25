@@ -30,7 +30,9 @@ analysis:
   dependence_max_lag: 168
   rolling_window_hours: 720
   rolling_step_hours: 168
+  histogram_bins: 120
   normal_qq_points: 501
+  relationship_groups: 10
 
 
 exchanges:
@@ -60,6 +62,6 @@ exchanges:
 
 runtime:
   workers: 2
-  # true: перший рендер автоматично отримує відсутні або несумісні дані.
-  # false: рендер зупиняється й не виконує мережевих запитів до бірж.
+  # Керує лише явним запуском scripts/ensure_project_data.R.
+  # Quarto render завжди перевіряє готові локальні дані без їх оновлення.
   auto_download_data: true

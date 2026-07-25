@@ -527,7 +527,7 @@ read_project_config <- function(path = "config.yml") {
   if (validation_start <= data_start) {
     stop(
       paste(
-        "Початковий навчальний період порожній або занадто короткий:",
+        "Дослідницький період порожній або занадто короткий:",
         "зменште evaluation.validation_years або розширте дані."
       )
     )
@@ -562,6 +562,18 @@ read_project_config <- function(path = "config.yml") {
     minimum = 101,
     maximum = 2001
   )
+  histogram_bins <- require_integer(
+    raw_config$analysis$histogram_bins,
+    "analysis.histogram_bins",
+    minimum = 30,
+    maximum = 400
+  )
+  relationship_groups <- require_integer(
+    raw_config$analysis$relationship_groups,
+    "analysis.relationship_groups",
+    minimum = 4,
+    maximum = 20
+  )
 
   config <- list(
     study = list(
@@ -589,7 +601,9 @@ read_project_config <- function(path = "config.yml") {
       dependence_max_lag = dependence_max_lag,
       rolling_window_hours = rolling_window_hours,
       rolling_step_hours = rolling_step_hours,
-      normal_qq_points = normal_qq_points
+      histogram_bins = histogram_bins,
+      normal_qq_points = normal_qq_points,
+      relationship_groups = relationship_groups
     ),
     exchanges = exchanges,
     candidate = exchanges[[candidate_id]],

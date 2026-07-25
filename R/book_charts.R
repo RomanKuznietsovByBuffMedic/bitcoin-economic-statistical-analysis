@@ -281,40 +281,6 @@ book_chart_margins <- function() {
       top = 112,
       bottom = 88
     ),
-    time_split = book_plot_margin(
-      left = 102,
-      top = 100,
-      bottom = 82
-    ),
-    range_controls = book_plot_margin(
-      top = 104,
-      bottom = 92
-    ),
-    wide_axis = book_plot_margin(
-      left = 78,
-      bottom = 86
-    ),
-    calibration = book_plot_margin(
-      left = 78,
-      bottom = 90
-    ),
-    metric_labels = book_plot_margin(
-      left = 118
-    ),
-    rolling = book_plot_margin(
-      left = 88,
-      bottom = 86
-    ),
-    compact = book_plot_margin(bottom = 82),
-    strategy = book_plot_margin(
-      top = 112,
-      bottom = 88
-    ),
-    activity = book_plot_margin(
-      left = 76,
-      top = 110,
-      bottom = 90
-    ),
     diagnostic = book_plot_margin(
       left = 78,
       top = 112,
@@ -324,11 +290,6 @@ book_chart_margins <- function() {
       left = 82,
       top = 116,
       bottom = 90
-    ),
-    diagnostic_labels = book_plot_margin(
-      left = 230,
-      top = 112,
-      bottom = 86
     )
   )
 }
@@ -375,25 +336,6 @@ book_axis_style <- function(title = NULL) {
     linecolor = palette[["neutral"]],
     automargin = TRUE,
     fixedrange = FALSE
-  )
-}
-
-book_time_range <- function(times, hours) {
-  times <- sort(as.POSIXct(times, tz = "UTC"))
-  if (length(times) == 0L) {
-    return(NULL)
-  }
-
-  end_time <- utils::tail(times, 1L)
-  start_time <- max(
-    utils::head(times, 1L),
-    end_time - as.difftime(hours, units = "hours")
-  )
-
-  format(
-    c(start_time, end_time),
-    "%Y-%m-%d %H:%M:%S",
-    tz = "UTC"
   )
 }
 

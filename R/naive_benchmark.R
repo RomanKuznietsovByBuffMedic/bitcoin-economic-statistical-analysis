@@ -163,17 +163,48 @@ score_return_forecast <- function(
 
 compare_return_forecast_to_naive <- function(
   benchmark,
-  candidate_log_return_forecast,
+  candidate_forecast,
   candidate_label
 ) {
   require_naive_benchmark_columns(
     benchmark,
     c(
+      "target_time",
       "actual_log_return",
       "naive_log_return_forecast"
     ),
     "порівняння з наївним прогнозом"
   )
+  require_naive_benchmark_columns(
+    candidate_forecast,
+    c("target_time", "forecast_log_return"),
+    "прогнозу кандидата"
+  )
+
+  valid_target_time <- function(value) {
+    inherits(value, "POSIXt") &&
+      !anyNA(value) &&
+      !anyDuplicated(value)
+  }
+  if (
+    !valid_target_time(benchmark$target_time) ||
+      !valid_target_time(candidate_forecast$target_time)
+  ) {
+    stop("target_time має містити унікальні моменти POSIXct без NA.")
+  }
+  if (
+    !identical(
+      as.numeric(candidate_forecast$target_time),
+      as.numeric(benchmark$target_time)
+    )
+  ) {
+    stop(
+      paste(
+        "Кандидат і наївний еталон мають містити",
+        "ті самі target_time у тому самому порядку."
+      )
+    )
+  }
 
   naive_metrics <- score_return_forecast(
     actual_log_return = benchmark$actual_log_return,
@@ -183,7 +214,7 @@ compare_return_forecast_to_naive <- function(
   )
   candidate_metrics <- score_return_forecast(
     actual_log_return = benchmark$actual_log_return,
-    forecast_log_return = candidate_log_return_forecast,
+    forecast_log_return = candidate_forecast$forecast_log_return,
     method = candidate_label
   )
 

@@ -8,12 +8,12 @@ Imports:
     dplyr,
     ggplot2,
     htmlwidgets,
+    httr,
     jsonlite,
     knitr,
     openssl,
     plotly,
     renv,
     rmarkdown,
-    scales,
     tibble,
     yaml

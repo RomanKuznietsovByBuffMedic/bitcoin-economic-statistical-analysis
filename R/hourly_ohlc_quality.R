@@ -22,6 +22,36 @@ find_hourly_gaps <- function(data) {
   )
 }
 
+collapse_exact_hourly_duplicates <- function(
+  data,
+  time_column = "open_time"
+) {
+  if (!is.data.frame(data) || !time_column %in% names(data)) {
+    stop("Для перевірки повторів потрібні data.frame і open_time.")
+  }
+
+  repeated_time <- duplicated(data[[time_column]]) |
+    duplicated(data[[time_column]], fromLast = TRUE)
+  if (!any(repeated_time)) {
+    return(list(data = data, exact_duplicate_rows = 0L))
+  }
+
+  unique_rows <- data[!duplicated(data), , drop = FALSE]
+  if (anyDuplicated(unique_rows[[time_column]])) {
+    stop(
+      paste(
+        "Виявлено суперечливі OHLC-рядки для тієї самої години.",
+        "Такі свічки не можна автоматично зводити до одного значення."
+      )
+    )
+  }
+
+  list(
+    data = unique_rows,
+    exact_duplicate_rows = nrow(data) - nrow(unique_rows)
+  )
+}
+
 validate_hourly_ohlc <- function(data, start_time, end_time) {
   validate_time_range(
     start_time,
@@ -49,10 +79,10 @@ validate_hourly_ohlc <- function(data, start_time, end_time) {
     stop("У заданому періоді немає жодної OHLC-свічки.")
   }
 
-  duplicate_rows <- sum(duplicated(period_data$open_time))
-  clean_data <- period_data |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+  duplicate_check <- collapse_exact_hourly_duplicates(period_data)
+  duplicate_rows <- duplicate_check$exact_duplicate_rows
+  clean_data <- duplicate_check$data |>
+    dplyr::arrange(open_time)
 
   utc_parts <- as.POSIXlt(clean_data$open_time, tz = "UTC")
   misaligned_hours <- sum(
@@ -151,9 +181,6 @@ require_bounded_hourly_ohlc <- function(
     difftime(end_time, start_time, units = "hours")
   )
   expected_last <- end_time - 60 * 60
-  duplicate_rows <- result$summary$Значення[
-    result$summary$Перевірка == "Повторені години"
-  ]
   boundaries_match <- identical(
     as.numeric(min(result$data$open_time)),
     as.numeric(start_time)
@@ -163,8 +190,7 @@ require_bounded_hourly_ohlc <- function(
   )
 
   if (
-    duplicate_rows != 0 ||
-      !boundaries_match ||
+    !boundaries_match ||
       (
         !isTRUE(allow_internal_gaps) &&
           (
@@ -176,10 +202,7 @@ require_bounded_hourly_ohlc <- function(
     stop(
       source_label,
       if (isTRUE(allow_internal_gaps)) {
-        paste(
-          " не має правильних меж",
-          "або містить повторені години."
-        )
+        " не має правильних меж заданого періоду."
       } else {
         " не має повного погодинного покриття заданого періоду."
       }
@@ -201,76 +224,5 @@ require_complete_hourly_ohlc <- function(
     end_time = end_time,
     source_label = source_label,
     allow_internal_gaps = FALSE
-  )
-}
-
-summarize_hourly_sources <- function(
-  sources,
-  start_time,
-  end_time,
-  source_labels = names(sources)
-) {
-  if (
-    !is.list(sources) ||
-      length(sources) == 0L ||
-      is.null(names(sources)) ||
-      any(!nzchar(names(sources))) ||
-      length(source_labels) != length(sources)
-  ) {
-    stop("sources має бути непорожнім іменованим списком OHLC-джерел.")
-  }
-  source_labels <- as.character(source_labels)
-  if (anyNA(source_labels) || any(!nzchar(source_labels))) {
-    stop("Кожне OHLC-джерело повинно мати зрозумілу назву.")
-  }
-
-  checks <- lapply(
-    sources,
-    validate_hourly_ohlc,
-    start_time = start_time,
-    end_time = end_time
-  )
-  names(checks) <- names(sources)
-  value_from <- function(check, label) {
-    check$summary$Значення[
-      check$summary$Перевірка == label
-    ][[1L]]
-  }
-  summary_rows <- lapply(
-    seq_along(checks),
-    function(index) {
-      check <- checks[[index]]
-      data.frame(
-        source_id = names(checks)[[index]],
-        source = source_labels[[index]],
-        observations = nrow(check$data),
-        missing_hours = value_from(
-          check,
-          "Пропущені години"
-        ),
-        completeness_percent = value_from(
-          check,
-          "Повнота, %"
-        ),
-        duplicate_hours = value_from(
-          check,
-          "Повторені години"
-        ),
-        invalid_ohlc_rows = value_from(
-          check,
-          "Порушення співвідношень OHLC"
-        ),
-        invalid_volume_rows = value_from(
-          check,
-          "Від'ємний або нечисловий обсяг"
-        ),
-        stringsAsFactors = FALSE
-      )
-    }
-  )
-
-  list(
-    checks = checks,
-    summary = do.call(rbind, summary_rows)
   )
 }

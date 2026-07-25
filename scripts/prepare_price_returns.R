@@ -29,12 +29,17 @@ cat(
   "\n"
 )
 cat(
-  "Навчальних рядків:",
-  nrow(result$data_split$training),
+  "Дослідницьких рядків:",
+  nrow(result$data_split$exploration),
   "\n"
 )
 cat(
-  "Тестових рядків:",
+  "Рядків внутрішньої перевірки:",
+  nrow(result$data_split$validation),
+  "\n"
+)
+cat(
+  "Рядків фінального тесту:",
   nrow(result$data_split$test),
   "\n"
 )

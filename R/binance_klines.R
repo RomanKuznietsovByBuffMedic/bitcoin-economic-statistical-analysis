@@ -126,8 +126,7 @@ normalize_binance_klines <- function(data, start_time, end_time) {
       open_time >= start_time,
       open_time < end_time
     ) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 }
 
 download_binance_klines <- function(
@@ -181,11 +180,15 @@ download_binance_klines <- function(
       end_ms - 1
     )
 
-    response <- jsonlite::fromJSON(
-      request_url,
-      simplifyVector = TRUE,
-      simplifyDataFrame = TRUE,
-      simplifyMatrix = TRUE
+    response <- download_json_with_retry(
+      url = request_url,
+      attempts = 4L,
+      initial_pause_seconds = 1,
+      maximum_pause_seconds = 8,
+      context = "Binance REST API недоступний",
+      simplify_vector = TRUE,
+      simplify_data_frame = TRUE,
+      simplify_matrix = TRUE
     )
 
     if (
@@ -282,8 +285,8 @@ download_file_atomic <- function(url, destination) {
     stop("Не вдалося завантажити: ", url)
   }
 
-  if (!file.copy(temporary_file, destination, overwrite = TRUE)) {
-    stop("Не вдалося зберегти: ", destination)
+  if (!file.rename(temporary_file, destination)) {
+    stop("Не вдалося атомарно замінити: ", destination)
   }
 
   invisible(destination)
@@ -435,8 +438,7 @@ recheck_binance_gaps <- function(
 
   recovered_data <- dplyr::bind_rows(recovered)
   combined <- dplyr::bind_rows(data, recovered_data) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 
   list(
     data = combined,
@@ -544,8 +546,7 @@ download_binance_hybrid_klines <- function(
 
   data <- dplyr::bind_rows(data_parts) |>
     dplyr::filter(open_time >= start_time, open_time < end_time) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 
   if (nrow(data) == 0) {
     stop("Офіційні джерела Binance не повернули жодної свічки.")
@@ -577,7 +578,6 @@ download_binance_hybrid_klines <- function(
 
   acquisition_info <- list(
     method = "Місячні архіви Binance Vision + REST API",
-    downloaded_at_utc = format(Sys.time(), "%Y-%m-%d %H:%M:%S UTC", tz = "UTC"),
     archive_base_url = archive_base_url,
     rest_endpoint = rest_endpoint,
     symbol = symbol,

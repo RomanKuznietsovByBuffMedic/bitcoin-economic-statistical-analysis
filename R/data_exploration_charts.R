@@ -45,6 +45,7 @@ plot_annual_market_scale <- function(data) {
       "Рік для графіка має бути записаний чотирма цифрами."
     )
   }
+  baseline_year <- min(data$year)
 
   widget <- plotly::plot_ly()
   for (metric_id in metric_ids) {
@@ -96,8 +97,7 @@ plot_annual_market_scale <- function(data) {
       ),
       xaxis = modifyList(
         book_time_axis(
-          "Календарний рік, UTC",
-          rangeslider = TRUE
+          "Календарний рік, UTC"
         ),
         list(
           tickformat = "%Y",
@@ -105,7 +105,7 @@ plot_annual_market_scale <- function(data) {
         )
       ),
       yaxis = book_axis_style(
-        "Індекс: перший видимий рік = 100"
+        paste0("Індекс: ", baseline_year, " = 100")
       ),
       shapes = list(
         list(

@@ -60,11 +60,6 @@ attach_source_metadata <- function(
   )
   metadata <- expected_source_metadata(config, exchange_id)
   metadata$verification_level <- verification_level
-  metadata$recorded_at_utc <- format(
-    Sys.time(),
-    "%Y-%m-%d %H:%M:%S UTC",
-    tz = "UTC"
-  )
   attr(data, "source_metadata") <- metadata
   data
 }
@@ -118,18 +113,12 @@ expected_prepared_metadata <- function(config, raw_sha256) {
 attach_prepared_metadata <- function(
   data,
   config,
-  raw_sha256,
-  prepared_at = Sys.time()
+  raw_sha256
 ) {
   metadata <- expected_prepared_metadata(config, raw_sha256)
   for (field in names(metadata)) {
     attr(data, field) <- metadata[[field]]
   }
-  attr(data, "prepared_at_utc") <- format(
-    prepared_at,
-    "%Y-%m-%d %H:%M:%S UTC",
-    tz = "UTC"
-  )
 
   data
 }
@@ -321,11 +310,6 @@ build_data_manifest <- function(config) {
 
   list(
     schema_version = 1L,
-    generated_at_utc = format(
-      Sys.time(),
-      "%Y-%m-%d %H:%M:%S UTC",
-      tz = "UTC"
-    ),
     data_spec = manifest_data_spec(config),
     files = c(cache_entries, list(prepared = prepared_entry))
   )
@@ -373,6 +357,12 @@ validate_data_manifest <- function(
   }
 
   manifest <- yaml::read_yaml(path)
+  if (
+    length(manifest$schema_version) != 1L ||
+      !identical(as.integer(manifest$schema_version), 1L)
+  ) {
+    stop("Непідтримувана schema_version у manifest.yml.")
+  }
   expected_spec <- manifest_data_spec(config)
   if (
     !identical(
@@ -420,12 +410,33 @@ validate_data_manifest <- function(
     config$paths$cache,
     list(prepared = config$paths$prepared)
   )
+  if (
+    !identical(
+      sort(names(manifest$files)),
+      sort(names(expected_paths))
+    )
+  ) {
+    stop("Склад файлів у manifest.yml не відповідає проєкту.")
+  }
   checks <- lapply(
     names(expected_paths),
     function(file_id) {
       expected_path <- expected_paths[[file_id]]
       manifest_entry <- manifest$files[[file_id]]
+      raw_entry <- !identical(file_id, "prepared")
       file_exists <- file.exists(expected_path)
+      role_matches <- identical(
+        as.character(manifest_entry$role),
+        if (raw_entry) "raw" else "prepared"
+      )
+      exchange_matches <- !raw_entry || identical(
+        as.character(manifest_entry$exchange_id),
+        file_id
+      )
+      verification_matches <- !raw_entry || identical(
+        as.character(manifest_entry$verification_level),
+        "verified_on_download"
+      )
       path_matches <- !is.null(manifest_entry$path) &&
         identical(as.character(manifest_entry$path), expected_path)
       manifest_sha256 <- if (is.null(manifest_entry$sha256)) {
@@ -450,6 +461,9 @@ validate_data_manifest <- function(
         `Файл` = file_id,
         `Шлях` = expected_path,
         `Існує` = file_exists,
+        `Роль коректна` = role_matches,
+        `Біржа коректна` = exchange_matches,
+        `Походження перевірено` = verification_matches,
         `Шлях відповідає маніфесту` = path_matches,
         `SHA-256 відповідає маніфесту` = sha_matches
       )
@@ -459,6 +473,9 @@ validate_data_manifest <- function(
 
   if (
     !all(result$`Існує`) ||
+      !all(result$`Роль коректна`) ||
+      !all(result$`Біржа коректна`) ||
+      !all(result$`Походження перевірено`) ||
       !all(result$`Шлях відповідає маніфесту`) ||
       !all(result$`SHA-256 відповідає маніфесту`)
   ) {

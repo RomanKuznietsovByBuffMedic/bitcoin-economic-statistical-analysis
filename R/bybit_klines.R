@@ -70,23 +70,45 @@ download_bybit_window <- function(
     limit = limit
   )
 
-  response <- retry_with_backoff(
-    action = function() {
-      jsonlite::fromJSON(url, simplifyVector = FALSE)
-    },
+  response <- download_json_with_retry(
+    url = url,
     attempts = attempts,
     initial_pause_seconds = 1,
-    maximum_pause_seconds = 4,
-    context = "Bybit API недоступний"
+    maximum_pause_seconds = 8,
+    context = "Bybit API недоступний",
+    simplify_vector = FALSE,
+    simplify_data_frame = FALSE,
+    response_check = function(value) {
+      code <- suppressWarnings(as.integer(value$retCode))
+      if (length(code) != 1L || is.na(code)) {
+        return(list(
+          retryable = FALSE,
+          message = "Bybit повернув відповідь без коректного retCode."
+        ))
+      }
+      if (code == 0L) {
+        return(NULL)
+      }
+      message_text <- as.character(value$retMsg)
+      if (
+        length(message_text) != 1L ||
+          is.na(message_text) ||
+          !nzchar(message_text)
+      ) {
+        message_text <- "без текстового пояснення"
+      }
+
+      list(
+        retryable = code %in% c(10000L, 10006L, 10016L),
+        message = paste(
+          "Bybit повернув помилку",
+          code,
+          ":",
+          message_text
+        )
+      )
+    }
   )
-  if (!identical(as.integer(response$retCode), 0L)) {
-    stop(
-      "Bybit повернув помилку ",
-      response$retCode,
-      ": ",
-      response$retMsg
-    )
-  }
 
   returned_category <- as.character(response$result$category)
   returned_symbol <- as.character(response$result$symbol)
@@ -135,8 +157,7 @@ download_bybit_window <- function(
       open_time_ms >= start_ms,
       open_time_ms < end_ms
     ) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 }
 
 download_bybit_klines <- function(
@@ -191,8 +212,7 @@ download_bybit_klines <- function(
 
   data <- dplyr::bind_rows(batches) |>
     dplyr::filter(open_time >= start_time, open_time < end_time) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 
   if (nrow(data) == 0L) {
     stop(
@@ -204,11 +224,6 @@ download_bybit_klines <- function(
 
   attr(data, "acquisition_info") <- list(
     method = "Bybit V5 market kline API",
-    downloaded_at_utc = format(
-      Sys.time(),
-      "%Y-%m-%d %H:%M:%S UTC",
-      tz = "UTC"
-    ),
     endpoint = endpoint,
     category = category,
     symbol = symbol,

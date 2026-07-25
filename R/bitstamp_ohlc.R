@@ -172,26 +172,22 @@ download_bitstamp_batch <- function(
     end_timestamp
   )
 
-  retry_with_backoff(
-    action = function() {
-      response <- jsonlite::fromJSON(
-        request_url,
-        simplifyVector = TRUE,
-        simplifyDataFrame = TRUE
-      )
-      normalize_bitstamp_response(
-        response = response,
-        market_symbol = market_symbol,
-        request_url = request_url
-      )
-    },
+  response <- download_json_with_retry(
+    url = request_url,
     attempts = attempts,
     initial_pause_seconds = 0.5,
-    maximum_pause_seconds = 2,
+    maximum_pause_seconds = 8,
     context = paste0(
       "Не вдалося отримати пакет Bitstamp. Запит: ",
       request_url
-    )
+    ),
+    simplify_vector = TRUE,
+    simplify_data_frame = TRUE
+  )
+  normalize_bitstamp_response(
+    response = response,
+    market_symbol = market_symbol,
+    request_url = request_url
   )
 }
 
@@ -336,8 +332,7 @@ download_bitstamp_ohlc <- function(
 
   data <- dplyr::bind_rows(batches) |>
     dplyr::filter(open_time >= start_time, open_time < end_time) |>
-    dplyr::arrange(open_time) |>
-    dplyr::distinct(open_time, .keep_all = TRUE)
+    dplyr::arrange(open_time)
 
   if (nrow(data) == 0) {
     stop("Bitstamp не повернув жодної свічки у заданих межах.")
@@ -345,11 +340,6 @@ download_bitstamp_ohlc <- function(
 
   attr(data, "acquisition_info") <- list(
     method = "Bitstamp OHLC API",
-    downloaded_at_utc = format(
-      Sys.time(),
-      "%Y-%m-%d %H:%M:%S UTC",
-      tz = "UTC"
-    ),
     endpoint = endpoint,
     market_symbol = market_symbol,
     step_seconds = step_seconds,

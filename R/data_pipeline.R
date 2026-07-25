@@ -269,7 +269,8 @@ prepare_price_return_files <- function(
 
       data_split <- split_time_series(
         data = prepared_data,
-        training_start = config$study$data_start,
+        exploration_start = config$study$data_start,
+        validation_start = config$evaluation$validation_start,
         test_start = config$evaluation$test_start,
         test_end_exclusive = config$evaluation$test_end_exclusive
       )
@@ -310,7 +311,9 @@ project_parameter_table <- function(config) {
       "Тривалість тесту, календарних років",
       "Найбільший лаг ACF/PACF дохідності",
       "Найбільший лаг ACF масштабу рухів",
+      "Кількість інтервалів гістограми",
       "Кількість точок Q-Q",
+      "Кількість груп попередніх ознак",
       "Рухоме описове вікно, годин",
       "Крок описового вікна, годин"
     ),
@@ -351,7 +354,9 @@ project_parameter_table <- function(config) {
       config$evaluation$test_years,
       config$analysis$mean_max_lag,
       config$analysis$dependence_max_lag,
+      config$analysis$histogram_bins,
       config$analysis$normal_qq_points,
+      config$analysis$relationship_groups,
       config$analysis$rolling_window_hours,
       config$analysis$rolling_step_hours
     )
@@ -389,7 +394,8 @@ collect_project_data_checks <- function(config) {
   )
   data_split <- split_time_series(
     data = prepared_quality$data,
-    training_start = config$study$data_start,
+    exploration_start = config$study$data_start,
+    validation_start = config$evaluation$validation_start,
     test_start = config$evaluation$test_start,
     test_end_exclusive = config$evaluation$test_end_exclusive
   )

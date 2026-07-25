@@ -29,17 +29,25 @@ format_download_progress <- function(
   )
 }
 
-retry_with_backoff <- function(
-  action,
+download_json_with_retry <- function(
+  url,
   attempts = 3L,
   initial_pause_seconds = 0.5,
-  maximum_pause_seconds = 4,
-  context = "Операція"
+  maximum_pause_seconds = 8,
+  context = "HTTP-запит",
+  simplify_vector = TRUE,
+  simplify_data_frame = TRUE,
+  simplify_matrix = FALSE,
+  response_check = NULL
 ) {
-  if (!is.function(action)) {
-    stop("retry_with_backoff() очікує функцію без аргументів.")
+  url <- as.character(url)
+  if (
+    length(url) != 1L ||
+      is.na(url) ||
+      !nzchar(trimws(url))
+  ) {
+    stop("URL має бути одним непорожнім рядком.")
   }
-
   attempts <- suppressWarnings(as.numeric(attempts))
   if (
     length(attempts) != 1L ||
@@ -52,47 +60,123 @@ retry_with_backoff <- function(
   }
   attempts <- as.integer(attempts)
 
-  pause_values <- suppressWarnings(as.numeric(c(
+  pauses <- suppressWarnings(as.numeric(c(
     initial_pause_seconds,
     maximum_pause_seconds
   )))
   if (
-    length(initial_pause_seconds) != 1L ||
-      length(maximum_pause_seconds) != 1L ||
-      length(pause_values) != 2L ||
-      anyNA(pause_values) ||
-      any(!is.finite(pause_values)) ||
-      any(pause_values < 0)
+    length(pauses) != 2L ||
+      anyNA(pauses) ||
+      any(!is.finite(pauses)) ||
+      any(pauses < 0)
   ) {
     stop("Паузи між повторними спробами мають бути невід'ємними.")
   }
-  initial_pause_seconds <- pause_values[[1L]]
-  maximum_pause_seconds <- pause_values[[2L]]
+  initial_pause_seconds <- pauses[[1L]]
+  maximum_pause_seconds <- pauses[[2L]]
+  if (!is.null(response_check) && !is.function(response_check)) {
+    stop("response_check має бути функцією або NULL.")
+  }
 
   last_error <- "невідома помилка"
   for (attempt in seq_len(attempts)) {
-    result <- tryCatch(
-      list(ok = TRUE, value = action(), error = NULL),
-      error = function(error) {
-        list(
-          ok = FALSE,
-          value = NULL,
-          error = conditionMessage(error)
-        )
-      }
+    retry_after <- NA_real_
+    response <- tryCatch(
+      httr::GET(url, httr::timeout(30)),
+      error = identity
     )
 
-    if (isTRUE(result$ok)) {
-      return(result$value)
+    if (inherits(response, "error")) {
+      retryable <- TRUE
+      last_error <- conditionMessage(response)
+    } else {
+      status <- httr::status_code(response)
+      retry_header <- httr::headers(response)[["retry-after"]]
+      if (!is.null(retry_header)) {
+        retry_after <- suppressWarnings(as.numeric(retry_header))
+        if (
+          length(retry_after) != 1L ||
+            is.na(retry_after) ||
+            !is.finite(retry_after) ||
+            retry_after < 0
+        ) {
+          retry_after <- NA_real_
+        }
+      }
+
+      if (status >= 200L && status < 300L) {
+        parsed <- tryCatch(
+          jsonlite::fromJSON(
+            httr::content(
+              response,
+              as = "text",
+              encoding = "UTF-8"
+            ),
+            simplifyVector = simplify_vector,
+            simplifyDataFrame = simplify_data_frame,
+            simplifyMatrix = simplify_matrix
+          ),
+          error = identity
+        )
+        if (inherits(parsed, "error")) {
+          retryable <- TRUE
+          last_error <- paste(
+            "некоректний JSON:",
+            conditionMessage(parsed)
+          )
+        } else {
+          check <- if (is.null(response_check)) {
+            NULL
+          } else {
+            response_check(parsed)
+          }
+          if (is.null(check)) {
+            return(parsed)
+          }
+          if (
+            !is.list(check) ||
+              !is.logical(check$retryable) ||
+              length(check$retryable) != 1L ||
+              is.na(check$retryable) ||
+              length(check$message) != 1L ||
+              is.na(check$message) ||
+              !nzchar(as.character(check$message))
+          ) {
+            stop(
+              paste(
+                "response_check має повернути NULL або список",
+                "з полями retryable і message."
+              )
+            )
+          }
+          retryable <- check$retryable
+          last_error <- as.character(check$message)
+        }
+      } else {
+        retryable <- status == 429L || status >= 500L
+        status_text <- tryCatch(
+          httr::http_status(response)$message,
+          error = function(error) ""
+        )
+        last_error <- trimws(paste("HTTP", status, status_text))
+      }
     }
 
-    last_error <- result$error
+    if (!isTRUE(retryable)) {
+      stop(context, ": ", last_error)
+    }
     if (attempt < attempts) {
-      pause <- min(
-        maximum_pause_seconds,
-        initial_pause_seconds * 2^(attempt - 1L)
-      )
-      Sys.sleep(pause)
+      pause <- if (is.finite(retry_after)) {
+        retry_after
+      } else {
+        min(
+          maximum_pause_seconds,
+          initial_pause_seconds * 2^(attempt - 1L)
+        )
+      }
+      if (pause > 0) {
+        Sys.sleep(pause)
+      }
     }
   }
 
