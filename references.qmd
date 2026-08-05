@@ -1,8 +1,0 @@
----
-title: "Джерела"
-toc: false
-number-sections: false
----
-
-::: {#refs}
-:::
