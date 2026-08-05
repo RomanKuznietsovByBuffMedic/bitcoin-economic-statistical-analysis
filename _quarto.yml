@@ -1,0 +1,22 @@
+project:
+  type: book
+
+book:
+  title: "Bitcoin і BTC: економічний та статистичний аналіз"
+  chapters:
+    - index.qmd
+
+lang: uk
+
+format:
+  html:
+    theme:
+      dark: darkly
+      light: flatly
+    toc: true
+    toc-location: right
+    smooth-scroll: true
+    code-fold: true
+    code-summary: "Код"
+    code-copy: false
+    code-overflow: wrap
