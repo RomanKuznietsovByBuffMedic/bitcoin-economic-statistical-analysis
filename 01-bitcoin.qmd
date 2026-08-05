@@ -334,5 +334,3 @@ Bitcoin характеризується
 - [Coinbase Exchange. *Matching Engine*](https://docs.cdp.coinbase.com/exchange/concepts/matching-engine).
 - [Makarov and Schoar. *Trading and Arbitrage in Cryptocurrency Markets*](https://dspace.mit.edu/entities/publication/7f91bfb5-ba77-4d0e-9c79-ec75e104e6cc).
 - [SEC. *Exchange-Traded Products Providing Exposure to Bitcoin and Ether*](https://www.investor.gov/introduction-investing/general-resources/news-alerts-bulletins/investor-bulletins/ETPBulletinSeptember2024).
-
-::::
