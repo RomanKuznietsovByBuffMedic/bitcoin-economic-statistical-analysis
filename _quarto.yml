@@ -5,6 +5,7 @@ book:
   title: "Bitcoin і BTC: економічний та статистичний аналіз"
   chapters:
     - index.qmd
+    - 01-bitcoin.qmd
 
 lang: uk
 
